@@ -17,8 +17,6 @@ export async function POST(req) {
     }
   })
 
-  console.log('existing user', existingUser)
-
   if (existingUser) {
     return Response.json({ message: 'An account with this email already exists. Please sign in to continue.' }, { status: 400 })
   }
@@ -26,14 +24,13 @@ export async function POST(req) {
   const hashedPassword = await bcrypt.hash(password, saltRounds)
   
   try {
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: email,
         passwordDigest: hashedPassword
       }
     })
 
-    console.log('user', user)
   } catch (error) {
     console.error(error)
 

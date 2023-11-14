@@ -18,7 +18,6 @@ export const options = {
         }
       },
       async authorize(credentials) {
-        console.log('credentials', credentials)
         const prisma = new PrismaClient()
         const user = await prisma.user.findUnique({
           where: {
