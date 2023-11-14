@@ -1,7 +1,11 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Modal from './components/Modal'
 import Toast from './components/Toast'
+import dynamic from 'next/dynamic'
+
+const Modal = dynamic(() => import('./components/Modal'), {
+  ssr: false
+})
 
 const inter = Inter({ subsets: ['latin'] })
 

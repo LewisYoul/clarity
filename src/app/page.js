@@ -1,8 +1,12 @@
 import { options } from "./api/auth/[...nextauth]/options"
 import { getServerSession } from 'next-auth/next'
-import QrCodeGenerator from './components/QrCodeGenerator.js'
 import Header from "./components/Header"
 import { redirect } from 'next/navigation';
+import dynamic from 'next/dynamic'
+
+const QrCodeGenerator = dynamic(() => import('./components/QrCodeGenerator'), {
+  ssr: false
+})
 
 export default async function Home() {
   const session = await getServerSession(options)
