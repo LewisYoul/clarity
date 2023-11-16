@@ -14,4 +14,19 @@ model User {
   id      Int      @id @default(autoincrement())
   email   String   @unique
   passwordDigest String
+  teamUsers TeamUser[]
+}
+
+model Team {
+  id      Int      @id @default(autoincrement())
+  name  String
+  teamUsers TeamUser[]
+}
+
+model TeamUser {
+  id      Int      @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  teamId Int
+  team Team @relation(fields: [teamId], references: [id])
 }

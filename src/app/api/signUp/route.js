@@ -27,10 +27,20 @@ export async function POST(req) {
     await prisma.user.create({
       data: {
         email: email,
-        passwordDigest: hashedPassword
+        passwordDigest: hashedPassword,
+        teamUsers: {
+          create: [
+            { 
+              team: {
+                create: {
+                  name: 'Personal',
+                }
+              }
+            }
+          ]
+        }
       }
     })
-
   } catch (error) {
     console.error(error)
 
