@@ -15,6 +15,7 @@ model User {
   email   String   @unique
   passwordDigest String
   teamUsers TeamUser[]
+  passwordResetRequests PasswordResetRequest[]
 }
 
 model Team {
@@ -30,4 +31,12 @@ model TeamUser {
   user User @relation(fields: [userId], references: [id])
   teamId Int
   team Team @relation(fields: [teamId], references: [id])
+}
+
+model PasswordResetRequest {
+  id      Int      @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  token String
+  expiresAt DateTime
 }
