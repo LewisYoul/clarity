@@ -34,7 +34,7 @@ export async function POST(req) {
 
         postmarkClient.sendEmail({
           "From": "hello@palqr.com",
-          "To": "hello@palqr.com",
+          "To": user.email,
           "Subject": "PalQR Password Reset Request",
           "HtmlBody": html,
           "TextBody": text,
