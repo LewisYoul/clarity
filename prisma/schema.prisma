@@ -21,6 +21,7 @@ model Team {
   id      Int      @id @default(autoincrement())
   name  String
   teamUsers TeamUser[]
+  isPersonal Boolean @default(true)
 }
 
 model TeamUser {

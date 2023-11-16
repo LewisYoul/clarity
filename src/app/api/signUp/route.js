@@ -33,7 +33,8 @@ export async function POST(req) {
             { 
               team: {
                 create: {
-                  name: 'Personal',
+                  name: 'My Team',
+                  isPersonal: true,
                 }
               }
             }
