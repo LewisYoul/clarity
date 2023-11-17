@@ -1,59 +1,39 @@
 import { PrismaClient } from '@prisma/client';
-const postmark = require("postmark");
+import bcrypt from 'bcrypt'
 
 export async function POST(req) {
-  const { email } = await req.json();
+  const { password, passwordConfirmation, userId, token } = await req.json();
+  const saltRounds = 10;
 
-  console.log('email', email);
-
-  const prisma = new PrismaClient();
-
+  if (password !== passwordConfirmation) {
+    return Response.json({ message: "The passwords you've entered don't match. Please try again." }, { status: 400 })
+  }
+  
   try {
-    const user = await prisma.user.findUnique({
+    const prisma = new PrismaClient();
+    const passwordResetRequest = await prisma.passwordResetRequest.findFirst({
       where: {
-        email,
-      },
-    });
-
-    console.log('user', user);
-
-    if (user) {
-      const postmarkClient = new postmark.ServerClient(process.env.POSTMARK_SERVER_ID);
-
-      try {
-
-        const html = `
-          <p>Hello ${user.email},</p>
-          <p>A request has been made to reset your password. Please click the following link to reset your password: https://palqr.com/reset-password/${user.id}.</p>
-          <p>If you did not make this request, please ignore this email.</p>
-          <br>
-          <p>Thanks,</p>
-          <p>PalQR</p>
-        `
-        const text = `Hello ${user.email}, A request has been made to reset your password. Please click the following link to reset your password: https://palqr.com/reset-password/${user.id}. If you did not make this request, please ignore this email. Thanks, PalQR`
-
-        postmarkClient.sendEmail({
-          "From": "hello@palqr.com",
-          "To": user.email,
-          "Subject": "PalQR Password Reset Request",
-          "HtmlBody": html,
-          "TextBody": text,
-          "MessageStream": "outbound"
-        });
-
-        return Response.json({ message: 'Please check your email for a link to reset your password.' }, { status: 200 });
-      } catch (error) {
-        console.error(error);
-      
-        return Response.json({ message: 'There was an error sending the password reset email, please contact us if the issue persists.' }, { status: 500 });
+        userId: userId,
+        token: token
       }
+    })
 
-    } else {
-      return Response.json({ message: 'No user with that email exists.' }, { status: 400 });
+    if (!passwordResetRequest) {
+      return Response.json({ message: 'We were unable to reset your password, please request another password reset link.' }, { status: 400 });
     }
+    
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+    
+    await prisma.user.update({
+      where: { id: userId },
+      data: { passwordDigest: hashedPassword },
+    })
+    // TODO mark the password reset request as used
+    
+    return Response.json({ message: 'Your password has been updated, you can now sign in.' });
   } catch (error) {
-    console.error(error);
+    console.error(error)
 
-    return Response.json({ message: 'There was an error sending the password reset email, please contact us if the issue persists.' }, { status: 500 });
+    return Response.json({ message: 'We were unable to reset your password, please request another password reset link.' }, { status: 500 });
   }
 }

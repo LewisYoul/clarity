@@ -4,17 +4,18 @@ import { showToast } from '../utils/toastUtils';
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
 
-export default function ResetPasswordForm() {
+export default function ResetPasswordForm({ userId, token }) {
   const router = useRouter()
 
   const handleSubmit = async (e) => {
     const data = new FormData(e.target);
     
     const params = {
-      email: data.get('email'),
+      password: data.get('password'),
+      passwordConfirmation: data.get('passwordConfirmation'),
+      userId: userId,
+      token: token
     }
-
-    console.log(params);
 
     try {
       const res = await axios.post('/api/resetPassword', params)

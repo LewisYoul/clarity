@@ -4,22 +4,39 @@ import { redirect } from 'next/navigation';
 import ResetPasswordForm from "../components/ResetPasswordForm";
 import Link from 'next/link'
 import { PrismaClient } from "@prisma/client"
+import moment from 'moment'
 
-export default async function ResetPassword() {
+export default async function ResetPassword({ searchParams }) {
   const session = await getServerSession(options)
-
-  // TODO: check the token in the params is still valid else redirect to forgot password
-  const prisma = new PrismaClient()
-  const user = await prisma.user.findUnique({
-    where: {
-      email: "lewisyoul@gmail.com"
-    }
-  })
-
-  console.log('user', user)
 
   console.log(session)
   if (session === null) {
+
+    console.log(searchParams)
+    // const urlParams = new URLSearchParams(window.location.search);
+    const { token } = searchParams;
+
+    if (!token) {
+      redirect("forgot-password?message=missingToken")
+    }
+  
+    const prisma = new PrismaClient()
+    const passwordResetRequest = await prisma.passwordResetRequest.findFirst({
+      where: {
+        token: token
+      }
+    })
+
+    if (!passwordResetRequest) {
+      redirect("forgot-password?message=noMatchingPasswordResetRequest")
+    }
+    
+    console.log("RR", passwordResetRequest)
+
+    if (moment().isAfter(passwordResetRequest.expiresAt)) {
+      redirect("forgot-password?message=expiredPasswordResetRequest")
+    }
+
     return (
       <>
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -41,7 +58,7 @@ export default async function ResetPassword() {
             </p>
           </div>
 
-          <ResetPasswordForm />
+          <ResetPasswordForm userId={passwordResetRequest.userId} token={token} />
         </div>
       </>
     )
