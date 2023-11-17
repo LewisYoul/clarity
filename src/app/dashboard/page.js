@@ -20,7 +20,7 @@ export default async function Dashboard() {
         {qrs.length === 0 ? (
           <div className="w-full">
             <div className="flex justify-center mt-4">
-              <p className="block mx-auto">You don't have any QR codes yet, click the button below to create one!</p>
+              <p className="block mx-auto">You don&apos;t have any QR codes yet, click the button below to create one!</p>
             </div>
 
             <div className="flex justify-center mt-4">
