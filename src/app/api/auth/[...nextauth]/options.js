@@ -22,6 +22,9 @@ export const options = {
         const user = await prisma.user.findUnique({
           where: {
             email: credentials.email
+          },
+          include: {
+            teamUsers: true
           }
         })
 
@@ -41,6 +44,40 @@ export const options = {
       }
     })
   ],
+
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      console.log('JWT', token, user)
+      // if (user) {
+      //   token.sub = user.id
+      // }
+
+      if (user) {
+        token.id = user.id
+        // For now just use the first team. Once people can invite others and be part
+        // of multiple teams we'll need to change this and allow people to select.
+        token.teamId = user.teamUsers[0].teamId
+      }
+
+      return token
+    },
+    session: async ({ session, token }) => {
+      const userSession = {
+        email: token.email,
+        id: token.id,
+      }
+
+      const teamSession = {
+        id: token.teamId,
+      }
+
+      console.log('SESSION', session, token)
+      session.user = userSession
+      session.team = teamSession
+      
+      return session
+    }
+  },
 
   pages: {
     signIn: '/sign-in',
