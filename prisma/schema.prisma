@@ -16,6 +16,7 @@ model User {
   passwordDigest String
   teamUsers TeamUser[]
   passwordResetRequests PasswordResetRequest[]
+  qrCodes QRCode[]
 }
 
 model Team {
@@ -23,6 +24,7 @@ model Team {
   name  String
   teamUsers TeamUser[]
   isPersonal Boolean @default(true)
+  qrCodes QRCode[]
 }
 
 model TeamUser {
@@ -39,4 +41,13 @@ model PasswordResetRequest {
   user User @relation(fields: [userId], references: [id])
   token String
   expiresAt DateTime
+}
+
+model QRCode {
+  id      Int      @id @default(autoincrement())
+  teamId Int
+  team Team @relation(fields: [teamId], references: [id])
+  createdById Int
+  createdBy User @relation(fields: [createdById], references: [id])
+  link String
 }
