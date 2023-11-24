@@ -8,12 +8,19 @@ export default function Modal() {
   const [showModal, setShowModal] = useState(false);
 
   const openQrModal = () => {
-    console.log('openQrModal event fired')
     setShowModal(true)
+  }
+
+  const closeQrModal = () => {
+    setShowModal(false)
   }
 
   useEffect(() => {
     document.addEventListener('openQrModal', openQrModal)
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener('closeQrModal', closeQrModal)
   }, [])
 
   if (!showModal) {

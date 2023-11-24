@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import Header from "./components/Header"
 import { redirect } from 'next/navigation';
 import dynamic from 'next/dynamic'
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 const QrCodeGenerator = dynamic(() => import('./components/QrCodeGenerator'), {
   ssr: false
@@ -10,6 +11,7 @@ const QrCodeGenerator = dynamic(() => import('./components/QrCodeGenerator'), {
 
 export default async function Home() {
   const session = await getServerSession(options)
+
 
   console.log(session)
 

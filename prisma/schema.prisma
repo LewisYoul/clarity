@@ -51,3 +51,12 @@ model QRCode {
   createdBy User @relation(fields: [createdById], references: [id])
   link String
 }
+
+model File {
+  id      Int      @id @default(autoincrement())
+  key String
+  fileName String
+  fileType String
+  fileableId Int
+  fileableType String
+}

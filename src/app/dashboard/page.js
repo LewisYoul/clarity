@@ -7,22 +7,12 @@ import { getServerSession } from 'next-auth/next'
 export default async function Dashboard() {
   const session = await getServerSession(options)
 
-  const openQrModal = () => {
-    console.log('h')
-    const event = new CustomEvent('openQrModal', { detail: {} })
-    document.dispatchEvent(event)
-  }
-
-  console.log('DASH SESH', session)
-
   const prisma = new PrismaClient()
   const qrs = await prisma.QRCode.findMany({
     where: {
       teamId: session.team.id
     }
   })
-
-  console.log('QRS', qrs)
 
   return (
     <div className="bg-white h-full min-h-screen ">

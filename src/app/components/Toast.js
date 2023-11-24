@@ -25,7 +25,7 @@ const Toast = () => {
     <div
       className={`${
         toastMessage ? 'opacity-100' : 'opacity-0'
-      } transition-opacity duration-500 ease-in-out fixed top-0 left-0 w-full bg-gray-900 text-white text-center py-2`}
+      } transition-opacity duration-500 ease-in-out fixed top-0 left-0 w-full bg-gray-900 text-white text-center py-2 z-50`}
     >
       {toastMessage}
     </div>

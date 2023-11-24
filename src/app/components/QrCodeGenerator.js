@@ -4,8 +4,11 @@ import QRCodeStyling from "qr-code-styling";
 import Card from "./Card";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDownTrayIcon, LinkIcon } from '@heroicons/react/24/outline'
+import { showToast } from "../utils/toastUtils";
+import { useRouter } from 'next/navigation'
 
 export default function QrCodeGenerator() {
+  const router = useRouter()
   const ref = useRef(null);
   const [qrCodeOptions, setQrCodeOptions] = useState({
     width: 200,
@@ -32,7 +35,13 @@ export default function QrCodeGenerator() {
     qrCode.update(qrCodeOptions);
   }, [qrCode, qrCodeOptions])
 
-  const generateGrCode = (e) => {
+  const closeQrModal = () => {
+    const event = new CustomEvent('closeQrModal', { detail: {} })
+
+    document.dispatchEvent(event)
+  }
+
+  const generateQrCode = (e) => {
     let data = e.target.value
 
     if (e.target.value === '') { data = 'https://example.com' }
@@ -60,6 +69,32 @@ export default function QrCodeGenerator() {
     })
   }
 
+  const saveQrCode = async () => {
+    const svgBlob = await qrCode.getRawData('svg')
+    const pngBlob = await qrCode.getRawData('png')
+
+    const formData = new FormData()
+
+    formData.append('link', qrCodeOptions.data)
+    formData.append('svg', svgBlob)
+    formData.append('png', pngBlob)
+
+    try {
+      const res = await fetch('/api/qrCodes', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await res.json();
+
+      showToast(data.message)
+      closeQrModal()
+      router.push('/dashboard')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return(
     <Card>
       <label htmlFor="link" className="inline-flex items-center text-sm font-medium leading-6 text-gray-900">
@@ -67,7 +102,7 @@ export default function QrCodeGenerator() {
       </label>
       <div className="mt-2">
         <input
-          onChange={generateGrCode}
+          onChange={generateQrCode}
           type="text"
           name="link"
           id="link"
@@ -80,7 +115,7 @@ export default function QrCodeGenerator() {
         <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
       </div>
 
-      <div className="flex justify-center w-full mt-6 mb-4">
+      {/* <div className="flex justify-center w-full mt-6 mb-4">
         <button
           onClick={() => { downloadQrCode('png') }}
           type="button"
@@ -94,6 +129,15 @@ export default function QrCodeGenerator() {
           className="ml-1 inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" /> SVG
+        </button>
+      </div> */}
+      <div className="flex justify-center w-full mt-6 mb-4">
+        <button
+          onClick={saveQrCode}
+          type="button"
+          className="mr-1 inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Save
         </button>
       </div>
     </Card>
