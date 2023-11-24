@@ -89,7 +89,7 @@ export default function QrCodeGenerator() {
 
       showToast(data.message)
       closeQrModal()
-      router.push('/dashboard')
+      window.location.href = window.location
     } catch (error) {
       console.error(error)
     }

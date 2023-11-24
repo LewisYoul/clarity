@@ -30,7 +30,7 @@ export async function POST(req) {
   const svgKey = `qrCodes/${qrCode.id}/qr.svg`;
 
   let command = new PutObjectCommand({
-    Bucket: "palqr-development",
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: pngKey,
     Body: pngBuffer,
     ContentType: "image/png",
@@ -44,7 +44,7 @@ export async function POST(req) {
   }
 
   command = new PutObjectCommand({
-    Bucket: "palqr-development",
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: svgKey,
     Body: svgText,
     ContentType: "`qrCodes/${qrCode.id}/qr.png`",
