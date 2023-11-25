@@ -54,7 +54,6 @@ model QRCode {
 
 model File {
   id      Int      @id @default(autoincrement())
-  key String
   fileName String
   fileType String
   fileableId Int

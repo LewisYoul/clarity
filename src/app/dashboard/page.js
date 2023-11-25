@@ -7,12 +7,36 @@ import { getServerSession } from 'next-auth/next'
 export default async function Dashboard() {
   const session = await getServerSession(options)
 
-  const prisma = new PrismaClient()
-  const qrs = await prisma.QRCode.findMany({
+  const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+  })
+
+  let qrs = await prisma.QRCode.findMany({
     where: {
       teamId: session.team.id
     }
   })
+
+  // This is causing N+1 but I don't know prisma well enough yet to fix it.
+  qrs = await Promise.all(
+    qrs.map(async (qr) => {
+      const files = await prisma.File.findMany({
+        where: {
+          fileableId: qr.id,
+          fileableType: 'QRCode'
+        }
+      })
+
+      qr.svgFile = files.find(file => file.fileName === 'qr.svg')
+      qr.svgFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.svgFile.id}/qr.svg`
+      qr.pngFile = files.find(file => file.fileName === 'qr.png')
+      qr.pngFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.pngFile.id}/qr.png`
+
+      return qr
+    })
+  )
+
+  console.log('QRS 2', qrs)
 
   return (
     <div className="bg-white h-full min-h-screen ">
@@ -44,7 +68,7 @@ export default async function Dashboard() {
                 <div className="flex justify-center">
                   <div className="mt-4">
                     <div className="bg-white h-40 w-40">
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"></img>
+                      <img src={qr.svgFile.url}></img>
                     </div>
                     <div className="mt-3 flex justify-center">
                       <p className="text-sm ">{qr.link}</p>

@@ -26,8 +26,16 @@ export async function POST(req) {
 
   const client = new S3Client({ region: process.env.AWS_DEFAULT_REGION });
 
-  const pngKey = `qrCodes/${qrCode.id}/qr.png`;
-  const svgKey = `qrCodes/${qrCode.id}/qr.svg`;
+  const createdPng = await prisma.File.create({
+    data: {
+      fileName: 'qr.png',
+      fileType: 'image/png',
+      fileableId: qrCode.id,
+      fileableType: 'QRCode',
+    }
+  })
+
+  const pngKey = `File/${createdPng.id}/qr.png`;
 
   let command = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME,
@@ -43,11 +51,22 @@ export async function POST(req) {
     console.error(err);
   }
 
+  const createdSvg = await prisma.File.create({
+    data: {
+      fileName: 'qr.svg',
+      fileType: 'image/svg+xml',
+      fileableId: qrCode.id,
+      fileableType: 'QRCode',
+    }
+  })
+
+  const svgKey = `File/${createdSvg.id}/qr.svg`;
+
   command = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: svgKey,
     Body: svgText,
-    ContentType: "`qrCodes/${qrCode.id}/qr.png`",
+    ContentType: "image/svg+xml",
   });
 
   try {
@@ -57,25 +76,8 @@ export async function POST(req) {
     console.error(err);
   }
 
-  prisma.File.create({
-    data: {
-      key: pngKey,
-      fileName: 'qr.png',
-      fileType: 'image/png',
-      fileableId: qrCode.id,
-      fileableType: 'QRCode',
-    }
-  })
-
-  prisma.File.create({
-    data: {
-      key: svgKey,
-      fileName: 'qr.svg',
-      fileType: 'image/svg+xml',
-      fileableId: qrCode.id,
-      fileableType: 'QRCode',
-    }
-  })
+  console.log('createdPng', createdPng);
+  console.log('createdSvg', createdSvg);
 
   return Response.json({ message: 'QR Code created!' })
 }
