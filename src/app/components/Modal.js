@@ -11,7 +11,7 @@ export default function Modal() {
     setShowModal(true)
   }
 
-  const closeQrModal = () => {
+  const closeQrModal = (event) => {
     setShowModal(false)
   }
 

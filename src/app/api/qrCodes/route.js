@@ -3,6 +3,43 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { options } from "../auth/[...nextauth]/options";
 import { getServerSession } from 'next-auth/next'
 
+export async function GET(req) {
+  const session = await getServerSession(options)
+
+  const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+  })
+
+  let qrs = await prisma.QRCode.findMany({
+    where: {
+      teamId: session.team.id
+    }
+  })
+
+  // This is causing N+1 but I don't know prisma well enough yet to fix it.
+  qrs = await Promise.all(
+    qrs.map(async (qr) => {
+      const files = await prisma.File.findMany({
+        where: {
+          fileableId: qr.id,
+          fileableType: 'QRCode'
+        }
+      })
+
+      qr.svgFile = files.find(file => file.fileName === 'qr.svg')
+      qr.svgFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.svgFile.id}/qr.svg`
+      qr.pngFile = files.find(file => file.fileName === 'qr.png')
+      qr.pngFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.pngFile.id}/qr.png`
+
+      return qr
+    })
+  )
+
+  console.log('QRS 2', qrs)
+
+  return Response.json({ data: qrs })
+}
+
 export async function POST(req) {
   const session = await getServerSession(options)
 

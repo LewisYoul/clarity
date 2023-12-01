@@ -41,6 +41,12 @@ export default function QrCodeGenerator() {
     document.dispatchEvent(event)
   }
 
+  const triggerQrCodeFetch = () => {
+    const event = new CustomEvent('triggerQrCodeFetch', { detail: {} })
+
+    document.dispatchEvent(event)
+  }
+
   const generateQrCode = (e) => {
     let data = e.target.value
 
@@ -88,8 +94,8 @@ export default function QrCodeGenerator() {
       const data = await res.json();
 
       showToast(data.message)
+      triggerQrCodeFetch()
       closeQrModal()
-      window.location.href = window.location
     } catch (error) {
       console.error(error)
     }
