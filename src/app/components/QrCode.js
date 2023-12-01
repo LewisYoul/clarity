@@ -1,4 +1,5 @@
 import { ArrowDownTrayIcon, PencilIcon, PlusIcon  } from '@heroicons/react/24/outline'
+import Link from 'next/link';
 
 const QrCode = (props) => {
   const { qr } = props;
@@ -22,12 +23,12 @@ const QrCode = (props) => {
         <button className="flex-1 justify-center py-4 inline-flex items-center ml-1">
           <PencilIcon className="mr-1 h-4 w-4" aria-hidden="true" /> Edit
         </button>
-        <button className="flex-1 justify-center py-4 inline-flex items-center border-r border-l pr-3 pl-3">
+        <Link href={qr.pngFile.url} target="_blank" rel="noopener noreferrer" locale={false} download="file.png" className="flex-1 justify-center py-4 inline-flex items-center border-r border-l pr-3 pl-3">
           <ArrowDownTrayIcon className="mr-1 h-4 w-4" aria-hidden="true" /> PNG
-        </button>
-        <button className="flex-1 justify-center py-4 inline-flex items-center mr-1">
+        </Link>
+        <Link href={qr.svgFile.url} target="_blank" rel="noopener noreferrer" locale={false} download="file.png" className="flex-1 justify-center py-4 inline-flex items-center border-r border-l pr-3 pl-3">
           <ArrowDownTrayIcon className="mr-1 h-4 w-4" aria-hidden="true" /> SVG
-        </button>
+        </Link>
       </div>
     </div>
   );
