@@ -47,11 +47,6 @@ export const options = {
 
   callbacks: {
     jwt: async ({ token, user }) => {
-      console.log('JWT', token, user)
-      // if (user) {
-      //   token.sub = user.id
-      // }
-
       if (user) {
         token.id = user.id
         // For now just use the first team. Once people can invite others and be part
@@ -71,7 +66,6 @@ export const options = {
         id: token.teamId,
       }
 
-      console.log('SESSION', session, token)
       session.user = userSession
       session.team = teamSession
       

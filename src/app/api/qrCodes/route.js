@@ -6,9 +6,33 @@ import { getServerSession } from 'next-auth/next'
 export async function GET(req) {
   const session = await getServerSession(options)
 
+  if (!session || !session.user || !session.team) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 })
+  }
+
   const prisma = new PrismaClient({
     log: ['query', 'info', 'warn', 'error'],
   })
+
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: session.user.id
+    }
+  })
+
+  if (!currentUser) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 })
+  }
+
+  const currentTeam = await prisma.team.findUnique({
+    where: {
+      id: session.team.id
+    }
+  })
+
+  if (!currentTeam) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 })
+  }
 
   let qrs = await prisma.QRCode.findMany({
     where: {
@@ -34,8 +58,6 @@ export async function GET(req) {
       return qr
     })
   )
-
-  console.log('QRS 2', qrs)
 
   return Response.json({ data: qrs })
 }
