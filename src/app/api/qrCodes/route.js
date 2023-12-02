@@ -1,12 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { options } from "../auth/[...nextauth]/options";
-import { getServerSession } from 'next-auth/next'
+import { authorizeRequest } from '@/app/utils/sessionUtils';
 
 export async function GET(req) {
-  const session = await getServerSession(options)
+  const { currentUser, currentTeam } = await authorizeRequest();
 
-  if (!session || !session.user || !session.team) {
+  if (!currentUser || !currentTeam) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 })
   }
 
@@ -14,29 +13,9 @@ export async function GET(req) {
     log: ['query', 'info', 'warn', 'error'],
   })
 
-  const currentUser = await prisma.user.findUnique({
-    where: {
-      id: session.user.id
-    }
-  })
-
-  if (!currentUser) {
-    return Response.json({ message: 'Unauthorized' }, { status: 401 })
-  }
-
-  const currentTeam = await prisma.team.findUnique({
-    where: {
-      id: session.team.id
-    }
-  })
-
-  if (!currentTeam) {
-    return Response.json({ message: 'Unauthorized' }, { status: 401 })
-  }
-
   let qrs = await prisma.QRCode.findMany({
     where: {
-      teamId: session.team.id
+      teamId: currentTeam.id
     }
   })
 
@@ -63,7 +42,11 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  const session = await getServerSession(options)
+  const { currentUser, currentTeam } = await authorizeRequest();
+
+  if (!currentUser || !currentTeam) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 })
+  }
 
   const formData = await req.formData();
   const png = formData.get('png');
@@ -71,19 +54,17 @@ export async function POST(req) {
   const svg = formData.get('svg');
   const svgText = await svg.text();
 
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+  })
 
   const qrCode = await prisma.QRCode.create({
     data: {
-      teamId: session.team.id,
-      createdById: session.user.id,
+      teamId: currentTeam.id,
+      createdById: currentUser.id,
       link: formData.get('link'),
     }
   })
-
-  console.log('qrCode', qrCode);
-
-  const client = new S3Client({ region: process.env.AWS_DEFAULT_REGION });
 
   const createdPng = await prisma.File.create({
     data: {
@@ -94,22 +75,6 @@ export async function POST(req) {
     }
   })
 
-  const pngKey = `File/${createdPng.id}/qr.png`;
-
-  let command = new PutObjectCommand({
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: pngKey,
-    Body: pngBuffer,
-    ContentType: "image/png",
-  });
-
-  try {
-    const response = await client.send(command);
-    console.log(response);
-  } catch (err) {
-    console.error(err);
-  }
-
   const createdSvg = await prisma.File.create({
     data: {
       fileName: 'qr.svg',
@@ -119,24 +84,37 @@ export async function POST(req) {
     }
   })
 
+  const pngKey = `File/${createdPng.id}/qr.png`;
   const svgKey = `File/${createdSvg.id}/qr.svg`;
 
-  command = new PutObjectCommand({
+  const pngCreationCommand = new PutObjectCommand({
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: pngKey,
+    Body: pngBuffer,
+    ContentType: "image/png",
+  });
+
+  const svgCreationCommand = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: svgKey,
     Body: svgText,
     ContentType: "image/svg+xml",
   });
 
-  try {
-    const response = await client.send(command);
-    console.log(response);
-  } catch (err) {
-    console.error(err);
-  }
+  const s3 = new S3Client({ region: process.env.AWS_DEFAULT_REGION });
 
-  console.log('createdPng', createdPng);
-  console.log('createdSvg', createdSvg);
+  try {
+    await s3.send(pngCreationCommand);
+    await s3.send(svgCreationCommand);
+  } catch (error) {
+    console.error('BUGGER', error);
+
+    await prisma.File.delete({ where: { id: createdPng.id } })
+    await prisma.File.delete({ where: { id: createdSvg.id } })
+    await prisma.QRCode.delete({ where: { id: qrCode.id } })
+
+    return Response.json({ message: 'There was a problem creating your QR code. If this problem continues please contact us.' }, { status: 500 })
+  }
 
   return Response.json({ message: 'QR Code created!' })
 }

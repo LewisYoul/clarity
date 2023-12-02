@@ -3,15 +3,25 @@
 import { useEffect, useState } from "react";
 import QrCode from "./QrCode";
 import { PlusIcon  } from '@heroicons/react/24/outline'
+import { showToast } from "../utils/toastUtils";
 
 export default function QrCodeList() {
   const [qrs, setQrs] = useState(null);
   
   const fetchQrCodes = async () => {
-    const res = await fetch('/api/qrCodes')
-    const json = await res.json()
+    try {
+      const res = await fetch('/api/qrCodes')
 
-    setQrs(json.data)
+      if (!res.ok) throw new Error()
+
+      const json = await res.json()
+  
+      setQrs(json.data)
+    } catch (error) {
+      console.error(error)
+
+      showToast('There was a problem loading your QR codes. If the problem persists please contact us.')
+    }
   }
 
   useEffect(() => {
@@ -23,7 +33,7 @@ export default function QrCodeList() {
     document.addEventListener('triggerQrCodeFetch', fetchQrCodes)
   }, [])
 
-  if (qrs === null) return (
+  if (qrs === null || qrs === undefined) return (
     <div>Loading...</div>
   )
 
