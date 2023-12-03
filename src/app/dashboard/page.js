@@ -11,7 +11,7 @@ export default async function Dashboard() {
   const session = await getServerSession(options)
 
   return (
-    <div className="bg-white h-full min-h-screen ">
+    <div className="bg-white h-full min-h-screen">
       <div className="max-w-6xl m-auto">
         <LoggedInHeader />
 
