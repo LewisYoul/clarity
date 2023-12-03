@@ -97,7 +97,9 @@ export default function SignUpForm() {
         </button>
       </div>
 
-      <p className="w-full text-center">Already have an account? <Link className="hover:underline text-indigo-600" href="/sign-in">Sign in</Link></p>
+      <p className="mt-10 text-center text-sm text-gray-500">
+        Already have an account? <Link href="/sign-in" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign in</Link>
+      </p>
     </form>
 
   )
