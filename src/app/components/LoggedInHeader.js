@@ -5,8 +5,8 @@ import Link from 'next/link'
 
 export default function LoggedInHeader() {
   const openQrModal = () => {
-    console.log('h')
     const event = new CustomEvent('openQrModal', { detail: {} })
+
     document.dispatchEvent(event)
   }
 
@@ -23,13 +23,13 @@ export default function LoggedInHeader() {
             />
           </a>
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
+        <div className="flex flex-1 justify-end items-center">
           <button
             onClick={openQrModal}
             type="button"
             className="mr-4 inline-flex rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            <PlusIcon className="h-5 w-5"/> New QR Code
+            <PlusIcon className="h-5 w-5"/> QR Code
           </button>
           <Link href="/api/auth/signout">Sign Out</Link>
         </div>
