@@ -16,7 +16,7 @@ export default async function ForgotPassword() {
             <Link href="/">
               <img
                 className="mx-auto h-10 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                src="/logo.svg"
                 alt="Your Company"
               />
             </Link>
