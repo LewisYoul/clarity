@@ -41,7 +41,7 @@ export default function Header() {
         </Link>
         <Link
           href="/sign-up"
-          className="inline-flex rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 ring-1 ring-inset ring-indigo-600"
+          className="inline-flex rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-palqrblue ring-1 ring-inset ring-palqrblue"
         >
           Sign Up  
         </Link>
