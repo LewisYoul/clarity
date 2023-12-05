@@ -1,10 +1,10 @@
 "use client";
 
 import QRCodeStyling from "qr-code-styling";
-import Card from "./Card";
+import Card from "../Card";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownTrayIcon, LinkIcon } from '@heroicons/react/24/outline'
-import { showToast } from "../utils/toastUtils";
+import { LinkIcon } from '@heroicons/react/24/outline'
+import { showToast } from "../../utils/toastUtils";
 import { useRouter } from 'next/navigation'
 
 export default function QrCodeGenerator() {

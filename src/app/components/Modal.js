@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import QrCodeGenerator from "./QrCodeGenerator";
+import QrCodeGenerator from "./qr-code-generators/QrCodeGenerator";
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function Modal() {

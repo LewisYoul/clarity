@@ -5,15 +5,12 @@ import { redirect } from 'next/navigation';
 import dynamic from 'next/dynamic'
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
-const QrCodeGenerator = dynamic(() => import('./components/QrCodeGenerator'), {
+const LoggedOutQrCodeGenerator = dynamic(() => import('./components/qr-code-generators/LoggedOutQrCodeGenerator'), {
   ssr: false
 })
 
 export default async function Home() {
   const session = await getServerSession(options)
-
-
-  console.log(session)
 
   if (session === null) {
     return (
@@ -44,7 +41,9 @@ export default async function Home() {
                 </p>
               </div>
             </div>
-            <QrCodeGenerator />
+            <div className="w-[600px] mx-auto">
+              <LoggedOutQrCodeGenerator />
+            </div>
             <div
               className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
               aria-hidden="true"
