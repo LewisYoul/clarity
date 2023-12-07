@@ -4,7 +4,6 @@ import QRCodeStyling from "qr-code-styling";
 import Card from "../Card";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDownTrayIcon, LinkIcon } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/navigation'
 import { RadioGroup } from '@headlessui/react'
 
 const dotTypes = [
@@ -30,8 +29,24 @@ const dotTypes = [
   }
 ]
 
+const eyeTypes = [
+  {
+    name: 'Dot',
+    value: 'dot'
+  },
+  {
+    name: 'Square',
+    value: 'square'
+  },
+  {
+    name: 'Rounded',
+    value: 'extra-rounded'
+  }
+]
+
 export default function QrCodeGenerator() {
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[1])
+  const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[1])
   const [link, setLink] = useState('https://example.com')
 
   const ref = useRef(null);
@@ -45,7 +60,10 @@ export default function QrCodeGenerator() {
     },
     dotsOptions: {
       type: selectedDotType.value
-    }
+    },
+    cornersSquareOptions: {
+      type: selectedEyeType.value
+    },
   });
 
   const [qrCode] = useState(new QRCodeStyling(qrCodeOptions));
@@ -76,14 +94,17 @@ export default function QrCodeGenerator() {
         },
         dotsOptions: {
           type: selectedDotType.value
-        }
+        },
+        cornersSquareOptions: {
+          type: selectedEyeType.value
+        },
       })
     }
 
     console.log(selectedDotType, link)
 
     generateQrCode()
-  }, [selectedDotType, link])
+  }, [selectedDotType, selectedEyeType, link])
 
 
   const downloadQrCode = (extension) => {
@@ -119,14 +140,46 @@ export default function QrCodeGenerator() {
         />
       </div>
 
-      <label htmlFor="link" className="inline-flex items-center text-sm font-medium leading-6 text-gray-900 mt-3">
-        <LinkIcon className="h-3 w-3 mr-1" aria-hidden="true" /> Shape & Form
+      <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-3">
+        Shape & Form
+      </label>
+
+      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        Dots
       </label>
 
       <RadioGroup value={selectedDotType} onChange={setSelectedDotType} className="mt-2">
         <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
           {dotTypes.map((option) => (
+            <RadioGroup.Option
+              key={option.name}
+              value={option}
+              className={({ active, checked }) => {
+                console.log(active, checked)
+                return classNames('cursor-pointer bg-white',
+                  checked
+                    ? 'ring-2 ring-palqrblue ring-offset-2'
+                    : 'ring-1 ring-inset ring-gray-300 text-gray-900 hover:bg-gray-50',
+                  'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
+                )}
+              }
+              disabled={false}
+            >
+              <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
+            </RadioGroup.Option>
+          ))}
+        </div>
+      </RadioGroup>
+
+      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        Eyes
+      </label>
+
+      <RadioGroup value={selectedEyeType} onChange={setSelectedEyeType} className="mt-2">
+        <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+          {eyeTypes.map((option) => (
             <RadioGroup.Option
               key={option.name}
               value={option}
