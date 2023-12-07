@@ -5,6 +5,7 @@ import Card from "../Card";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDownTrayIcon, LinkIcon } from '@heroicons/react/24/outline'
 import { RadioGroup } from '@headlessui/react'
+import FileInput from "../form/FileInput";
 
 const dotTypes = [
   {
@@ -47,9 +48,11 @@ const eyeTypes = [
 export default function QrCodeGenerator() {
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[1])
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[1])
+  const [logoPath, setLogoPath] = useState(null)
   const [link, setLink] = useState('https://example.com')
 
   const ref = useRef(null);
+
   const [qrCodeOptions, setQrCodeOptions] = useState({
     width: 200,
     height: 200,
@@ -89,6 +92,7 @@ export default function QrCodeGenerator() {
         height: 200,
         data: link,
         margin: 10,
+        image: logoPath,
         backgroundOptions: {
           color: 'white',
         },
@@ -98,13 +102,16 @@ export default function QrCodeGenerator() {
         cornersSquareOptions: {
           type: selectedEyeType.value
         },
+        imageOptions: {
+          crossOrigin: "anonymous",
+          margin: 5,
+          imageSize: 0.5,
+        }
       })
     }
 
-    console.log(selectedDotType, link)
-
     generateQrCode()
-  }, [selectedDotType, selectedEyeType, link])
+  }, [selectedDotType, selectedEyeType, logoPath, link])
 
 
   const downloadQrCode = (extension) => {
@@ -113,21 +120,10 @@ export default function QrCodeGenerator() {
     })
   }
 
-  const memoryOptions = [
-    { name: '4 GB', inStock: true },
-    { name: '8 GB', inStock: true },
-    { name: '16 GB', inStock: true },
-    { name: '32 GB', inStock: true },
-    { name: '64 GB', inStock: true },
-    { name: '128 GB', inStock: false },
-  ]
-
-  const [mem, setMem] = useState(memoryOptions[2])
-
   return(
     <Card>
-      <label htmlFor="link" className="inline-flex items-center text-sm font-medium leading-6 text-gray-900">
-        <LinkIcon className="h-3 w-3 mr-1" aria-hidden="true" /> Link
+      <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900">
+        Destination
       </label>
       <div className="mt-2">
         <input
@@ -140,7 +136,7 @@ export default function QrCodeGenerator() {
         />
       </div>
 
-      <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-3">
+      <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-5">
         Shape & Form
       </label>
 
@@ -156,7 +152,6 @@ export default function QrCodeGenerator() {
               key={option.name}
               value={option}
               className={({ active, checked }) => {
-                console.log(active, checked)
                 return classNames('cursor-pointer bg-white',
                   checked
                     ? 'ring-2 ring-palqrblue ring-offset-2'
@@ -184,7 +179,6 @@ export default function QrCodeGenerator() {
               key={option.name}
               value={option}
               className={({ active, checked }) => {
-                console.log(active, checked)
                 return classNames('cursor-pointer bg-white',
                   checked
                     ? 'ring-2 ring-palqrblue ring-offset-2'
@@ -199,6 +193,14 @@ export default function QrCodeGenerator() {
           ))}
         </div>
       </RadioGroup>
+
+      <label htmlFor="link" className="block text-md font-semibold leading-6 text-gray-900 mt-5">
+        Logo
+      </label>
+
+      <div className="mt-2">
+        <FileInput onChange={setLogoPath} />
+      </div>
 
       <div className="flex justify-center w-full mt-6">
         <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
