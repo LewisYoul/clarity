@@ -5,10 +5,8 @@ import Card from "../Card";
 import { useEffect, useRef, useState } from "react";
 import { LinkIcon } from '@heroicons/react/24/outline'
 import { showToast } from "../../utils/toastUtils";
-import { useRouter } from 'next/navigation'
 
-export default function QrCodeGenerator() {
-  const router = useRouter()
+export default function QrCodeGenerator() {    
   const ref = useRef(null);
   const [qrCodeOptions, setQrCodeOptions] = useState({
     width: 200,
