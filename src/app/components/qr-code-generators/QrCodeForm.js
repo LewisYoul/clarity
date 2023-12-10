@@ -62,6 +62,7 @@ export default function QrCodeForm({ onChange }) {
   const [logoPath, setLogoPath] = useState(null)
   const [dotsColor, setDotsColor] = useState("#000000")
   const [innerEyeColor, setInnerEyeColor] = useState("#000000")
+  const [outerEyeColor, setOuterEyeColor] = useState("#000000")
   const [link, setLink] = useState('https://example.com')
 
   const ref = useRef(null);
@@ -79,6 +80,7 @@ export default function QrCodeForm({ onChange }) {
       type: selectedDotType.value
     },
     cornersSquareOptions: {
+      color: outerEyeColor,
       type: selectedEyeType.value
     },
     cornersDotOptions: {
@@ -121,7 +123,7 @@ export default function QrCodeForm({ onChange }) {
           type: selectedDotType.value
         },
         cornersSquareOptions: {
-          color: "#000000",
+          color: outerEyeColor,
           type: selectedEyeType.value
         },
         cornersDotOptions: {
@@ -137,7 +139,7 @@ export default function QrCodeForm({ onChange }) {
     }
 
     generateQrCode()
-  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor])
+  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor])
 
   return(
     <div>
@@ -254,6 +256,12 @@ export default function QrCodeForm({ onChange }) {
       </label>
 
       <ColorInput onChange={setInnerEyeColor} />
+
+      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        Outer Eyes
+      </label>
+
+      <ColorInput onChange={setOuterEyeColor} />
 
       <label htmlFor="link" className="block text-md font-semibold leading-6 text-gray-900 mt-5">
         Logo
