@@ -7,12 +7,12 @@ import FileInput from "../form/FileInput";
 
 const dotTypes = [
   {
-    name: 'Rounded',
-    value: 'rounded'
-  },
-  {
     name: 'Square',
     value: 'square'
+  },
+  {
+    name: 'Rounded',
+    value: 'rounded'
   },
   {
     name: 'Smooth',
@@ -30,22 +30,34 @@ const dotTypes = [
 
 const eyeTypes = [
   {
-    name: 'Dot',
-    value: 'dot'
-  },
-  {
     name: 'Square',
     value: 'square'
+  },
+  {
+    name: 'Circle',
+    value: 'dot'
   },
   {
     name: 'Rounded',
     value: 'extra-rounded'
   }
 ]
+// 'dot' 'square'
+const innerEyeTypes = [
+  {
+    name: 'Square',
+    value: 'square'
+  },
+  {
+    name: 'Dot',
+    value: 'dot'
+  },
+]
 
 export default function QrCodeForm({ onChange }) {
-  const [selectedDotType, setSelectedDotType] = useState(dotTypes[1])
-  const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[1])
+  const [selectedDotType, setSelectedDotType] = useState(dotTypes[0])
+  const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
+  const [selectedInnerEyeType, setSelectedInnerEyeType] = useState(innerEyeTypes[0])
   const [logoPath, setLogoPath] = useState(null)
   const [link, setLink] = useState('https://example.com')
 
@@ -64,6 +76,9 @@ export default function QrCodeForm({ onChange }) {
     },
     cornersSquareOptions: {
       type: selectedEyeType.value
+    },
+    cornersDotOptions: {
+      type: selectedInnerEyeType.value
     },
   });
 
@@ -102,6 +117,9 @@ export default function QrCodeForm({ onChange }) {
         cornersSquareOptions: {
           type: selectedEyeType.value
         },
+        cornersDotOptions: {
+          type: selectedInnerEyeType.value
+        },
         imageOptions: {
           crossOrigin: "anonymous",
           margin: 5,
@@ -111,7 +129,7 @@ export default function QrCodeForm({ onChange }) {
     }
 
     generateQrCode()
-  }, [selectedDotType, selectedEyeType, logoPath, link])
+  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType])
 
 
   const downloadQrCode = (extension) => {
@@ -145,7 +163,6 @@ export default function QrCodeForm({ onChange }) {
       </label>
 
       <RadioGroup value={selectedDotType} onChange={setSelectedDotType} className="mt-2">
-        <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
           {dotTypes.map((option) => (
             <RadioGroup.Option
@@ -168,7 +185,34 @@ export default function QrCodeForm({ onChange }) {
       </RadioGroup>
 
       <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
-        Eyes
+        Inner Eyes
+      </label>
+
+      <RadioGroup value={selectedInnerEyeType} onChange={setSelectedInnerEyeType} className="mt-2">
+        <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+          {innerEyeTypes.map((option) => (
+            <RadioGroup.Option
+              key={option.name}
+              value={option}
+              className={({ active, checked }) => {
+                return classNames('cursor-pointer bg-white',
+                  checked
+                    ? 'ring-2 ring-palqrblue ring-offset-2'
+                    : 'ring-1 ring-inset ring-gray-300 text-gray-900 hover:bg-gray-50',
+                  'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
+                )}
+              }
+              disabled={false}
+            >
+              <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
+            </RadioGroup.Option>
+          ))}
+        </div>
+      </RadioGroup>
+
+      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        Outer Eyes
       </label>
 
       <RadioGroup value={selectedEyeType} onChange={setSelectedEyeType} className="mt-2">
