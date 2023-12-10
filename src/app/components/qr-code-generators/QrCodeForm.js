@@ -60,7 +60,8 @@ export default function QrCodeForm({ onChange }) {
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
   const [selectedInnerEyeType, setSelectedInnerEyeType] = useState(innerEyeTypes[0])
   const [logoPath, setLogoPath] = useState(null)
-  const [color, setColor] = useState("#000000")
+  const [dotsColor, setDotsColor] = useState("#000000")
+  const [innerEyeColor, setInnerEyeColor] = useState("#000000")
   const [link, setLink] = useState('https://example.com')
 
   const ref = useRef(null);
@@ -74,13 +75,14 @@ export default function QrCodeForm({ onChange }) {
       color: 'white',
     },
     dotsOptions: {
-      color: color,
+      color: dotsColor,
       type: selectedDotType.value
     },
     cornersSquareOptions: {
       type: selectedEyeType.value
     },
     cornersDotOptions: {
+      color: innerEyeColor,
       type: selectedInnerEyeType.value
     },
   });
@@ -115,7 +117,7 @@ export default function QrCodeForm({ onChange }) {
           color: 'white',
         },
         dotsOptions: {
-          color: color,
+          color: dotsColor,
           type: selectedDotType.value
         },
         cornersSquareOptions: {
@@ -123,7 +125,7 @@ export default function QrCodeForm({ onChange }) {
           type: selectedEyeType.value
         },
         cornersDotOptions: {
-          color: "#000000",
+          color: innerEyeColor,
           type: selectedInnerEyeType.value
         },
         imageOptions: {
@@ -135,7 +137,7 @@ export default function QrCodeForm({ onChange }) {
     }
 
     generateQrCode()
-  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, color])
+  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor])
 
   return(
     <div>
@@ -245,7 +247,13 @@ export default function QrCodeForm({ onChange }) {
         Dots
       </label>
 
-      <ColorInput onChange={setColor} />
+      <ColorInput onChange={setDotsColor} />
+
+      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        Inner Eyes
+      </label>
+
+      <ColorInput onChange={setInnerEyeColor} />
 
       <label htmlFor="link" className="block text-md font-semibold leading-6 text-gray-900 mt-5">
         Logo
