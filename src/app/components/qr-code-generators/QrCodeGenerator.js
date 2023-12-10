@@ -1,37 +1,12 @@
 "use client";
 
-import QRCodeStyling from "qr-code-styling";
 import Card from "../Card";
-import { useEffect, useRef, useState } from "react";
-import { LinkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
 import { showToast } from "../../utils/toastUtils";
+import QrCodeForm from "./QrCodeForm";
 
-export default function QrCodeGenerator() {    
-  const ref = useRef(null);
-  const [qrCodeOptions, setQrCodeOptions] = useState({
-    width: 200,
-    height: 200,
-    margin: 10,
-    data: "https://example.com",
-    backgroundOptions: {
-      color: 'white',
-    },
-    dotsOptions: {
-      type: 'rounded'
-    }
-  });
-
-  const [qrCode] = useState(new QRCodeStyling(qrCodeOptions));
-
-  useEffect(() => {
-    if (ref.current) {
-      qrCode.append(ref.current);
-    }
-  }, [qrCode, ref]);
-
-  useEffect(() => {
-    qrCode.update(qrCodeOptions);
-  }, [qrCode, qrCodeOptions])
+export default function QrCodeGenerator() {  
+  const [qrCode, setQrCode] = useState()  
 
   const closeQrModal = () => {
     const event = new CustomEvent('closeQrModal', { detail: {} })
@@ -45,33 +20,6 @@ export default function QrCodeGenerator() {
     document.dispatchEvent(event)
   }
 
-  const generateQrCode = (e) => {
-    let data = e.target.value
-
-    if (e.target.value === '') { data = 'https://example.com' }
-
-    let margin = 10
-
-    if (data.length <= 11) {
-      margin = 8
-    }
-
-    setQrCodeOptions({
-      width: 200,
-      height: 200,
-      data: data,
-      margin: margin,
-      backgroundOptions: {
-        color: 'white',
-      }
-    })
-  }
-
-  const downloadQrCode = (extension) => {
-    qrCode.download({
-      extension: extension
-    })
-  }
 
   const saveQrCode = async () => {
     const svgBlob = await qrCode.getRawData('svg')
@@ -79,7 +27,7 @@ export default function QrCodeGenerator() {
 
     const formData = new FormData()
 
-    formData.append('link', qrCodeOptions.data)
+    formData.append('link', qrCode._options.data)
     formData.append('svg', svgBlob)
     formData.append('png', pngBlob)
 
@@ -101,23 +49,8 @@ export default function QrCodeGenerator() {
 
   return(
     <Card>
-      <label htmlFor="link" className="inline-flex items-center text-sm font-medium leading-6 text-gray-900">
-        <LinkIcon className="h-3 w-3 mr-1" aria-hidden="true" /> Link
-      </label>
-      <div className="mt-2">
-        <input
-          onChange={generateQrCode}
-          type="text"
-          name="link"
-          id="link"
-          className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6"
-          placeholder="https://example.com"
-        />
-      </div>
+      <QrCodeForm onChange={setQrCode} />
 
-      <div className="flex justify-center w-full mt-6">
-        <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
-      </div>
       <div className="flex justify-center w-full mt-6 mb-4">
         <button
           onClick={saveQrCode}
