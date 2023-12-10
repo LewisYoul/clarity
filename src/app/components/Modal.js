@@ -29,15 +29,15 @@ export default function Modal() {
 
   return (
     <div className="fixed h-screen w-full bg-gray-300 bg-opacity-75 z-10 flex justify-center">
-      <div className="w-[600px] h-96 bg-white bg-opacity-100 mt-12 rounded-md relative">
-        <div className="absolute -top-3 -right-3 bg-white rounded-full">
+      <div className="w-[600px] h-[800px] max-h-[800px] overflow-scroll bg-white bg-opacity-100 mt-12 rounded-md relative">
+        <div className="absolute top-0 right-0 pt-2 pr-2">
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-gray-700"
+            className="inline-flex items-center justify-center text-gray-700"
             onClick={() => setShowModal(false)}
           >
             <span className="sr-only">Close modal</span>
-            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+            <XMarkIcon className="h-7 w-7" aria-hidden="true" />
           </button>
         </div>
         <QrCodeGenerator />
