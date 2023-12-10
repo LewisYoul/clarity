@@ -4,6 +4,7 @@ import QRCodeStyling from "qr-code-styling";
 import { useEffect, useRef, useState } from "react";
 import { RadioGroup } from '@headlessui/react'
 import FileInput from "../form/FileInput";
+import ColorInput from "../form/ColorInput";
 
 const dotTypes = [
   {
@@ -59,6 +60,7 @@ export default function QrCodeForm({ onChange }) {
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
   const [selectedInnerEyeType, setSelectedInnerEyeType] = useState(innerEyeTypes[0])
   const [logoPath, setLogoPath] = useState(null)
+  const [color, setColor] = useState("#000000")
   const [link, setLink] = useState('https://example.com')
 
   const ref = useRef(null);
@@ -72,6 +74,7 @@ export default function QrCodeForm({ onChange }) {
       color: 'white',
     },
     dotsOptions: {
+      color: color,
       type: selectedDotType.value
     },
     cornersSquareOptions: {
@@ -112,12 +115,15 @@ export default function QrCodeForm({ onChange }) {
           color: 'white',
         },
         dotsOptions: {
+          color: color,
           type: selectedDotType.value
         },
         cornersSquareOptions: {
+          color: "#000000",
           type: selectedEyeType.value
         },
         cornersDotOptions: {
+          color: "#000000",
           type: selectedInnerEyeType.value
         },
         imageOptions: {
@@ -129,14 +135,7 @@ export default function QrCodeForm({ onChange }) {
     }
 
     generateQrCode()
-  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType])
-
-
-  const downloadQrCode = (extension) => {
-    qrCode.download({
-      extension: extension
-    })
-  }
+  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, color])
 
   return(
     <div>
@@ -237,6 +236,16 @@ export default function QrCodeForm({ onChange }) {
           ))}
         </div>
       </RadioGroup>
+
+      <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-5">
+        Color
+      </label>
+
+      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        Dots
+      </label>
+
+      <ColorInput onChange={setColor} />
 
       <label htmlFor="link" className="block text-md font-semibold leading-6 text-gray-900 mt-5">
         Logo
