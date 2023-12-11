@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { RadioGroup } from '@headlessui/react'
 import FileInput from "../form/FileInput";
 import ColorInput from "../form/ColorInput";
+import Collapse from "../Collapse";
 
 const dotTypes = [
   {
@@ -157,111 +158,111 @@ export default function QrCodeForm({ onChange }) {
         />
       </div>
 
-      <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-5">
-        Shape & Form
-      </label>
+      <Collapse title="Shape & Form">
+        {/* <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-5">
+          Shape & Form
+        </label> */}
 
-      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
-        Dots
-      </label>
+        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+          Dots
+        </label>
 
-      <RadioGroup value={selectedDotType} onChange={setSelectedDotType} className="mt-2">
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-          {dotTypes.map((option) => (
-            <RadioGroup.Option
-              key={option.name}
-              value={option}
-              className={({ active, checked }) => {
-                return classNames('cursor-pointer bg-white',
+        <RadioGroup value={selectedDotType} onChange={setSelectedDotType} className="mt-2">
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+            {dotTypes.map((option) => (
+              <RadioGroup.Option
+                key={option.name}
+                value={option}
+                className={({ active, checked }) => {
+                  return classNames('cursor-pointer bg-white',
+                    checked
+                      ? 'border border-palqrblue border-2'
+                      : 'border border-2 ring-gray-300 text-gray-900 hover:bg-gray-50',
+                    'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
+                  )}
+                }
+                disabled={false}
+              >
+                <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
+              </RadioGroup.Option>
+            ))}
+          </div>
+        </RadioGroup>
+
+        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+          Inner Eyes
+        </label>
+
+        <RadioGroup value={selectedInnerEyeType} onChange={setSelectedInnerEyeType} className="mt-2">
+          <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+            {innerEyeTypes.map((option) => (
+              <RadioGroup.Option
+                key={option.name}
+                value={option}
+                className={({ active, checked }) => {
+                  return classNames('cursor-pointer bg-white',
                   checked
-                    ? 'ring-2 ring-palqrblue ring-offset-2'
-                    : 'ring-1 ring-inset ring-gray-300 text-gray-900 hover:bg-gray-50',
-                  'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
-                )}
-              }
-              disabled={false}
-            >
-              <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
-            </RadioGroup.Option>
-          ))}
-        </div>
-      </RadioGroup>
+                  ? 'border border-palqrblue border-2'
+                  : 'border border-2 ring-gray-300 text-gray-900 hover:bg-gray-50',
+                'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
+                  )}
+                }
+                disabled={false}
+              >
+                <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
+              </RadioGroup.Option>
+            ))}
+          </div>
+        </RadioGroup>
 
-      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
-        Inner Eyes
-      </label>
+        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+          Outer Eyes
+        </label>
 
-      <RadioGroup value={selectedInnerEyeType} onChange={setSelectedInnerEyeType} className="mt-2">
-        <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-          {innerEyeTypes.map((option) => (
-            <RadioGroup.Option
-              key={option.name}
-              value={option}
-              className={({ active, checked }) => {
-                return classNames('cursor-pointer bg-white',
+        <RadioGroup value={selectedEyeType} onChange={setSelectedEyeType} className="mt-2">
+          <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+            {eyeTypes.map((option) => (
+              <RadioGroup.Option
+                key={option.name}
+                value={option}
+                className={({ active, checked }) => {
+                  return classNames('cursor-pointer bg-white',
                   checked
-                    ? 'ring-2 ring-palqrblue ring-offset-2'
-                    : 'ring-1 ring-inset ring-gray-300 text-gray-900 hover:bg-gray-50',
-                  'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
-                )}
-              }
-              disabled={false}
-            >
-              <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
-            </RadioGroup.Option>
-          ))}
-        </div>
-      </RadioGroup>
+                  ? 'border border-palqrblue border-2'
+                  : 'border border-2 ring-gray-300 text-gray-900 hover:bg-gray-50',
+                'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
+                  )}
+                }
+                disabled={false}
+              >
+                <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
+              </RadioGroup.Option>
+            ))}
+          </div>
+        </RadioGroup>
+      </Collapse>
 
-      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
-        Outer Eyes
-      </label>
+      <Collapse title="Color">
+        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+          Dots
+        </label>
 
-      <RadioGroup value={selectedEyeType} onChange={setSelectedEyeType} className="mt-2">
-        <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-          {eyeTypes.map((option) => (
-            <RadioGroup.Option
-              key={option.name}
-              value={option}
-              className={({ active, checked }) => {
-                return classNames('cursor-pointer bg-white',
-                  checked
-                    ? 'ring-2 ring-palqrblue ring-offset-2'
-                    : 'ring-1 ring-inset ring-gray-300 text-gray-900 hover:bg-gray-50',
-                  'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
-                )}
-              }
-              disabled={false}
-            >
-              <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
-            </RadioGroup.Option>
-          ))}
-        </div>
-      </RadioGroup>
+        <ColorInput onChange={setDotsColor} />
 
-      <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-5">
-        Color
-      </label>
+        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+          Inner Eyes
+        </label>
 
-      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
-        Dots
-      </label>
+        <ColorInput onChange={setInnerEyeColor} />
 
-      <ColorInput onChange={setDotsColor} />
+        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+          Outer Eyes
+        </label>
 
-      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
-        Inner Eyes
-      </label>
-
-      <ColorInput onChange={setInnerEyeColor} />
-
-      <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
-        Outer Eyes
-      </label>
-
-      <ColorInput onChange={setOuterEyeColor} />
+        <ColorInput onChange={setOuterEyeColor} />
+      </Collapse>
 
       <label htmlFor="link" className="block text-md font-semibold leading-6 text-gray-900 mt-5">
         Logo
