@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { authorizeRequest } from '@/app/utils/sessionUtils';
+import prisma from '../../utils/prisma';
 
 export async function GET(req) {
   const { currentUser, currentTeam } = await authorizeRequest();
@@ -8,10 +8,6 @@ export async function GET(req) {
   if (!currentUser || !currentTeam) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 })
   }
-
-  const prisma = new PrismaClient({
-    log: ['query', 'info', 'warn', 'error'],
-  })
 
   let qrs = await prisma.QRCode.findMany({
     where: {
@@ -53,10 +49,6 @@ export async function POST(req) {
   const pngBuffer = await png.arrayBuffer();
   const svg = formData.get('svg');
   const svgText = await svg.text();
-
-  const prisma = new PrismaClient({
-    log: ['query', 'info', 'warn', 'error'],
-  })
 
   const qrCode = await prisma.QRCode.create({
     data: {

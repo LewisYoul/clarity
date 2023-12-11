@@ -3,8 +3,8 @@ import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation';
 import ResetPasswordForm from "../components/ResetPasswordForm";
 import Link from 'next/link'
-import { PrismaClient } from "@prisma/client"
 import moment from 'moment'
+import prisma from "../utils/prisma";
 
 export default async function ResetPassword({ searchParams }) {
   const session = await getServerSession(options)
@@ -20,7 +20,6 @@ export default async function ResetPassword({ searchParams }) {
       redirect("forgot-password?message=missingToken")
     }
   
-    const prisma = new PrismaClient()
     const passwordResetRequest = await prisma.passwordResetRequest.findFirst({
       where: {
         token: token

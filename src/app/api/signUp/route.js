@@ -1,5 +1,5 @@
+import prisma from '../../utils/prisma'
 import bcrypt from 'bcrypt'
-import { PrismaClient } from "@prisma/client"
 
 export async function POST(req) {
   const { email, password, passwordConfirmation } = await req.json()
@@ -8,8 +8,6 @@ export async function POST(req) {
   if (password !== passwordConfirmation) {
     return Response.json({ message: "The passwords you've entered don't match. Please try again." }, { status: 400 })
   }
-
-  const prisma = new PrismaClient()
 
   const existingUser = await prisma.user.findUnique({
     where: {

@@ -1,13 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from "../../utils/prisma";
+
 const postmark = require("postmark");
 const crypto = require('crypto');
 
 export async function POST(req) {
   const { email } = await req.json();
-
-  console.log('email', email);
-
-  const prisma = new PrismaClient();
 
   try {
     const user = await prisma.user.findUnique({

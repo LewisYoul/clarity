@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../utils/prisma';
 import bcrypt from 'bcrypt'
 
 export async function POST(req) {
@@ -10,7 +10,6 @@ export async function POST(req) {
   }
   
   try {
-    const prisma = new PrismaClient();
     const passwordResetRequest = await prisma.passwordResetRequest.findFirst({
       where: {
         userId: userId,

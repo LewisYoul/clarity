@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth/next'
 import { options } from "../api/auth/[...nextauth]/options";
-import { PrismaClient } from '@prisma/client';
+import prisma from "./prisma";
 
 export async function authorizeRequest() {
   const session = await getServerSession(options)
@@ -9,10 +9,6 @@ export async function authorizeRequest() {
   if (!session || !session.user || !session.team) {
     return unauthorizedObject;
   }
-
-  const prisma = new PrismaClient({
-    log: ['query', 'info', 'warn', 'error'],
-  })
 
   const currentUser = await prisma.user.findUnique({
     where: {
