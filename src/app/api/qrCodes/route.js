@@ -38,6 +38,8 @@ export async function GET(req) {
     })
   )
 
+  await prisma.$disconnect()
+
   return Response.json({ data: qrs })
 }
 
@@ -106,12 +108,16 @@ export async function POST(req) {
   try {
     await s3.send(pngCreationCommand);
     await s3.send(svgCreationCommand);
+
+    await prisma.$disconnect()
   } catch (error) {
     console.error('BUGGER', error);
 
     await prisma.File.delete({ where: { id: createdPng.id } })
     await prisma.File.delete({ where: { id: createdSvg.id } })
     await prisma.QRCode.delete({ where: { id: qrCode.id } })
+
+    await prisma.$disconnect()
 
     return Response.json({ message: 'There was a problem creating your QR code. If this problem continues please contact us.' }, { status: 500 })
   }
