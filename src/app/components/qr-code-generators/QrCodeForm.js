@@ -2,10 +2,10 @@
 
 import QRCodeStyling from "qr-code-styling";
 import { useEffect, useRef, useState } from "react";
-import { RadioGroup } from '@headlessui/react'
 import FileInput from "../form/FileInput";
 import ColorInput from "../form/ColorInput";
 import Collapse from "../Collapse";
+import Radio from "../form/Radio";
 
 const dotTypes = [
   {
@@ -153,95 +153,29 @@ export default function QrCodeForm({ onChange }) {
           type="text"
           name="link"
           id="link"
-          className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
           placeholder="https://example.com"
         />
       </div>
 
       <Collapse title="Shape & Form">
-        {/* <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-5">
-          Shape & Form
-        </label> */}
-
         <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
           Dots
         </label>
 
-        <RadioGroup value={selectedDotType} onChange={setSelectedDotType} className="mt-2">
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-            {dotTypes.map((option) => (
-              <RadioGroup.Option
-                key={option.name}
-                value={option}
-                className={({ active, checked }) => {
-                  return classNames('cursor-pointer bg-white',
-                    checked
-                      ? 'border border-palqrblue border-2'
-                      : 'border border-2 ring-gray-300 text-gray-900 hover:bg-gray-50',
-                    'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
-                  )}
-                }
-                disabled={false}
-              >
-                <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
-              </RadioGroup.Option>
-            ))}
-          </div>
-        </RadioGroup>
+        <Radio value={selectedDotType} options={dotTypes} onChange={setSelectedDotType} />
 
         <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
           Inner Eyes
         </label>
 
-        <RadioGroup value={selectedInnerEyeType} onChange={setSelectedInnerEyeType} className="mt-2">
-          <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-            {innerEyeTypes.map((option) => (
-              <RadioGroup.Option
-                key={option.name}
-                value={option}
-                className={({ active, checked }) => {
-                  return classNames('cursor-pointer bg-white',
-                  checked
-                  ? 'border border-palqrblue border-2'
-                  : 'border border-2 ring-gray-300 text-gray-900 hover:bg-gray-50',
-                'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
-                  )}
-                }
-                disabled={false}
-              >
-                <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
-              </RadioGroup.Option>
-            ))}
-          </div>
-        </RadioGroup>
+        <Radio value={selectedInnerEyeType} options={innerEyeTypes} onChange={setSelectedInnerEyeType} />
 
         <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
           Outer Eyes
         </label>
 
-        <RadioGroup value={selectedEyeType} onChange={setSelectedEyeType} className="mt-2">
-          <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-            {eyeTypes.map((option) => (
-              <RadioGroup.Option
-                key={option.name}
-                value={option}
-                className={({ active, checked }) => {
-                  return classNames('cursor-pointer bg-white',
-                  checked
-                  ? 'border border-palqrblue border-2'
-                  : 'border border-2 ring-gray-300 text-gray-900 hover:bg-gray-50',
-                'flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1'
-                  )}
-                }
-                disabled={false}
-              >
-                <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
-              </RadioGroup.Option>
-            ))}
-          </div>
-        </RadioGroup>
+        <Radio value={selectedEyeType} options={eyeTypes} onChange={setSelectedEyeType} />
       </Collapse>
 
       <Collapse title="Color">
