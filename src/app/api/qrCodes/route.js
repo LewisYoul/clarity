@@ -15,24 +15,37 @@ export async function GET(req) {
     }
   })
 
-  // This is causing N+1 but I don't know prisma well enough yet to fix it.
-  qrs = await Promise.all(
-    qrs.map(async (qr) => {
-      const files = await prisma.File.findMany({
-        where: {
-          fileableId: qr.id,
-          fileableType: 'QRCode'
-        }
-      })
+  const qrIds = qrs.map(qr => qr.id)
 
-      qr.svgFile = files.find(file => file.fileName === 'qr.svg')
+  // Turns out prisma doesn't support polymorphic relationships yet - https://github.com/prisma/prisma/issues/1644.
+  const svgFiles = await prisma.File.findMany({
+    where: {
+      fileableId: {
+        in: qrIds
+      },
+      fileableType: 'QRCode',
+      fileType: 'image/svg+xml'
+    }
+  })
+
+  const pngFiles = await prisma.File.findMany({
+    where: {
+      fileableId: {
+        in: qrIds
+      },
+      fileableType: 'QRCode',
+      fileType: 'image/png'
+    }
+  })
+
+    qrs.map((qr) => {
+      qr.svgFile = svgFiles.find(file => file.fileableId === qr.id)
       qr.svgFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.svgFile.id}/qr.svg`
-      qr.pngFile = files.find(file => file.fileName === 'qr.png')
+      qr.pngFile = pngFiles.find(file => file.fileableId === qr.id)
       qr.pngFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.pngFile.id}/qr.png`
 
       return qr
     })
-  )
 
   return Response.json({ data: qrs })
 }

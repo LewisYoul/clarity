@@ -25,9 +25,8 @@ export default function QrCodeList() {
   }
 
   useEffect(() => {
-    
     fetchQrCodes()
-  }, [setQrs])
+  }, [])
 
   useEffect(() => {
     document.addEventListener('triggerQrCodeFetch', fetchQrCodes)
