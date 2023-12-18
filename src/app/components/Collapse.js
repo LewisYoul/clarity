@@ -10,7 +10,7 @@ export default function Collapse({ title, children }) {
 
   return (
     <div>
-      <label onClick={toggleActive} htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-5 w-full">
+      <label onClick={toggleActive} className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 mt-5 w-full">
         {title}
         {<ChevronDownIcon className={`h-5 w-5 ml-1 transition-all duration-300 transform ${active ? '-rotate-180' : ''}`} aria-hidden="true" />}
       </label>

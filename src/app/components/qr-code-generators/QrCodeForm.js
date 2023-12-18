@@ -7,56 +7,56 @@ import ColorInput from "../form/ColorInput";
 import Collapse from "../Collapse";
 import Radio from "../form/Radio";
 
-const dotTypes = [
-  {
-    name: 'Square',
-    value: 'square'
-  },
-  {
-    name: 'Rounded',
-    value: 'rounded'
-  },
-  {
-    name: 'Smooth',
-    value: 'extra-rounded'
-  },
-  {
-    name: 'Classy',
-    value: 'classy'
-  },
-  {
-    name: 'Calligraphy',
-    value: 'classy-rounded'
-  }
-]
-
-const eyeTypes = [
-  {
-    name: 'Square',
-    value: 'square'
-  },
-  {
-    name: 'Circle',
-    value: 'dot'
-  },
-  {
-    name: 'Rounded',
-    value: 'extra-rounded'
-  }
-]
-// 'dot' 'square'
-const innerEyeTypes = [
-  {
-    name: 'Square',
-    value: 'square'
-  },
-  {
-    name: 'Dot',
-    value: 'dot'
-  },
-]
-
 export default function QrCodeForm({ onChange }) {
+  const dotTypes = [
+    {
+      name: 'Square',
+      value: 'square'
+    },
+    {
+      name: 'Rounded',
+      value: 'rounded'
+    },
+    {
+      name: 'Smooth',
+      value: 'extra-rounded'
+    },
+    {
+      name: 'Classy',
+      value: 'classy'
+    },
+    {
+      name: 'Calligraphy',
+      value: 'classy-rounded'
+    }
+  ]
+  
+  const eyeTypes = [
+    {
+      name: 'Square',
+      value: 'square'
+    },
+    {
+      name: 'Circle',
+      value: 'dot'
+    },
+    {
+      name: 'Rounded',
+      value: 'extra-rounded'
+    }
+  ]
+  // 'dot' 'square'
+  const innerEyeTypes = [
+    {
+      name: 'Square',
+      value: 'square'
+    },
+    {
+      name: 'Dot',
+      value: 'dot'
+    },
+  ]
+
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[0])
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
   const [selectedInnerEyeType, setSelectedInnerEyeType] = useState(innerEyeTypes[0])
@@ -91,10 +91,6 @@ export default function QrCodeForm({ onChange }) {
   });
 
   const [qrCode] = useState(new QRCodeStyling(qrCodeOptions));
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-  }
 
   useEffect(() => {
     if (ref.current) {
@@ -155,23 +151,24 @@ export default function QrCodeForm({ onChange }) {
           id="link"
           className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
           placeholder="https://example.com"
+          autoFocus
         />
       </div>
 
       <Collapse title="Shape & Form">
-        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        <label className="block text-sm font-medium text-gray-900 mt-3">
           Dots
         </label>
 
         <Radio value={selectedDotType} options={dotTypes} onChange={setSelectedDotType} />
 
-        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        <label className="block text-sm font-medium text-gray-900 mt-3">
           Inner Eyes
         </label>
 
         <Radio value={selectedInnerEyeType} options={innerEyeTypes} onChange={setSelectedInnerEyeType} />
 
-        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        <label className="block text-sm font-medium text-gray-900 mt-3">
           Outer Eyes
         </label>
 
@@ -179,26 +176,26 @@ export default function QrCodeForm({ onChange }) {
       </Collapse>
 
       <Collapse title="Color">
-        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        <label className="block text-sm font-medium text-gray-900 mt-3">
           Dots
         </label>
 
         <ColorInput onChange={setDotsColor} />
 
-        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        <label className="block text-sm font-medium text-gray-900 mt-3">
           Inner Eyes
         </label>
 
         <ColorInput onChange={setInnerEyeColor} />
 
-        <label htmlFor="link" className="block text-sm font-medium text-gray-900 mt-3">
+        <label className="block text-sm font-medium text-gray-900 mt-3">
           Outer Eyes
         </label>
 
         <ColorInput onChange={setOuterEyeColor} />
       </Collapse>
 
-      <label htmlFor="link" className="block text-md font-semibold leading-6 text-gray-900 mt-5">
+      <label className="block text-md font-semibold leading-6 text-gray-900 mt-5">
         Logo
       </label>
 
@@ -210,6 +207,5 @@ export default function QrCodeForm({ onChange }) {
         <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
       </div>
     </div>
-
   )
 }
