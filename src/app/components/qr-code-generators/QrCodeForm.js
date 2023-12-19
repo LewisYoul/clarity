@@ -7,56 +7,56 @@ import ColorInput from "../form/ColorInput";
 import Collapse from "../Collapse";
 import Radio from "../form/Radio";
 
-export default function QrCodeForm({ onChange }) {
-  const dotTypes = [
-    {
-      name: 'Square',
-      value: 'square'
-    },
-    {
-      name: 'Rounded',
-      value: 'rounded'
-    },
-    {
-      name: 'Smooth',
-      value: 'extra-rounded'
-    },
-    {
-      name: 'Classy',
-      value: 'classy'
-    },
-    {
-      name: 'Calligraphy',
-      value: 'classy-rounded'
-    }
-  ]
-  
-  const eyeTypes = [
-    {
-      name: 'Square',
-      value: 'square'
-    },
-    {
-      name: 'Circle',
-      value: 'dot'
-    },
-    {
-      name: 'Rounded',
-      value: 'extra-rounded'
-    }
-  ]
-  // 'dot' 'square'
-  const innerEyeTypes = [
-    {
-      name: 'Square',
-      value: 'square'
-    },
-    {
-      name: 'Dot',
-      value: 'dot'
-    },
-  ]
+const dotTypes = [
+  {
+    name: 'Square',
+    value: 'square'
+  },
+  {
+    name: 'Rounded',
+    value: 'rounded'
+  },
+  {
+    name: 'Smooth',
+    value: 'extra-rounded'
+  },
+  {
+    name: 'Classy',
+    value: 'classy'
+  },
+  {
+    name: 'Calligraphy',
+    value: 'classy-rounded'
+  }
+]
 
+const eyeTypes = [
+  {
+    name: 'Square',
+    value: 'square'
+  },
+  {
+    name: 'Circle',
+    value: 'dot'
+  },
+  {
+    name: 'Rounded',
+    value: 'extra-rounded'
+  }
+]
+// 'dot' 'square'
+const innerEyeTypes = [
+  {
+    name: 'Square',
+    value: 'square'
+  },
+  {
+    name: 'Dot',
+    value: 'dot'
+  },
+]
+
+export default function QrCodeForm({ onChange }) {
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[0])
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
   const [selectedInnerEyeType, setSelectedInnerEyeType] = useState(innerEyeTypes[0])
