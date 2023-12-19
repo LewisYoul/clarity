@@ -56,9 +56,9 @@ export default function QrCodeList() {
       </div>
       {
         qrs.length === 0 ? (
-          <div className="w-full">
-            <div className="flex justify-center mt-4">
-              <p className="block mx-auto">We couldn&apos;t find any QR codes, click the button below to create one!</p>
+          <div className="w-full px-8 pt-10">
+            <div className="flex justify-center text-center mt-4">
+              <p className="block mx-auto text-gray-500">We couldn&apos;t find any QR codes, click the button below to create one!</p>
             </div>
 
             <div className="flex justify-center mt-4">
