@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import QrCode from "./QrCode";
 import { PlusIcon  } from '@heroicons/react/24/outline'
 import { showToast } from "../utils/toastUtils";
+import debounce from 'debounce';
 
 export default function QrCodeList() {
   const [qrs, setQrs] = useState(null);
   
-  const fetchQrCodes = async () => {
+  const fetchQrCodes = async (searchTerm) => {
+    const url = searchTerm ? `/api/qrCodes?searchTerm=${searchTerm}` : '/api/qrCodes'
+
     try {
-      const res = await fetch('/api/qrCodes')
+      const res = await fetch(url)
 
       if (!res.ok) throw new Error()
 
@@ -32,32 +35,49 @@ export default function QrCodeList() {
     document.addEventListener('triggerQrCodeFetch', fetchQrCodes)
   }, [])
 
+  const handleSearchChange = debounce(async (e) => {
+    let searchTerm = e.target.value.toLowerCase()
+    
+    if (searchTerm === '') {
+      searchTerm = null
+    }
+
+    fetchQrCodes(searchTerm)
+  }, 300)
+
   if (qrs === null || qrs === undefined) return (
     <div>Loading...</div>
   )
 
   return(
-    qrs.length === 0 ? (
-      <div className="w-full">
-        <div className="flex justify-center mt-4">
-          <p className="block mx-auto">You don&apos;t have any QR codes yet, click the button below to create one!</p>
-        </div>
+    <div className="pb-4">
+      <div className="mb-4 flex h-full border rounded-md border border-1 bg-slate-50 border-slate-200 p-4 mx-4 lg:mx-0">
+        <input placeholder="Search QR codes" onChange={handleSearchChange} className="block w-full lg:w-60 rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6" type="text"></input>
+      </div>
+      {
+        qrs.length === 0 ? (
+          <div className="w-full">
+            <div className="flex justify-center mt-4">
+              <p className="block mx-auto">We couldn&apos;t find any QR codes, click the button below to create one!</p>
+            </div>
 
-        <div className="flex justify-center mt-4">
-          <button
-            type="button"
-            className="mr-4 inline-flex rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            <PlusIcon className="h-5 w-5"/> New QR Code
-          </button>
-        </div>
-      </div>
-    ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-4 lg:mx-0">
-        {qrs.map((qr) => (
-          <QrCode qr={qr} key={`qr-${qr.id}`} />
-        ))}
-      </div>
-    )
+            <div className="flex justify-center mt-4">
+              <button
+                type="button"
+                className="mr-4 inline-flex rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <PlusIcon className="h-5 w-5"/> New QR Code
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-4 lg:mx-0">
+            {qrs.map((qr) => (
+              <QrCode qr={qr} key={`qr-${qr.id}`} />
+            ))}
+          </div>
+        )
+      }
+    </div>
   )
 }

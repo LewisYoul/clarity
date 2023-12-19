@@ -4,14 +4,28 @@ import prisma from '../../utils/prisma';
 
 export async function GET(req) {
   const { currentUser, currentTeam } = await authorizeRequest();
-
+  
   if (!currentUser || !currentTeam) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 })
   }
 
+  const params = req.nextUrl.searchParams
+  console.log(params)
+
+  let searchTermQuery = {}
+
+  if (params.has('searchTerm')) {
+    searchTermQuery = {
+      link: {
+        contains: params.get('searchTerm')
+      }
+    }
+  }
+
   let qrs = await prisma.QRCode.findMany({
     where: {
-      teamId: currentTeam.id
+      teamId: currentTeam.id,
+      ...searchTermQuery
     }
   })
 
