@@ -32,7 +32,7 @@ export default function QrCodeList() {
   }, [])
 
   useEffect(() => {
-    document.addEventListener('triggerQrCodeFetch', fetchQrCodes)
+    document.addEventListener('triggerQrCodeFetch', () => { fetchQrCodes() })
   }, [])
 
   const handleSearchChange = debounce(async (e) => {
