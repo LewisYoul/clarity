@@ -26,6 +26,9 @@ export async function GET(req) {
     where: {
       teamId: currentTeam.id,
       ...searchTermQuery
+    },
+    orderBy: {
+      updatedAt: 'desc'
     }
   })
 

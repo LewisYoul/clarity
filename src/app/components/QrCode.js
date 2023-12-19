@@ -11,12 +11,17 @@ const QrCode = (props) => {
       </span> */}
       <div className="flex justify-center">
         <div className="mt-4">
+          <div className="mb-3 flex justify-center w-40">
+            <p className="max-w-full text-sm truncate">{qr.link}</p>
+          </div>
           <div className="bg-white h-40 w-40">
             <img src={qr.svgFile.url}></img>
           </div>
-          <div className="mt-3 flex justify-center w-40">
-            <p className="max-w-full text-sm truncate">{qr.link}</p>
-          </div>
+        </div>
+      </div>
+      <div>
+        <div className="my-3 flex justify-center">
+          <p className="max-w-full text-xs text-gray-400">Updated {new Date(qr.createdAt).toLocaleString('en-US', { year:"numeric", month:"short", day:"numeric", hour: '2-digit', minute:'2-digit', hour12: false })}</p>
         </div>
       </div>
       <div className="mt-5 flex text-sm border-t">

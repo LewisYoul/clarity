@@ -50,6 +50,8 @@ model QRCode {
   createdById Int
   createdBy User @relation(fields: [createdById], references: [id])
   link String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model File {
