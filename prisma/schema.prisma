@@ -53,6 +53,7 @@ model QRCode {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   type QRCodeType @default(link)
+  mailTo MailTo?
 }
 
 model File {
@@ -66,4 +67,15 @@ model File {
 enum QRCodeType {
   link
   pdf
+}
+
+model MailTo {
+  id      Int      @id @default(autoincrement())
+  qrCodeId Int @unique
+  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
+  to String
+  cc String?
+  bcc String?
+  subject String
+  body String
 }

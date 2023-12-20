@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-export default function FileInput({ onChange }) {
+export default function FileInput({ accept, buttonText, onChange }) {
   const [filePath, setFilePath] = useState(null)
   const inputRef = useRef(null)
 
@@ -32,11 +32,11 @@ export default function FileInput({ onChange }) {
     setFilePath(filePath)
   }
 
-  const inputButtonText = filePath ? 'Change' : 'Upload a logo'
+  const inputButtonText = filePath ? 'Change' : buttonText
 
   return (
     <>
-      <input className="hidden"type="file" id="logo" name="logo" accept="image/png, image/jpeg" ref={inputRef} onChange={(e) => handleFileChange(e)} />
+      <input className="hidden"type="file" id="logo" name="logo" accept={accept.join(', ')} ref={inputRef} onChange={(e) => handleFileChange(e)} />
       <button onClick={clickRealFileInput} className="bg-white ring-1 ring-inset ring-gray-300 rounded-md text-sm px-3 py-1">{inputButtonText}</button>
       {filePath ? <button onClick={clearFileInput} className="bg-white ring-1 ring-inset ring-gray-300 rounded-md text-sm px-3 py-1">Remove</button> : null}
     </>

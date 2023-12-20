@@ -57,6 +57,7 @@ const innerEyeTypes = [
 ]
 
 export default function QrCodeForm({ onChange }) {
+  const [type, setType] = useState('link')
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[0])
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
   const [selectedInnerEyeType, setSelectedInnerEyeType] = useState(innerEyeTypes[0])
@@ -138,22 +139,52 @@ export default function QrCodeForm({ onChange }) {
     generateQrCode()
   }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor])
 
+  useEffect(() => {
+
+  }, [type])
+
+  const changeQrCodeType = (e) => {
+    const type = e.target.value
+
+    console.log(type)
+
+    setType(type)
+  }
+
   return(
     <div>
-      <label htmlFor="link" className="inline-flex items-center text-md font-semibold leading-6 text-gray-900">
-        Destination
-      </label>
-      <div className="mt-2">
-        <input
-          onChange={(e) => setLink(e.target.value)}
-          type="text"
-          name="link"
-          id="link"
-          className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-          placeholder="https://example.com"
-          autoFocus
-        />
-      </div>
+      <select defaultValue="link" onChange={changeQrCodeType} className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 bg-slate-100">
+        <option value="link">Link</option>
+        <option value="pdf">PDF</option>
+      </select>
+      
+      {
+        type === 'link' && (
+          <div className="mt-2">
+            <input
+              onChange={(e) => setLink(e.target.value)}
+              type="text"
+              name="link"
+              id="link"
+              className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+              placeholder="https://example.com"
+              autoFocus
+            />
+          </div>
+        )
+      }
+
+      {
+        type === 'pdf' && (
+          <div className="mt-2">
+            <FileInput
+              accept={['application/pdf']}
+              buttonText="Upload a PDF"
+              onChange={() => {}}
+            />
+          </div>
+        )
+      }
 
       <Collapse title="Shape & Form">
         <label className="block text-sm font-medium text-gray-900 mt-3">
@@ -200,7 +231,11 @@ export default function QrCodeForm({ onChange }) {
       </label>
 
       <div className="mt-2">
-        <FileInput onChange={setLogoPath} />
+        <FileInput
+          accept={['image/png', 'image/jpeg']}
+          buttonText="Upload a logo"
+          onChange={setLogoPath}
+        />
       </div>
 
       <div className="flex justify-center w-full mt-6">
