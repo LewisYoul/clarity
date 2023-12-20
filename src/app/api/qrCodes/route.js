@@ -1,6 +1,7 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { authorizeRequest } from '@/app/utils/sessionUtils';
 import prisma from '../../utils/prisma';
+import qrCodeCreator from "../../utils/qr-codes/qrCodeCreator";
 
 export async function GET(req) {
   const { currentUser, currentTeam } = await authorizeRequest();
@@ -73,73 +74,13 @@ export async function POST(req) {
   if (!currentUser || !currentTeam) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 })
   }
-
+  
   const formData = await req.formData();
-  const png = formData.get('png');
-  const pngBuffer = await png.arrayBuffer();
-  const svg = formData.get('svg');
-  const svgText = await svg.text();
+  const result = await qrCodeCreator(currentUser, currentTeam, formData)
 
-  console.log(formData.get('type'))
-
-  const qrCode = await prisma.QRCode.create({
-    data: {
-      teamId: currentTeam.id,
-      createdById: currentUser.id,
-      link: formData.get('link'),
-      type: formData.get('type'),
-    }
-  })
-
-  const createdPng = await prisma.File.create({
-    data: {
-      fileName: 'qr.png',
-      fileType: 'image/png',
-      fileableId: qrCode.id,
-      fileableType: 'QRCode',
-    }
-  })
-
-  const createdSvg = await prisma.File.create({
-    data: {
-      fileName: 'qr.svg',
-      fileType: 'image/svg+xml',
-      fileableId: qrCode.id,
-      fileableType: 'QRCode',
-    }
-  })
-
-  const pngKey = `File/${createdPng.id}/qr.png`;
-  const svgKey = `File/${createdSvg.id}/qr.svg`;
-
-  const pngCreationCommand = new PutObjectCommand({
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: pngKey,
-    Body: pngBuffer,
-    ContentType: "image/png",
-  });
-
-  const svgCreationCommand = new PutObjectCommand({
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: svgKey,
-    Body: svgText,
-    ContentType: "image/svg+xml",
-  });
-
-  const s3 = new S3Client({ region: process.env.AWS_DEFAULT_REGION });
-
-  try {
-    await s3.send(pngCreationCommand);
-    await s3.send(svgCreationCommand);
-  } catch (error) {
-    console.error('BUGGER', error);
-
-    await prisma.File.delete({ where: { id: createdPng.id } })
-    await prisma.File.delete({ where: { id: createdSvg.id } })
-    await prisma.QRCode.delete({ where: { id: qrCode.id } })
-
-    return Response.json({ message: 'There was a problem creating your QR code. If this problem continues please contact us.' }, { status: 500 })
+  if (result.success) {
+    return Response.json({ message: result.message })
+  } else {
+    return Response.json({ message: result.message }, { status: 400 })
   }
-
-  return Response.json({ message: 'QR Code created!' })
 }
