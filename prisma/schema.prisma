@@ -52,6 +52,7 @@ model QRCode {
   link String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
+  type QRCodeType @default(link)
 }
 
 model File {
@@ -60,4 +61,9 @@ model File {
   fileType String
   fileableId Int
   fileableType String
+}
+
+enum QRCodeType {
+  link
+  pdf
 }

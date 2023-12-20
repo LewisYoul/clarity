@@ -28,6 +28,7 @@ export default function QrCodeGenerator() {
     const formData = new FormData()
 
     formData.append('link', qrCode._options.data)
+    formData.append('type', 'link')
     formData.append('svg', svgBlob)
     formData.append('png', pngBlob)
 

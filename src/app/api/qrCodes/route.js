@@ -80,11 +80,14 @@ export async function POST(req) {
   const svg = formData.get('svg');
   const svgText = await svg.text();
 
+  console.log(formData.get('type'))
+
   const qrCode = await prisma.QRCode.create({
     data: {
       teamId: currentTeam.id,
       createdById: currentUser.id,
       link: formData.get('link'),
+      type: formData.get('type'),
     }
   })
 
