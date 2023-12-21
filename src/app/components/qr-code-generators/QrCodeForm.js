@@ -6,6 +6,7 @@ import FileInput from "../form/FileInput";
 import ColorInput from "../form/ColorInput";
 import Collapse from "../Collapse";
 import Radio from "../form/Radio";
+import MailToInput from "../form/MailToInput";
 
 const dotTypes = [
   {
@@ -66,6 +67,13 @@ export default function QrCodeForm({ onChange }) {
   const [innerEyeColor, setInnerEyeColor] = useState("#000000")
   const [outerEyeColor, setOuterEyeColor] = useState("#000000")
   const [link, setLink] = useState('https://example.com')
+  const [mailTo, setMailTo] = useState({
+    to: '',
+    cc: '',
+    bcc: '',
+    subject: '',
+    body: ''
+  })
 
   const ref = useRef(null);
 
@@ -101,12 +109,15 @@ export default function QrCodeForm({ onChange }) {
 
   useEffect(() => {
     qrCode.update(qrCodeOptions);
+    console.log('code', qrCode)
 
+    // TODO also send the mailto options back to form
     onChange(qrCode)
   }, [qrCode, qrCodeOptions, onChange])
 
   useEffect(() => {
     const generateQrCode = () => {
+      console.log('mt', mailTo)
       setQrCodeOptions({
         width: 200,
         height: 200,
@@ -137,7 +148,7 @@ export default function QrCodeForm({ onChange }) {
     }
 
     generateQrCode()
-  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor])
+  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo])
 
   useEffect(() => {
 
@@ -155,7 +166,8 @@ export default function QrCodeForm({ onChange }) {
     <div>
       <select defaultValue="link" onChange={changeQrCodeType} className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 bg-slate-100">
         <option value="link">Link</option>
-        <option value="pdf">PDF</option>
+        <option value="email">Email</option>
+        {/* <option value="pdf">PDF</option> */}
       </select>
       
       {
@@ -168,13 +180,18 @@ export default function QrCodeForm({ onChange }) {
               id="link"
               className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
               placeholder="https://example.com"
-              autoFocus
             />
           </div>
         )
       }
 
       {
+        type === 'email' && (
+          <MailToInput onChange={setMailTo} />
+        )
+      }
+
+{
         type === 'pdf' && (
           <div className="mt-2">
             <FileInput

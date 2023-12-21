@@ -62,6 +62,5 @@ export default function QrCodeGenerator() {
         </button>
       </div>
     </Card>
-
   )
 }
