@@ -9,6 +9,7 @@ class Result {
 }
 
 const qrCodeCreator = async (user, team, formData) => {
+  console.log('formData', formData)
   try {
     const png = formData.get('png');
     const pngBuffer = await png.arrayBuffer();
@@ -23,6 +24,21 @@ const qrCodeCreator = async (user, team, formData) => {
         type: formData.get('type'),
       }
     })
+
+    let mailTo = null;
+
+    if (formData.get('type') === 'email') {
+      mailTo = await prisma.MailTo.create({
+        data: {
+          to: formData.get('mailTo[to]'),
+          cc: formData.get('mailTo[cc]'),
+          bcc: formData.get('mailTo[bcc]'),
+          subject: formData.get('mailTo[subject]'),
+          body: formData.get('mailTo[body]'),
+          qrCodeId: qrCode.id,
+        }
+      })
+    }
   
     const createdPng = await prisma.File.create({
       data: {
@@ -70,6 +86,9 @@ const qrCodeCreator = async (user, team, formData) => {
       await prisma.File.delete({ where: { id: createdPng.id } })
       await prisma.File.delete({ where: { id: createdSvg.id } })
       await prisma.QRCode.delete({ where: { id: qrCode.id } })
+      if (mailTo) {
+        await prisma.MailTo.delete({ where: { id: mailTo.id } })
+      }
   
       return new Result(false, 'There was a problem creating your QR code. If this problem continues please contact us.')
     }

@@ -45,7 +45,7 @@ const eyeTypes = [
     value: 'extra-rounded'
   }
 ]
-// 'dot' 'square'
+
 const innerEyeTypes = [
   {
     name: 'Square',
@@ -68,16 +68,18 @@ export default function QrCodeForm({ onChange }) {
   const [outerEyeColor, setOuterEyeColor] = useState("#000000")
   const [link, setLink] = useState('https://example.com')
   const [mailTo, setMailTo] = useState({
-    to: '',
-    cc: '',
-    bcc: '',
-    subject: '',
-    body: ''
+    uri: '',
+    values: {
+      to: '',
+      cc: '',
+      bcc: '',
+      subject: '',
+      body: ''
+    }
   })
 
   const ref = useRef(null);
-
-  const [qrCodeOptions, setQrCodeOptions] = useState({
+  const defaultOptions = {
     width: 200,
     height: 200,
     margin: 10,
@@ -97,7 +99,10 @@ export default function QrCodeForm({ onChange }) {
       color: innerEyeColor,
       type: selectedInnerEyeType.value
     },
-  });
+  }
+
+  const [qrCodeOptions, setQrCodeOptions] = useState(defaultOptions);
+  // const [optionsToEmit, setOptionsToEmit] = useState(qrCodeOptions)
 
   const [qrCode] = useState(new QRCodeStyling(qrCodeOptions));
 
@@ -109,19 +114,16 @@ export default function QrCodeForm({ onChange }) {
 
   useEffect(() => {
     qrCode.update(qrCodeOptions);
-    console.log('code', qrCode)
 
-    // TODO also send the mailto options back to form
     onChange(qrCode)
   }, [qrCode, qrCodeOptions, onChange])
 
   useEffect(() => {
     const generateQrCode = () => {
-      console.log('mt', mailTo)
-      setQrCodeOptions({
+      const opts = {
         width: 200,
         height: 200,
-        data: link,
+        data: type === 'email' ? mailTo.uri : link,
         margin: 10,
         image: logoPath,
         backgroundOptions: {
@@ -143,12 +145,16 @@ export default function QrCodeForm({ onChange }) {
           crossOrigin: "anonymous",
           margin: 5,
           imageSize: 0.5,
-        }
-      })
+        },
+        mailTo: JSON.parse(JSON.stringify(mailTo)),
+        type
+      }
+
+      setQrCodeOptions(opts)
     }
 
     generateQrCode()
-  }, [selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo])
+  }, [type, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo])
 
   useEffect(() => {
 

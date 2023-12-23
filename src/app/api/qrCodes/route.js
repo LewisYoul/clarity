@@ -1,4 +1,3 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { authorizeRequest } from '@/app/utils/sessionUtils';
 import prisma from '../../utils/prisma';
 import qrCodeCreator from "../../utils/qr-codes/qrCodeCreator";

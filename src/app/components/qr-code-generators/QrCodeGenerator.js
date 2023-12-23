@@ -6,7 +6,8 @@ import { showToast } from "../../utils/toastUtils";
 import QrCodeForm from "./QrCodeForm";
 
 export default function QrCodeGenerator() {  
-  const [qrCode, setQrCode] = useState()  
+  const [qrCode, setQrCode] = useState()
+  const [options, setOptions] = useState()
 
   const closeQrModal = () => {
     const event = new CustomEvent('closeQrModal', { detail: {} })
@@ -20,17 +21,36 @@ export default function QrCodeGenerator() {
     document.dispatchEvent(event)
   }
 
-
-  const saveQrCode = async () => {
+  const createQrCodeForm = async () => {
     const svgBlob = await qrCode.getRawData('svg')
     const pngBlob = await qrCode.getRawData('png')
-
     const formData = new FormData()
+    const opts = qrCode._options
+console.log('opts', opts)
 
-    formData.append('link', qrCode._options.data)
-    formData.append('type', 'link')
+    formData.append('link', opts.data)
+    formData.append('type', opts.type)
     formData.append('svg', svgBlob)
     formData.append('png', pngBlob)
+
+    if (opts.type === 'email') {
+      formData.append('mailTo[to]', opts.mailTo.values.to)
+      formData.append('mailTo[cc]', opts.mailTo.values.cc)
+      formData.append('mailTo[bcc]', opts.mailTo.values.bcc)
+      formData.append('mailTo[subject]', opts.mailTo.values.subject)
+      formData.append('mailTo[body]', opts.mailTo.values.body)
+    }
+
+    for (let val of formData.entries()) {
+      console.log(val[0]+ ', ' + val[1]); 
+    }
+
+    return formData;
+  }
+
+
+  const saveQrCode = async () => {
+    const formData = await createQrCodeForm()
 
     try {
       const res = await fetch('/api/qrCodes', {
@@ -50,7 +70,10 @@ export default function QrCodeGenerator() {
 
   return(
     <Card>
-      <QrCodeForm onChange={setQrCode} />
+      <QrCodeForm onChange={(qrCode) => {
+        console.log('qrCode', qrCode)
+        setQrCode(qrCode)
+      }} />
 
       <div className="flex justify-center w-full mt-6 mb-4">
         <button

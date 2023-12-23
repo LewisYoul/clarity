@@ -67,6 +67,7 @@ model File {
 enum QRCodeType {
   link
   pdf
+  email
 }
 
 model MailTo {

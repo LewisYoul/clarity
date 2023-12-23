@@ -14,23 +14,15 @@ export default function MailToInput({ onChange }) {
     const constructMailToUri = () => {
       let uri = `mailto:${to}`
   
-      if (cc.includes('@')) {
-        uri = uri + `?cc=${cc}`
-      }
-  
-      if (bcc.includes('@')) {
-        uri = uri + `&bcc=${bcc}`
-      }
-  
-      if (subject !== '') {
-        uri = uri + `&subject=${subject}`
-      }
-  
-      if (body !== '') {
-        uri = uri + `&body=${body}`
-      }
+      uri = uri + `?cc=${cc}`
 
-      return uri
+      uri = uri + `&bcc=${bcc}`
+
+      uri = uri + `&subject=${subject}`
+
+      uri = uri + `&body=${body}`
+
+      return encodeURI(uri)
     }
 
     const values = {
