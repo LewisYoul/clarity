@@ -4,6 +4,8 @@ import Link from 'next/link';
 const QrCode = (props) => {
   const { qr } = props;
 
+  const title = qr.type === 'link' ? qr.link : qr.mailTo.to
+
   return (
     <div className="border rounded-md bg-slate-50 relative shadow-md">
       {/* <span className="absolute -top-2 -right-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
@@ -12,7 +14,7 @@ const QrCode = (props) => {
       <div className="flex justify-center">
         <div className="mt-4">
           <div className="mb-3 flex justify-center w-40">
-            <p className="max-w-full text-sm truncate">{qr.link}</p>
+            <p className="max-w-full text-sm truncate">{title}</p>
           </div>
           <div className="bg-white h-40 w-40">
             <img src={qr.svgFile.url}></img>

@@ -29,6 +29,9 @@ export async function GET(req) {
     },
     orderBy: {
       updatedAt: 'desc'
+    },
+    include: {
+      mailTo: true,
     }
   })
 
