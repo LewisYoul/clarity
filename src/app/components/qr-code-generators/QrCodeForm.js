@@ -7,6 +7,7 @@ import ColorInput from "../form/ColorInput";
 import Collapse from "../Collapse";
 import Radio from "../form/Radio";
 import MailToInput from "../form/MailToInput";
+import WiFiInput from "../form/WiFiInput";
 
 const dotTypes = [
   {
@@ -77,6 +78,14 @@ export default function QrCodeForm({ onChange }) {
       body: ''
     }
   })
+  const [wifi, setWifi] = useState({
+    data: '',
+    values: {
+      encryptionType: 'wpa',
+      ssid: '',
+      password: ''
+    }
+  })
 
   const ref = useRef(null);
   const defaultOptions = {
@@ -119,11 +128,22 @@ export default function QrCodeForm({ onChange }) {
   }, [qrCode, qrCodeOptions, onChange])
 
   useEffect(() => {
+    const dataForType = () => {
+      switch (type) {
+        case 'email':
+          return mailTo.uri
+        case 'wifi':
+          return wifi.data
+        default:
+          return link
+      }
+    } 
+
     const generateQrCode = () => {
       const opts = {
         width: 200,
         height: 200,
-        data: type === 'email' ? mailTo.uri : link,
+        data: dataForType(),
         margin: 10,
         image: logoPath,
         backgroundOptions: {
@@ -146,7 +166,8 @@ export default function QrCodeForm({ onChange }) {
           margin: 5,
           imageSize: 0.5,
         },
-        mailTo: JSON.parse(JSON.stringify(mailTo)),
+        mailTo: mailTo,
+        wifi: wifi,
         type
       }
 
@@ -154,7 +175,7 @@ export default function QrCodeForm({ onChange }) {
     }
 
     generateQrCode()
-  }, [type, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo])
+  }, [type, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi])
 
   useEffect(() => {
 
@@ -173,6 +194,7 @@ export default function QrCodeForm({ onChange }) {
       <select defaultValue="link" onChange={changeQrCodeType} className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 bg-slate-100">
         <option value="link">Link</option>
         <option value="email">Email</option>
+        <option value="wifi">WiFi</option>
         {/* <option value="pdf">PDF</option> */}
       </select>
       
@@ -197,7 +219,13 @@ export default function QrCodeForm({ onChange }) {
         )
       }
 
-{
+      {
+        type === 'wifi' && (
+          <WiFiInput onChange={setWifi} />
+        )
+      }
+
+      {
         type === 'pdf' && (
           <div className="mt-2">
             <FileInput

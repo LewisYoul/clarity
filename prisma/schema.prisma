@@ -54,6 +54,7 @@ model QRCode {
   updatedAt DateTime  @default(now()) @updatedAt
   type QRCodeType @default(link)
   mailTo MailTo?
+  wifi WiFi?
 }
 
 model File {
@@ -68,6 +69,7 @@ enum QRCodeType {
   link
   pdf
   email
+  wifi
 }
 
 model MailTo {
@@ -79,4 +81,19 @@ model MailTo {
   bcc String?
   subject String
   body String
+}
+
+enum WiFiEncryptionType {
+  WEP
+  WPA
+  nopass
+}
+
+model WiFi {
+  id      Int      @id @default(autoincrement())
+  qrCodeId Int @unique
+  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
+  encryptionType WiFiEncryptionType
+  ssid String
+  password String?
 }

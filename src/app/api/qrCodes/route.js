@@ -32,6 +32,7 @@ export async function GET(req) {
     },
     include: {
       mailTo: true,
+      wifi: true,
     }
   })
 

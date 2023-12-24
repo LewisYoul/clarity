@@ -26,7 +26,7 @@ export default function QrCodeGenerator() {
     const pngBlob = await qrCode.getRawData('png')
     const formData = new FormData()
     const opts = qrCode._options
-console.log('opts', opts)
+    console.log('opts', opts)
 
     formData.append('link', opts.data)
     formData.append('type', opts.type)
@@ -39,6 +39,12 @@ console.log('opts', opts)
       formData.append('mailTo[bcc]', opts.mailTo.values.bcc)
       formData.append('mailTo[subject]', opts.mailTo.values.subject)
       formData.append('mailTo[body]', opts.mailTo.values.body)
+    }
+
+    if (opts.type === 'wifi') {
+      formData.append('wifi[encryptionType]', opts.wifi.values.encryptionType)
+      formData.append('wifi[ssid]', opts.wifi.values.ssid)
+      formData.append('wifi[password]', opts.wifi.values.password)
     }
 
     for (let val of formData.entries()) {

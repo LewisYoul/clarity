@@ -4,7 +4,21 @@ import Link from 'next/link';
 const QrCode = (props) => {
   const { qr } = props;
 
-  const title = qr.type === 'link' ? qr.link : qr.mailTo.to
+  const qrCodeTitle = () => {
+    if (qr.type === 'link') {
+      return qr.link
+    }
+
+    if (qr.type === 'email') {
+      return qr.mailTo.to
+    }
+
+    if (qr.type === 'wifi') {
+      return qr.wifi.ssid
+    }
+  }
+
+  const title = qrCodeTitle()
 
   return (
     <div className="border rounded-md bg-slate-50 relative shadow-md">

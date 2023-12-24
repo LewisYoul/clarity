@@ -39,6 +39,19 @@ const qrCodeCreator = async (user, team, formData) => {
         }
       })
     }
+
+    let wifi = null;
+
+    if (formData.get('type') === 'wifi') {
+      wifi = await prisma.WiFi.create({
+        data: {
+          encryptionType: formData.get('wifi[encryptionType]'),
+          ssid: formData.get('wifi[ssid]'),
+          password: formData.get('wifi[password]'),
+          qrCodeId: qrCode.id,
+        }
+      })
+    }
   
     const createdPng = await prisma.File.create({
       data: {
@@ -88,6 +101,9 @@ const qrCodeCreator = async (user, team, formData) => {
       await prisma.QRCode.delete({ where: { id: qrCode.id } })
       if (mailTo) {
         await prisma.MailTo.delete({ where: { id: mailTo.id } })
+      }
+      if (wifi) {
+        await prisma.WiFi.delete({ where: { id: wifi.id } })
       }
   
       return new Result(false, 'There was a problem creating your QR code. If this problem continues please contact us.')
