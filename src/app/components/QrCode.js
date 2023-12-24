@@ -1,4 +1,4 @@
-import { ArrowDownTrayIcon, PencilIcon, PlusIcon  } from '@heroicons/react/24/outline'
+import { ArrowDownTrayIcon, PencilIcon, EnvelopeIcon, LinkIcon, WifiIcon  } from '@heroicons/react/24/outline'
 import Link from 'next/link';
 
 const QrCode = (props) => {
@@ -20,15 +20,15 @@ const QrCode = (props) => {
 
   const typeForDisplay = () => {
     if (qr.type === 'link') {
-      return 'Link'
+      return <LinkIcon className="w-4 h-4" />
     }
 
     if (qr.type === 'email') {
-      return 'Email'
+      return <EnvelopeIcon className="w-4 h-4" />
     }
-
+    
     if (qr.type === 'wifi') {
-      return 'WiFi'
+      return <WifiIcon className="w-4 h-4" />
     }    
   }
 
