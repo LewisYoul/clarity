@@ -18,13 +18,27 @@ const QrCode = (props) => {
     }
   }
 
+  const typeForDisplay = () => {
+    if (qr.type === 'link') {
+      return 'Link'
+    }
+
+    if (qr.type === 'email') {
+      return 'Email'
+    }
+
+    if (qr.type === 'wifi') {
+      return 'WiFi'
+    }    
+  }
+
   const title = qrCodeTitle()
 
   return (
     <div className="border rounded-md bg-slate-50 relative shadow-md">
-      {/* <span className="absolute -top-2 -right-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-        Static
-      </span> */}
+      <span className="absolute -top-2 -left-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+        {typeForDisplay()}
+      </span>
       <div className="flex justify-center">
         <div className="mt-4">
           <div className="mb-3 flex justify-center w-40">

@@ -51,7 +51,7 @@ export default function QrCodeList() {
 
   return(
     <div className="pb-4">
-      <div className="mb-4 flex h-full border rounded-md border border-1 bg-slate-50 border-slate-200 p-4 mx-4 lg:mx-0">
+      <div className="mb-6 flex h-full border rounded-md border border-1 bg-slate-50 border-slate-200 p-4 mx-4 lg:mx-0">
         <input placeholder="Search QR codes" onChange={handleSearchChange} className="block w-full lg:w-60 rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6" type="text"></input>
       </div>
       {
