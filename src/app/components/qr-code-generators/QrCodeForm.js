@@ -86,11 +86,12 @@ export default function QrCodeForm({ onChange }) {
       password: ''
     }
   })
+  const [svgUrl, setSvgUrl] = useState(null)
 
   const ref = useRef(null);
   const defaultOptions = {
-    width: 200,
-    height: 200,
+    width: 2000,
+    height: 2000,
     margin: 10,
     data: link,
     backgroundOptions: {
@@ -122,8 +123,15 @@ export default function QrCodeForm({ onChange }) {
   }, [qrCode, ref]);
 
   useEffect(() => {
-    qrCode.update(qrCodeOptions);
+    const getSvg = async () => {
+      const svg = await qrCode.getRawData('svg')
+      console.log('svg', await svg.text())
+      const url = URL.createObjectURL(svg)
+      setSvgUrl(url)
+    }
 
+    qrCode.update(qrCodeOptions);
+    getSvg()
     onChange(qrCode)
   }, [qrCode, qrCodeOptions, onChange])
 
@@ -141,8 +149,8 @@ export default function QrCodeForm({ onChange }) {
 
     const generateQrCode = () => {
       const opts = {
-        width: 200,
-        height: 200,
+        width: 2000,
+        height: 2000,
         data: dataForType(),
         margin: 10,
         image: logoPath,
@@ -290,7 +298,8 @@ export default function QrCodeForm({ onChange }) {
       </div>
 
       <div className="flex justify-center w-full mt-6">
-        <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
+        <div className="p-1 hidden rounded-md bg-white border border-2" ref={ref}></div>
+        <img width="200" height="200" src={svgUrl} />
       </div>
     </div>
   )
