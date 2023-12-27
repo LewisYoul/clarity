@@ -35,7 +35,11 @@ const qrCodeCreator = async (user, team, formData) => {
           bcc: formData.get('mailTo[bcc]'),
           subject: formData.get('mailTo[subject]'),
           body: formData.get('mailTo[body]'),
-          qrCodeId: qrCode.id,
+          qrCode: {
+            connect: {
+              id: qrCode.id,
+            }
+          }
         }
       })
     }

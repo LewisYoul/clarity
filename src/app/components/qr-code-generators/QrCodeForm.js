@@ -1,6 +1,6 @@
 "use client";
 
-import QRCodeStyling from "qr-code-styling";
+import QRCodeStyling from "palqr-code";
 import { useEffect, useRef, useState } from "react";
 import FileInput from "../form/FileInput";
 import ColorInput from "../form/ColorInput";
@@ -25,6 +25,10 @@ const dotTypes = [
   {
     name: 'Classy',
     value: 'classy'
+  },
+  {
+    name: 'Diamond',
+    value: 'diamond'
   },
   {
     name: 'Calligraphy',
@@ -59,7 +63,7 @@ const innerEyeTypes = [
 ]
 
 export default function QrCodeForm({ onChange }) {
-  const [type, setType] = useState('link')
+  const [selectedType, setSelectedType] = useState('link')
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[0])
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
   const [selectedInnerEyeType, setSelectedInnerEyeType] = useState(innerEyeTypes[0])
@@ -86,12 +90,13 @@ export default function QrCodeForm({ onChange }) {
       password: ''
     }
   })
-  const [svgUrl, setSvgUrl] = useState(null)
+  // const [svgUrl, setSvgUrl] = useState(null)
 
   const ref = useRef(null);
   const defaultOptions = {
-    width: 2000,
-    height: 2000,
+    type: 'svg',
+    width: 1000,
+    height: 1000,
     margin: 10,
     data: link,
     backgroundOptions: {
@@ -123,21 +128,20 @@ export default function QrCodeForm({ onChange }) {
   }, [qrCode, ref]);
 
   useEffect(() => {
-    const getSvg = async () => {
-      const svg = await qrCode.getRawData('svg')
-      console.log('svg', await svg.text())
-      const url = URL.createObjectURL(svg)
-      setSvgUrl(url)
+    qrCode.update(qrCodeOptions);
+
+    if (qrCode?._svg?._element) {
+      qrCode._svg._element.setAttribute('width', '200')
+      qrCode._svg._element.setAttribute('height', '200')
+      qrCode._svg._element.setAttribute('viewBox', '0 0 1000 1000')
     }
 
-    qrCode.update(qrCodeOptions);
-    getSvg()
     onChange(qrCode)
   }, [qrCode, qrCodeOptions, onChange])
 
   useEffect(() => {
     const dataForType = () => {
-      switch (type) {
+      switch (selectedType) {
         case 'email':
           return mailTo.uri
         case 'wifi':
@@ -149,8 +153,9 @@ export default function QrCodeForm({ onChange }) {
 
     const generateQrCode = () => {
       const opts = {
-        width: 2000,
-        height: 2000,
+        type: 'svg',
+        width: 1000,
+        height: 1000,
         data: dataForType(),
         margin: 10,
         image: logoPath,
@@ -176,25 +181,19 @@ export default function QrCodeForm({ onChange }) {
         },
         mailTo: mailTo,
         wifi: wifi,
-        type
+        selectedType,
       }
 
       setQrCodeOptions(opts)
     }
 
     generateQrCode()
-  }, [type, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi])
-
-  useEffect(() => {
-
-  }, [type])
+  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi])
 
   const changeQrCodeType = (e) => {
     const type = e.target.value
 
-    console.log(type)
-
-    setType(type)
+    setSelectedType(type)
   }
 
   return(
@@ -207,7 +206,7 @@ export default function QrCodeForm({ onChange }) {
       </select>
       
       {
-        type === 'link' && (
+        selectedType === 'link' && (
           <div className="mt-2">
             <input
               onChange={(e) => setLink(e.target.value)}
@@ -222,19 +221,19 @@ export default function QrCodeForm({ onChange }) {
       }
 
       {
-        type === 'email' && (
+        selectedType === 'email' && (
           <MailToInput onChange={setMailTo} />
         )
       }
 
       {
-        type === 'wifi' && (
+        selectedType === 'wifi' && (
           <WiFiInput onChange={setWifi} />
         )
       }
 
       {
-        type === 'pdf' && (
+        selectedType === 'pdf' && (
           <div className="mt-2">
             <FileInput
               accept={['application/pdf']}
@@ -298,8 +297,8 @@ export default function QrCodeForm({ onChange }) {
       </div>
 
       <div className="flex justify-center w-full mt-6">
-        <div className="p-1 hidden rounded-md bg-white border border-2" ref={ref}></div>
-        <img width="200" height="200" src={svgUrl} />
+        <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
+        {/* <img width="1000" height="1000" src={svgUrl} /> */}
       </div>
     </div>
   )

@@ -19,7 +19,14 @@ export default function FileInput({ accept, buttonText, onChange }) {
     setFilePath(null)
   }
 
-  const handleFileChange = (e) => {
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+  });
+
+  const handleFileChange = async (e) => {
     const file = e.target.files[0]
 
     if (!file) {
@@ -27,7 +34,7 @@ export default function FileInput({ accept, buttonText, onChange }) {
       return
     }
 
-    const filePath = URL.createObjectURL(file)
+    const filePath = await toBase64(file)
 
     setFilePath(filePath)
   }

@@ -29,11 +29,12 @@ export default function QrCodeGenerator() {
     console.log('opts', opts)
 
     formData.append('link', opts.data)
-    formData.append('type', opts.type)
+    formData.append('type', opts.selectedType)
     formData.append('svg', svgBlob)
     formData.append('png', pngBlob)
 
-    if (opts.type === 'email') {
+    if (opts.selectedType === 'email') {
+      console.log('here', opts.mailTo.values)
       formData.append('mailTo[to]', opts.mailTo.values.to)
       formData.append('mailTo[cc]', opts.mailTo.values.cc)
       formData.append('mailTo[bcc]', opts.mailTo.values.bcc)
@@ -41,7 +42,7 @@ export default function QrCodeGenerator() {
       formData.append('mailTo[body]', opts.mailTo.values.body)
     }
 
-    if (opts.type === 'wifi') {
+    if (opts.selectedType === 'wifi') {
       formData.append('wifi[encryptionType]', opts.wifi.values.encryptionType)
       formData.append('wifi[ssid]', opts.wifi.values.ssid)
       formData.append('wifi[password]', opts.wifi.values.password)
