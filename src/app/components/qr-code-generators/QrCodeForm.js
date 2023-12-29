@@ -11,7 +11,7 @@ import WiFiInput from "../form/WiFiInput";
 
 const dotTypes = [
   {
-    name: 'Square',
+    name: 'Original',
     value: 'square'
   },
   {
@@ -29,6 +29,10 @@ const dotTypes = [
   {
     name: 'Diamond',
     value: 'diamond'
+  },
+  {
+    name: 'Square',
+    value: 'small-square'
   },
   {
     name: 'Calligraphy',
