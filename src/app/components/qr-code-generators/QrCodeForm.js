@@ -68,6 +68,10 @@ const innerEyeTypes = [
     name: 'Dot',
     value: 'dot'
   },
+  {
+    name: 'Outpoint',
+    value: 'outpoint'
+  }
 ]
 
 export default function QrCodeForm({ onChange }) {
