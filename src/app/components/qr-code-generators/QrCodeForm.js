@@ -52,6 +52,10 @@ const eyeTypes = [
   {
     name: 'Rounded',
     value: 'extra-rounded'
+  },
+  {
+    name: 'Outpoint',
+    value: 'outpoint'
   }
 ]
 

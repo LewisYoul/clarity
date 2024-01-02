@@ -7,6 +7,7 @@ export default function FileInput({ accept, buttonText, onChange }) {
   const inputRef = useRef(null)
 
   useEffect(() => {
+    console.log('filePath', filePath)
     onChange(filePath)
   }, [filePath, onChange])
 
