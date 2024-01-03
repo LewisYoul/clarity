@@ -20,7 +20,7 @@
     "next": "14.0.0",
     "next-auth": "^4.24.4",
     "postmark": "^3.11.0",
-    "palqr-code": "1.10.0",
+    "palqr-code": "1.11.0",
     "react": "^18",
     "react-dom": "^18"
   },

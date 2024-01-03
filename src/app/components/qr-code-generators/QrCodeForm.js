@@ -71,6 +71,10 @@ const innerEyeTypes = [
   {
     name: 'Outpoint',
     value: 'outpoint'
+  },
+  {
+    name: 'Inpoint',
+    value: 'inpoint'
   }
 ]
 
