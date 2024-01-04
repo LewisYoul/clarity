@@ -89,7 +89,7 @@ export default function QrCodeForm({ onChange }) {
   const [outerEyeColor, setOuterEyeColor] = useState("#000000")
   const [link, setLink] = useState('https://example.com')
   const [mailTo, setMailTo] = useState({
-    uri: '',
+    uri: 'mailto:?cc=&bcc=&subject=&body=',
     values: {
       to: '',
       cc: '',
@@ -106,7 +106,6 @@ export default function QrCodeForm({ onChange }) {
       password: ''
     }
   })
-  // const [svgUrl, setSvgUrl] = useState(null)
 
   const ref = useRef(null);
   const defaultOptions = {
@@ -133,7 +132,6 @@ export default function QrCodeForm({ onChange }) {
   }
 
   const [qrCodeOptions, setQrCodeOptions] = useState(defaultOptions);
-  // const [optionsToEmit, setOptionsToEmit] = useState(qrCodeOptions)
 
   const [qrCode] = useState(new QRCodeStyling(qrCodeOptions));
 
