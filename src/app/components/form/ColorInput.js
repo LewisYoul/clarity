@@ -7,6 +7,7 @@ export default function ColorInput({ onChange }) {
   const colorRegex = /^#[0-9A-F]{6}$/i;
 
   const [color, setColor] = useState(defaultColor)
+  const textInputRef = useRef()
 
   useEffect(() => {
     onChange(color)
@@ -16,16 +17,15 @@ export default function ColorInput({ onChange }) {
     const newColor = event.target.value
 
     if (colorRegex.test(newColor)) {
+      textInputRef.current.value = newColor
       setColor(newColor)
-    } else {
-      setColor(defaultColor)
     }
   }
 
   return (
     <div className="flex mt-2 items-center">
-      <input type="color" value={color} onChange={(e) => { setColor(e.target.value) }} />
-      <input type="text" className="text-sm px-2 py-1.5" value={color} onChange={handleManualColorChange} />
+      <input type="color" value={color} onChange={handleManualColorChange} />
+      <input ref={textInputRef} type="text" className="text-sm px-2 py-1.5" defaultValue={color} onChange={handleManualColorChange} />
     </div>
   )
 }
