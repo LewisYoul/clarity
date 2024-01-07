@@ -83,6 +83,7 @@ const qrCodeCreator = async (user, team, formData) => {
       Key: pngKey,
       Body: pngBuffer,
       ContentType: "image/png",
+      ContentDisposition: "attachment"
     });
   
     const svgCreationCommand = new PutObjectCommand({
@@ -90,6 +91,7 @@ const qrCodeCreator = async (user, team, formData) => {
       Key: svgKey,
       Body: svgText,
       ContentType: "image/svg+xml",
+      ContentDisposition: "attachment"
     });
   
     const s3 = new S3Client({ region: process.env.AWS_DEFAULT_REGION });
