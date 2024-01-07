@@ -59,7 +59,7 @@ export async function GET(req) {
     }
   })
   qrs.map((qr) => {
-      console.log('qr', qr)
+      // console.log('qr', qr)
       qr.svgFile = svgFiles.find(file => file.fileableId === qr.id)
       qr.svgFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.svgFile.id}/qr.svg`
       qr.pngFile = pngFiles.find(file => file.fileableId === qr.id)

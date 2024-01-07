@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import s3 from "../s3";
 import prisma from "../prisma";
 
 class Result {
@@ -12,6 +12,7 @@ const qrCodeCreator = async (user, team, formData) => {
   console.log('formData', formData)
   try {
     const png = formData.get('png');
+    console.log('png', png)
     const pngBuffer = await png.arrayBuffer();
     const svg = formData.get('svg');
     const svgText = await svg.text();
@@ -78,27 +79,9 @@ const qrCodeCreator = async (user, team, formData) => {
     const pngKey = `File/${createdPng.id}/qr.png`;
     const svgKey = `File/${createdSvg.id}/qr.svg`;
   
-    const pngCreationCommand = new PutObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: pngKey,
-      Body: pngBuffer,
-      ContentType: "image/png",
-      ContentDisposition: "attachment"
-    });
-  
-    const svgCreationCommand = new PutObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: svgKey,
-      Body: svgText,
-      ContentType: "image/svg+xml",
-      ContentDisposition: "attachment"
-    });
-  
-    const s3 = new S3Client({ region: process.env.AWS_DEFAULT_REGION });
-  
     try {
-      await s3.send(pngCreationCommand);
-      await s3.send(svgCreationCommand);
+      await s3.uploadFile(pngKey, pngBuffer, "image/png");
+      await s3.uploadFile(svgKey, svgText, "image/svg+xml");
     } catch (error) {
       console.error('Error sending svg or png or aws', error);
   
