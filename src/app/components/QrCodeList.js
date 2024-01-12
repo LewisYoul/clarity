@@ -8,9 +8,11 @@ import debounce from 'debounce';
 
 export default function QrCodeList() {
   const [qrs, setQrs] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [sortBy, setSortBy] = useState('newestToOldest');
   
-  const fetchQrCodes = async (searchTerm) => {
-    const url = searchTerm ? `/api/qrCodes?searchTerm=${searchTerm}` : '/api/qrCodes'
+  const fetchQrCodes = async () => {
+    const url = searchTerm ? `/api/qrCodes?sortBy=${sortBy}&searchTerm=${searchTerm}` : `/api/qrCodes?sortBy=${sortBy}`
 
     try {
       const res = await fetch(url)
@@ -32,6 +34,10 @@ export default function QrCodeList() {
   }, [])
 
   useEffect(() => {
+    fetchQrCodes()
+  }, [searchTerm, sortBy])
+
+  useEffect(() => {
     document.addEventListener('triggerQrCodeFetch', () => { fetchQrCodes() })
   }, [])
 
@@ -42,8 +48,14 @@ export default function QrCodeList() {
       searchTerm = null
     }
 
-    fetchQrCodes(searchTerm)
+    setSearchTerm(searchTerm)
   }, 300)
+
+  const handleSortChange = async (e) => {
+    console.log(e.target.value)
+
+    setSortBy(e.target.value)
+  }
 
   if (qrs === null || qrs === undefined) return (
     <div>Loading...</div>
@@ -51,8 +63,15 @@ export default function QrCodeList() {
 
   return(
     <div className="pb-4">
-      <div className="mb-6 flex h-full border rounded-md border border-1 bg-slate-50 border-slate-200 p-4 mx-4 lg:mx-0">
+      <div className="mb-6 flex justify-between h-full border rounded-md border border-1 bg-slate-50 border-slate-200 p-4 mx-4 lg:mx-0">
         <input placeholder="Search QR codes" onChange={handleSearchChange} className="block w-full lg:w-60 rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6" type="text"></input>
+        
+        <div className="flex items-center text-sm">
+          <select className="bg-slate-50" defaultValue="newestToOldest" onChange={handleSortChange}>
+            <option value="newestToOldest">Newest</option>
+            <option value="oldestToNewest">Oldest</option>
+          </select>
+        </div>
       </div>
       {
         qrs.length === 0 ? (

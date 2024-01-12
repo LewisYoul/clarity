@@ -12,24 +12,24 @@ export async function GET(req) {
   const params = req.nextUrl.searchParams
   console.log(params)
 
-  let searchTermQuery = {}
+  let filterAndSortQuery = {}
 
   if (params.has('searchTerm')) {
-    searchTermQuery = {
+    filterAndSortQuery = {
       link: {
         contains: params.get('searchTerm'),
         mode: 'insensitive'
-      }
+      },
     }
   }
 
   let qrs = await prisma.QRCode.findMany({
     where: {
       teamId: currentTeam.id,
-      ...searchTermQuery
+      ...filterAndSortQuery
     },
     orderBy: {
-      updatedAt: 'desc'
+      updatedAt: params.get('sortBy') === 'newestToOldest' ? 'desc' : 'asc'
     },
     include: {
       mailTo: true,
