@@ -17,7 +17,8 @@ export async function GET(req) {
   if (params.has('searchTerm')) {
     searchTermQuery = {
       link: {
-        contains: params.get('searchTerm')
+        contains: params.get('searchTerm'),
+        mode: 'insensitive'
       }
     }
   }
