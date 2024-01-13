@@ -2,6 +2,56 @@ import { authorizeRequest } from '@/app/utils/sessionUtils';
 import prisma from '../../utils/prisma';
 import qrCodeCreator from "../../utils/qr-codes/qrCodeCreator";
 
+export async function DELETE(req) {
+  const { currentUser, currentTeam } = await authorizeRequest();
+  
+  if (!currentUser || !currentTeam) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 })
+  }
+
+  const params = req.nextUrl.searchParams
+  console.log(params)
+
+  const qrCodeId = Number(params.get('id'))
+
+  try {
+    const qrCode = await prisma.QRCode.findUnique({
+      where: {
+        id: qrCodeId,
+        teamId: currentTeam.id
+      }
+    })
+
+    if (!qrCode) { throw new Error('QR code not found.') }
+
+    await prisma.$transaction([
+      prisma.File.deleteMany({
+        where: {
+          fileableId: qrCodeId,
+          fileableType: 'QRCode'
+        }
+      }),
+      prisma.MailTo.deleteMany({
+        where: {
+          qrCodeId: qrCodeId
+        }
+      }),
+      prisma.WiFi.deleteMany({
+        where: {
+          qrCodeId: qrCodeId
+        }
+      }),
+      prisma.QRCode.delete({ where: { id: qrCodeId } })
+    ])
+
+    return Response.json({ message: 'QR code deleted.' })
+  } catch (error) {
+    console.error(error)
+
+    return Response.json({ message: 'There was a problem deleting your QR code. If the problem persists please contact us.' }, { status: 500 })
+  }
+}
+
 export async function GET(req) {
   const { currentUser, currentTeam } = await authorizeRequest();
   
@@ -60,7 +110,6 @@ export async function GET(req) {
     }
   })
   qrs.map((qr) => {
-      // console.log('qr', qr)
       qr.svgFile = svgFiles.find(file => file.fileableId === qr.id)
       qr.svgFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.svgFile.id}/qr.svg`
       qr.pngFile = pngFiles.find(file => file.fileableId === qr.id)

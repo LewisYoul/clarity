@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import QrCode from "./QrCode";
 import { PlusIcon  } from '@heroicons/react/24/outline'
 import { showToast } from "../utils/toastUtils";
@@ -66,7 +66,7 @@ export default function QrCodeList() {
       <div className="mb-6 flex justify-between h-full border rounded-md border border-1 bg-slate-50 border-slate-200 p-4 mx-4 lg:mx-0">
         <input placeholder="Search QR codes" onChange={handleSearchChange} className="block w-full lg:w-60 rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6" type="text"></input>
         
-        <div className="flex items-center text-sm">
+        <div className="items-center text-sm hidden md:flex">
           <select className="bg-slate-50" defaultValue="newestToOldest" onChange={handleSortChange}>
             <option value="newestToOldest">Newest</option>
             <option value="oldestToNewest">Oldest</option>
