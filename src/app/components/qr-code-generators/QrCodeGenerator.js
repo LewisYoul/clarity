@@ -48,6 +48,10 @@ export default function QrCodeGenerator() {
       formData.append('wifi[password]', opts.wifi.values.password)
     }
 
+    if (opts.selectedType === 'call') {
+      formData.append('call[phoneNumber]', opts.call.values.phoneNumber)
+    }
+
     for (let val of formData.entries()) {
       console.log(val[0]+ ', ' + val[1]); 
     }

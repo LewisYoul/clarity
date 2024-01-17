@@ -55,6 +55,7 @@ model QRCode {
   type QRCodeType @default(link)
   mailTo MailTo?
   wifi WiFi?
+  call Call?
 }
 
 model File {
@@ -70,6 +71,7 @@ enum QRCodeType {
   pdf
   email
   wifi
+  call
 }
 
 model MailTo {
@@ -96,4 +98,11 @@ model WiFi {
   encryptionType WiFiEncryptionType
   ssid String
   password String?
+}
+
+model Call {
+  id      Int      @id @default(autoincrement())
+  qrCodeId Int @unique
+  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
+  phoneNumber String
 }

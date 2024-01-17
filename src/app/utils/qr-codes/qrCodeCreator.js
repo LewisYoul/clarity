@@ -53,7 +53,26 @@ const qrCodeCreator = async (user, team, formData) => {
           encryptionType: formData.get('wifi[encryptionType]'),
           ssid: formData.get('wifi[ssid]'),
           password: formData.get('wifi[password]'),
-          qrCodeId: qrCode.id,
+          qrCode: {
+            connect: {
+              id: qrCode.id,
+            }
+          }
+        }
+      })
+    }
+    
+    let call = null;
+    
+    if (formData.get('type') === 'call') {
+      call = await prisma.Call.create({
+        data: {
+          phoneNumber: formData.get('call[phoneNumber]'),
+          qrCode: {
+            connect: {
+              id: qrCode.id,
+            }
+          }
         }
       })
     }
@@ -93,6 +112,9 @@ const qrCodeCreator = async (user, team, formData) => {
       }
       if (wifi) {
         await prisma.WiFi.delete({ where: { id: wifi.id } })
+      }
+      if (call) {
+        await prisma.Call.delete({ where: { id: call.id } })
       }
   
       return new Result(false, 'There was a problem creating your QR code. If this problem continues please contact us.')

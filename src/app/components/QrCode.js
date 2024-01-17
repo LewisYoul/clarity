@@ -1,4 +1,4 @@
-import { ArrowDownTrayIcon, EllipsisVerticalIcon, EnvelopeIcon, LinkIcon, WifiIcon  } from '@heroicons/react/24/outline'
+import { ArrowDownTrayIcon, EllipsisVerticalIcon, EnvelopeIcon, LinkIcon, WifiIcon, PhoneIcon  } from '@heroicons/react/24/outline'
 import Link from 'next/link';
 import { useState } from 'react';
 import { showToast } from '@/app/utils/toastUtils';
@@ -24,6 +24,10 @@ const QrCode = (props) => {
     if (qr.type === 'wifi') {
       return qr.wifi.ssid
     }
+    console.log('qr', qr)
+    if (qr.type === 'call') {
+      return qr.call.phoneNumber
+    }
   }
 
   const typeForDisplay = () => {
@@ -37,6 +41,10 @@ const QrCode = (props) => {
     
     if (qr.type === 'wifi') {
       return <WifiIcon className="w-4 h-4" />
+    }    
+    
+    if (qr.type === 'call') {
+      return <PhoneIcon className="w-4 h-4" />
     }    
   }
 

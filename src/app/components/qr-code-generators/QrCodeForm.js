@@ -8,6 +8,7 @@ import Collapse from "../Collapse";
 import Radio from "../form/Radio";
 import MailToInput from "../form/MailToInput";
 import WiFiInput from "../form/WiFiInput";
+import PhoneNumberInput from "../form/PhoneNumberInput"
 
 const dotTypes = [
   {
@@ -106,6 +107,12 @@ export default function QrCodeForm({ onChange }) {
       password: ''
     }
   })
+  const [call, setCall] = useState({
+    uri: 'tel:',
+    values: {
+      phoneNumber: ''
+    }
+  })
 
   const ref = useRef(null);
   const defaultOptions = {
@@ -160,6 +167,8 @@ export default function QrCodeForm({ onChange }) {
           return mailTo.uri
         case 'wifi':
           return wifi.data
+        case 'call':
+          return call.uri
         default:
           return link
       }
@@ -195,6 +204,7 @@ export default function QrCodeForm({ onChange }) {
         },
         mailTo: mailTo,
         wifi: wifi,
+        call: call,
         selectedType,
       }
 
@@ -202,7 +212,7 @@ export default function QrCodeForm({ onChange }) {
     }
 
     generateQrCode()
-  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi])
+  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call])
 
   const changeQrCodeType = (e) => {
     const type = e.target.value
@@ -216,7 +226,7 @@ export default function QrCodeForm({ onChange }) {
         <option value="link">Link</option>
         <option value="email">Email</option>
         <option value="wifi">WiFi</option>
-        {/* <option value="pdf">PDF</option> */}
+        <option value="call">Call</option>
       </select>
       
       {
@@ -243,6 +253,12 @@ export default function QrCodeForm({ onChange }) {
       {
         selectedType === 'wifi' && (
           <WiFiInput onChange={setWifi} />
+        )
+      }
+
+{
+        selectedType === 'call' && (
+          <PhoneNumberInput onChange={setCall} />
         )
       }
 
