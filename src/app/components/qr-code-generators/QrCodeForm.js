@@ -10,6 +10,7 @@ import MailToInput from "../form/MailToInput";
 import WiFiInput from "../form/WiFiInput";
 import PhoneNumberInput from "../form/PhoneNumberInput"
 import { GlobeAltIcon, DocumentTextIcon, ChatBubbleLeftIcon, EnvelopeIcon, DocumentIcon, WifiIcon, PhoneIcon, CreditCardIcon  } from '@heroicons/react/24/outline'
+import SmsInput from "../form/SmsInput";
 
 const dotTypes = [
   {
@@ -129,6 +130,12 @@ export default function QrCodeForm({ onChange, actionElement }) {
       phoneNumber: ''
     }
   })
+  const [sms, setSms] = useState({
+    uri: 'sms:',
+    values: {
+      smsNumber: ''
+    }
+  })
 
   const ref = useRef(null);
   const defaultOptions = {
@@ -185,6 +192,8 @@ export default function QrCodeForm({ onChange, actionElement }) {
           return wifi.data
         case 'call':
           return call.uri
+        case 'sms':
+          return sms.uri
         default:
           return link
       }
@@ -221,6 +230,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
         mailTo: mailTo,
         wifi: wifi,
         call: call,
+        sms: sms,
         selectedType,
       }
 
@@ -228,7 +238,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
     }
 
     generateQrCode()
-  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call])
+  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call, sms])
 
   const changeQrCodeType = (e) => {
     console.log(e.currentTarget.value)
@@ -257,10 +267,11 @@ export default function QrCodeForm({ onChange, actionElement }) {
         <button onClick={changeQrCodeType} className={typeButtonStyles('email')} value="email"><EnvelopeIcon className="w-4 h-4 mr-2" /> Email</button>
         <button onClick={changeQrCodeType} className={typeButtonStyles('wifi')} value="wifi"><WifiIcon className="w-4 h-4 mr-2" /> WiFi</button>
         <button onClick={changeQrCodeType} className={typeButtonStyles('call')} value="call"><PhoneIcon className="w-4 h-4 mr-2" /> Phone</button>
-        <button className={typeButtonStyles('text')}><DocumentTextIcon className="w-4 h-4 mr-2" /> Text</button>
-        <button className={typeButtonStyles('sms')}><ChatBubbleLeftIcon className="w-4 h-4 mr-2" /> SMS</button>
-        <button className={typeButtonStyles('pdf')}><DocumentIcon className="w-4 h-4 mr-2" /> PDF</button>
-        <button className={typeButtonStyles('vcard')}><CreditCardIcon className="w-4 h-4 mr-2" /> vCard</button>
+        <button onClick={changeQrCodeType} className={typeButtonStyles('sms')} value="sms"><ChatBubbleLeftIcon className="w-4 h-4 mr-2" /> SMS</button>
+        {/* Not available yet */}
+        <button className={typeButtonStyles('text') + " text-gray-300"}><DocumentTextIcon className="w-4 h-4 mr-2" /> Text</button>
+        <button className={typeButtonStyles('pdf') + " text-gray-300"}><DocumentIcon className="w-4 h-4 mr-2" /> PDF</button>
+        <button className={typeButtonStyles('vcard') + " text-gray-300"}><CreditCardIcon className="w-4 h-4 mr-2" /> vCard</button>
       </div>
         
         {
@@ -296,6 +307,12 @@ export default function QrCodeForm({ onChange, actionElement }) {
         {
           selectedType === 'call' && (
             <PhoneNumberInput onChange={setCall} />
+          )
+        }
+
+        {
+          selectedType === 'sms' && (
+            <SmsInput onChange={setSms} />
           )
         }
 

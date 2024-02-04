@@ -46,6 +46,11 @@ export async function DELETE(req) {
           qrCodeId: qrCodeId
         }
       }),
+      prisma.Sms.deleteMany({
+        where: {
+          qrCodeId: qrCodeId
+        }
+      }),
       prisma.QRCode.delete({ where: { id: qrCodeId } })
     ])
 
@@ -89,7 +94,8 @@ export async function GET(req) {
     include: {
       mailTo: true,
       wifi: true,
-      call: true
+      call: true,
+      sms: true
     }
   })
 

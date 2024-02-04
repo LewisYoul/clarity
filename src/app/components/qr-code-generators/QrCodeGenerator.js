@@ -52,6 +52,10 @@ export default function QrCodeGenerator() {
       formData.append('call[phoneNumber]', opts.call.values.phoneNumber)
     }
 
+    if (opts.selectedType === 'sms') {
+      formData.append('sms[smsNumber]', opts.sms.values.smsNumber)
+    }
+
     for (let val of formData.entries()) {
       console.log(val[0]+ ', ' + val[1]); 
     }

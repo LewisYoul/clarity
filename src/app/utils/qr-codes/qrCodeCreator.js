@@ -76,6 +76,21 @@ const qrCodeCreator = async (user, team, formData) => {
         }
       })
     }
+
+    let sms = null;
+    
+    if (formData.get('type') === 'sms') {
+      sms = await prisma.Sms.create({
+        data: {
+          smsNumber: formData.get('sms[smsNumber]'),
+          qrCode: {
+            connect: {
+              id: qrCode.id,
+            }
+          }
+        }
+      })
+    }
   
     const createdPng = await prisma.File.create({
       data: {

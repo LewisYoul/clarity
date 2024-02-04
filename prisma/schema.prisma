@@ -56,6 +56,7 @@ model QRCode {
   mailTo MailTo?
   wifi WiFi?
   call Call?
+  sms Sms?
 }
 
 model File {
@@ -72,6 +73,7 @@ enum QRCodeType {
   email
   wifi
   call
+  sms
 }
 
 model MailTo {
@@ -105,4 +107,11 @@ model Call {
   qrCodeId Int @unique
   qrCode QRCode @relation(fields: [qrCodeId], references: [id])
   phoneNumber String
+}
+
+model Sms {
+  id      Int      @id @default(autoincrement())
+  qrCodeId Int @unique
+  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
+  smsNumber String
 }
