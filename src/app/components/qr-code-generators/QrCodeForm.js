@@ -9,77 +9,93 @@ import Radio from "../form/Radio";
 import MailToInput from "../form/MailToInput";
 import WiFiInput from "../form/WiFiInput";
 import PhoneNumberInput from "../form/PhoneNumberInput"
+import { GlobeAltIcon, DocumentTextIcon, ChatBubbleLeftIcon, EnvelopeIcon, DocumentIcon, WifiIcon, PhoneIcon, CreditCardIcon  } from '@heroicons/react/24/outline'
 
 const dotTypes = [
   {
     name: 'Original',
-    value: 'square'
+    value: 'square',
+    icon: GlobeAltIcon
   },
   {
     name: 'Rounded',
-    value: 'rounded'
+    value: 'rounded',
+    icon: GlobeAltIcon
   },
   {
     name: 'Smooth',
-    value: 'extra-rounded'
+    value: 'extra-rounded',
+    icon: GlobeAltIcon
   },
   {
     name: 'Classy',
-    value: 'classy'
+    value: 'classy',
+    icon: GlobeAltIcon
   },
   {
     name: 'Diamond',
-    value: 'diamond'
+    value: 'diamond',
+    icon: GlobeAltIcon
   },
   {
     name: 'Square',
-    value: 'small-square'
+    value: 'small-square',
+    icon: GlobeAltIcon
   },
   {
     name: 'Calligraphy',
-    value: 'classy-rounded'
+    value: 'classy-rounded',
+    icon: GlobeAltIcon
   }
 ]
 
 const eyeTypes = [
   {
     name: 'Square',
-    value: 'square'
+    value: 'square',
+    icon: ChatBubbleLeftIcon
   },
   {
     name: 'Circle',
-    value: 'dot'
+    value: 'dot',
+    icon: ChatBubbleLeftIcon
   },
   {
     name: 'Rounded',
-    value: 'extra-rounded'
+    value: 'extra-rounded',
+    icon: ChatBubbleLeftIcon
   },
   {
     name: 'Outpoint',
-    value: 'outpoint'
+    value: 'outpoint',
+    icon: ChatBubbleLeftIcon
   }
 ]
 
 const innerEyeTypes = [
   {
     name: 'Square',
-    value: 'square'
+    value: 'square',
+    icon: EnvelopeIcon
   },
   {
     name: 'Dot',
-    value: 'dot'
+    value: 'dot',
+    icon: EnvelopeIcon
   },
   {
     name: 'Outpoint',
-    value: 'outpoint'
+    value: 'outpoint',
+    icon: EnvelopeIcon
   },
   {
     name: 'Inpoint',
-    value: 'inpoint'
+    value: 'inpoint',
+    icon: EnvelopeIcon
   }
 ]
 
-export default function QrCodeForm({ onChange }) {
+export default function QrCodeForm({ onChange, actionElement }) {
   const [selectedType, setSelectedType] = useState('link')
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[0])
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
@@ -215,121 +231,141 @@ export default function QrCodeForm({ onChange }) {
   }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call])
 
   const changeQrCodeType = (e) => {
-    const type = e.target.value
+    console.log(e.currentTarget.value)
+    const type = e.currentTarget.value
 
     setSelectedType(type)
   }
 
+  const typeButtonStyles = (type) => {
+    let styles = "flex items-center"
+
+    if (selectedType === type) {
+      styles += " font-semibold text-gray-900"
+    } else {
+      styles += " text-gray-500"
+    }
+
+    return styles
+  }
+
   return(
-    <div>
-      <select defaultValue="link" onChange={changeQrCodeType} className="inline-flex items-center text-md font-semibold leading-6 text-gray-900 bg-slate-100">
-        <option value="link">Link</option>
-        <option value="email">Email</option>
-        <option value="wifi">WiFi</option>
-        <option value="call">Call</option>
-      </select>
-      
-      {
-        selectedType === 'link' && (
-          <div className="mt-2">
-            <input
-              onChange={(e) => setLink(e.target.value)}
-              type="text"
-              name="link"
-              id="link"
-              className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-              placeholder="https://example.com"
-            />
-          </div>
-        )
-      }
+    <div className="flex flex-col md:flex-row">
+      <div className="md:mr-6">
+      <div className="grid grid-cols-4 gap-4">
+        <button onClick={changeQrCodeType} className={typeButtonStyles('link')} value="link"><GlobeAltIcon className="w-4 h-4 mr-2" /> URL</button>
+        <button onClick={changeQrCodeType} className={typeButtonStyles('email')} value="email"><EnvelopeIcon className="w-4 h-4 mr-2" /> Email</button>
+        <button onClick={changeQrCodeType} className={typeButtonStyles('wifi')} value="wifi"><WifiIcon className="w-4 h-4 mr-2" /> WiFi</button>
+        <button onClick={changeQrCodeType} className={typeButtonStyles('call')} value="call"><PhoneIcon className="w-4 h-4 mr-2" /> Phone</button>
+        <button className={typeButtonStyles('text')}><DocumentTextIcon className="w-4 h-4 mr-2" /> Text</button>
+        <button className={typeButtonStyles('sms')}><ChatBubbleLeftIcon className="w-4 h-4 mr-2" /> SMS</button>
+        <button className={typeButtonStyles('pdf')}><DocumentIcon className="w-4 h-4 mr-2" /> PDF</button>
+        <button className={typeButtonStyles('vcard')}><CreditCardIcon className="w-4 h-4 mr-2" /> vCard</button>
+      </div>
+        
+        {
+          selectedType === 'link' && (
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-900 mt-3">
+                Destination
+              </label>
+              <input
+                onChange={(e) => setLink(e.target.value)}
+                type="text"
+                name="link"
+                id="link"
+                className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                placeholder="https://example.com"
+              />
+            </div>
+          )
+        }
 
-      {
-        selectedType === 'email' && (
-          <MailToInput onChange={setMailTo} />
-        )
-      }
+        {
+          selectedType === 'email' && (
+            <MailToInput onChange={setMailTo} />
+          )
+        }
 
-      {
-        selectedType === 'wifi' && (
-          <WiFiInput onChange={setWifi} />
-        )
-      }
+        {
+          selectedType === 'wifi' && (
+            <WiFiInput onChange={setWifi} />
+          )
+        }
 
-{
-        selectedType === 'call' && (
-          <PhoneNumberInput onChange={setCall} />
-        )
-      }
+        {
+          selectedType === 'call' && (
+            <PhoneNumberInput onChange={setCall} />
+          )
+        }
 
-      {
-        selectedType === 'pdf' && (
-          <div className="mt-2">
-            <FileInput
-              accept={['application/pdf']}
-              buttonText="Upload a PDF"
-              onChange={() => {}}
-            />
-          </div>
-        )
-      }
+        {
+          selectedType === 'pdf' && (
+            <div className="mt-2">
+              <FileInput
+                accept={['application/pdf']}
+                buttonText="Upload a PDF"
+                onChange={() => {}}
+              />
+            </div>
+          )
+        }
 
-      <Collapse title="Shape & Form">
-        <label className="block text-sm font-medium text-gray-900 mt-3">
-          Dots
+        <p className="text-md font-semibold pt-5">Shape, Form & Color</p>
+
+        <p className="mt-2">Dots</p>
+
+        <div className="flex md:items-center flex-col md:flex-row">
+          <ColorInput onChange={setDotsColor} />
+
+          <Radio className="mt-2 md:mt-0 md:ml-4" value={selectedDotType} options={dotTypes} onChange={setSelectedDotType} />
+          {/* <div className="grid grid-cols-6 gap-3 ml-2">
+            <div className="rounded-md border border-gray-200 bg-white h-[46px] w-[46px]"></div>
+            <div className="rounded-md border border-gray-200 bg-white h-[46px] w-[46px]"></div>
+            <div className="rounded-md border border-gray-200 bg-white h-[46px] w-[46px]"></div>
+            <div className="rounded-md border border-gray-200 bg-white h-[46px] w-[46px]"></div>
+            <div className="rounded-md border border-gray-200 bg-white h-[46px] w-[46px]"></div>
+            <div className="rounded-md border border-gray-200 bg-white h-[46px] w-[46px]"></div>
+          </div> */}
+        </div>
+
+        <p className="mt-2">Inner Eyes</p>
+
+        <div className="flex md:items-center flex-col md:flex-row">
+          <ColorInput onChange={setInnerEyeColor} />
+
+          <Radio className="mt-2 md:mt-0 md:ml-4" value={selectedInnerEyeType} options={innerEyeTypes} onChange={setSelectedInnerEyeType} />
+        </div>
+
+        <p className="mt-2">Outer Eyes</p>
+
+        <div className="flex items-center">
+          <ColorInput onChange={setOuterEyeColor} />
+
+          <Radio className="ml-4" value={selectedEyeType} options={eyeTypes} onChange={setSelectedEyeType} />
+        </div>
+
+        <label className="block text-md font-semibold leading-6 text-gray-900 mt-5">
+          Logo
         </label>
 
-        <Radio value={selectedDotType} options={dotTypes} onChange={setSelectedDotType} />
-
-        <label className="block text-sm font-medium text-gray-900 mt-3">
-          Inner Eyes
-        </label>
-
-        <Radio value={selectedInnerEyeType} options={innerEyeTypes} onChange={setSelectedInnerEyeType} />
-
-        <label className="block text-sm font-medium text-gray-900 mt-3">
-          Outer Eyes
-        </label>
-
-        <Radio value={selectedEyeType} options={eyeTypes} onChange={setSelectedEyeType} />
-      </Collapse>
-
-      <Collapse title="Color">
-        <label className="block text-sm font-medium text-gray-900 mt-3">
-          Dots
-        </label>
-
-        <ColorInput onChange={setDotsColor} />
-
-        <label className="block text-sm font-medium text-gray-900 mt-3">
-          Inner Eyes
-        </label>
-
-        <ColorInput onChange={setInnerEyeColor} />
-
-        <label className="block text-sm font-medium text-gray-900 mt-3">
-          Outer Eyes
-        </label>
-
-        <ColorInput onChange={setOuterEyeColor} />
-      </Collapse>
-
-      <label className="block text-md font-semibold leading-6 text-gray-900 mt-5">
-        Logo
-      </label>
-
-      <div className="mt-2">
-        <FileInput
-          accept={['image/png', 'image/jpeg']}
-          buttonText="Upload a logo"
-          onChange={setLogoPath}
-        />
+        <div className="mt-2">
+          <FileInput
+            accept={['image/png', 'image/jpeg']}
+            buttonText="Upload a logo"
+            onChange={setLogoPath}
+          />
+        </div>
       </div>
 
-      <div className="flex justify-center w-full mt-6">
-        <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
-        {/* <img width="1000" height="1000" src={svgUrl} /> */}
+      <div className="flex items-center mt-6 md:mt-0">
+        <div className="flex justify-center items-center flex-col w-[460px] h-[460px] pt-6 pb-6 bg-pink-100 rounded-3xl md:rounded-full">
+          <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
+          {/* <img width="1000" height="1000" src={svgUrl} /> */}
+          {actionElement ? actionElement : null}
+        </div>
       </div>
+
     </div>
   )
 }

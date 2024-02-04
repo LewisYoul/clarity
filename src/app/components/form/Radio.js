@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
 
 function RadioOption({ option, onClick, className }) {
+  console.log('option', option)
   
   return (
     <div onClick={() => { onClick(option) }} className={className}>
-      <span>{option.name}</span>
+      {option.icon && <option.icon className="h-6 w-6 md:h-10 md:w-10" />}
     </div>
   )
 }
 
-export default function Radio({ value, options, onChange }) {
+export default function Radio({ value, options, onChange, className }) {
   const [selectedOption, setSelectedOption] = useState(value)
 
   useEffect(() => {
@@ -17,14 +18,14 @@ export default function Radio({ value, options, onChange }) {
   }, [selectedOption, onChange])
 
   return (
-    <div className="mt-2 grid grid-cols-3 gap-3 sm:grid-cols-6">
+    <div className={className + " flex md:grid md:gap-2 md:grid-cols-7"}>
       {options.map(option => {
-        let className = 'cursor-pointer bg-white flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1 '
+        let optionClassName = 'mr-1 md:mr-0 cursor-pointer bg-white flex items-center justify-center rounded-md px-2 py-1 text-sm sm:flex-1 '
         
-        className += selectedOption == option ? "border border-palqrblue border-2" : 'border border-2 ring-gray-300 text-gray-900 hover:bg-gray-50'
+        optionClassName += selectedOption == option ? "border border-palqrblue border-2" : 'border border-2 ring-gray-300 text-gray-900 hover:bg-gray-50'
 
         return(
-          <RadioOption className={className} key={option.name} option={option} onClick={setSelectedOption} />
+          <RadioOption className={optionClassName} key={option.name} option={option} onClick={setSelectedOption} />
         )
       })}
     </div>

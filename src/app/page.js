@@ -41,7 +41,7 @@ export default async function Home() {
                 </p>
               </div>
             </div>
-            <div className="w-full md:w-[600px] mx-auto">
+            <div className="w-full md:w-[1080px] mx-auto">
               <LoggedOutQrCodeGenerator />
             </div>
             <div

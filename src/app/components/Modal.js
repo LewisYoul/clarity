@@ -29,7 +29,7 @@ export default function Modal() {
 
   return (
     <div className="fixed h-screen w-full bg-gray-300 bg-opacity-75 z-10 flex justify-center">
-      <div className="w-[600px] h-screen md:h-[800px] overflow-scroll bg-slate-100 bg-opacity-100 md:mt-12 rounded-md relative">
+      <div className="w-[1080px] h-screen md:h-[800px] overflow-scroll bg-slate-100 bg-opacity-100 md:mt-12 rounded-md relative">
         <div className="absolute top-0 right-0 pt-2 pr-2">
           <button
             type="button"
