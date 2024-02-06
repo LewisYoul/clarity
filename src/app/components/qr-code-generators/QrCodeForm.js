@@ -260,7 +260,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
   }
 
   return(
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col justify-between md:flex-row">
       <div className="md:mr-6">
       <div className="grid grid-cols-4 gap-4">
         <button onClick={changeQrCodeType} className={typeButtonStyles('link')} value="link"><GlobeAltIcon className="w-4 h-4 mr-2" /> URL</button>
