@@ -28,18 +28,19 @@ export default function Modal() {
   }
 
   return (
-    <div className="fixed h-screen w-full bg-gray-300 bg-opacity-75 z-10 flex justify-center">
-      <div className="w-[1080px] h-screen md:h-[800px] overflow-scroll bg-slate-100 bg-opacity-100 md:mt-12 rounded-md relative">
-        <div className="absolute top-0 right-0 pt-2 pr-2">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center text-gray-700"
-            onClick={() => setShowModal(false)}
-          >
-            <span className="sr-only">Close modal</span>
-            <XMarkIcon className="h-7 w-7" aria-hidden="true" />
-          </button>
-        </div>
+    <div className="fixed h-screen w-full bg-white z-10 flex justify-center">
+      <div className="absolute top-0 right-0 pt-2 pr-2">
+        <button
+          type="button"
+          className="inline-flex items-center justify-center text-gray-700"
+          onClick={() => setShowModal(false)}
+        >
+          <span className="sr-only">Close modal</span>
+          <XMarkIcon className="h-10 w-10" aria-hidden="true" />
+        </button>
+      </div>
+      <div className="w-[1080px] h-screen md:h-[800px] overflow-scroll bg-opacity-100 md:mt-12 rounded-md relative">
+        <h1 className="text-center text-3xl mb-4 font-semibold">New QR Code</h1>
         <div className="pb-2">
           <QrCodeGenerator />
         </div>

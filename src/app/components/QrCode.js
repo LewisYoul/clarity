@@ -108,7 +108,7 @@ const QrCode = (props) => {
         )}
       </div>
       <span className="absolute -top-2 -left-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-        {typeForDisplay()}
+        {typeForDisplay()} <span className="ml-1">{qr.dynamicLinkUid ? 'dynamic' : 'static'}</span>
       </span>
       <div className="flex justify-center">
         <div className="mt-4">

@@ -11,6 +11,11 @@ import WiFiInput from "../form/WiFiInput";
 import PhoneNumberInput from "../form/PhoneNumberInput"
 import { GlobeAltIcon, DocumentTextIcon, ChatBubbleLeftIcon, EnvelopeIcon, DocumentIcon, WifiIcon, PhoneIcon, CreditCardIcon  } from '@heroicons/react/24/outline'
 import SmsInput from "../form/SmsInput";
+import { Switch } from '@headlessui/react'
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
 
 const dotTypes = [
   {
@@ -105,6 +110,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
   const [dotsColor, setDotsColor] = useState("#000000")
   const [innerEyeColor, setInnerEyeColor] = useState("#000000")
   const [outerEyeColor, setOuterEyeColor] = useState("#000000")
+  const [isDynamic, setIsDynamic] = useState(false)
   const [link, setLink] = useState('https://example.com')
   const [mailTo, setMailTo] = useState({
     uri: 'mailto:?cc=&bcc=&subject=&body=',
@@ -232,13 +238,14 @@ export default function QrCodeForm({ onChange, actionElement }) {
         call: call,
         sms: sms,
         selectedType,
+        isDynamic
       }
 
       setQrCodeOptions(opts)
     }
 
     generateQrCode()
-  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call, sms])
+  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call, sms, isDynamic])
 
   const changeQrCodeType = (e) => {
     console.log(e.currentTarget.value)
@@ -269,9 +276,9 @@ export default function QrCodeForm({ onChange, actionElement }) {
         <button onClick={changeQrCodeType} className={typeButtonStyles('call')} value="call"><PhoneIcon className="w-4 h-4 mr-2" /> Phone</button>
         <button onClick={changeQrCodeType} className={typeButtonStyles('sms')} value="sms"><ChatBubbleLeftIcon className="w-4 h-4 mr-2" /> SMS</button>
         {/* Not available yet */}
-        <button className={typeButtonStyles('text') + " text-gray-300"}><DocumentTextIcon className="w-4 h-4 mr-2" /> Text</button>
-        <button className={typeButtonStyles('pdf') + " text-gray-300"}><DocumentIcon className="w-4 h-4 mr-2" /> PDF</button>
-        <button className={typeButtonStyles('vcard') + " text-gray-300"}><CreditCardIcon className="w-4 h-4 mr-2" /> vCard</button>
+        <button className={typeButtonStyles('text')}><DocumentTextIcon className="w-4 h-4 mr-2" /> Text</button>
+        <button className={typeButtonStyles('pdf')}><DocumentIcon className="w-4 h-4 mr-2" /> PDF</button>
+        <button className={typeButtonStyles('vcard')}><CreditCardIcon className="w-4 h-4 mr-2" /> vCard</button>
       </div>
         
         {
@@ -328,6 +335,27 @@ export default function QrCodeForm({ onChange, actionElement }) {
           )
         }
 
+        <div className="mt-5 flex items-center">
+          <Switch
+            checked={isDynamic}
+            onChange={setIsDynamic}
+            className={classNames(
+              isDynamic ? 'bg-palqrblue' : 'bg-white',
+              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-palqrblue focus:ring-offset-2'
+            )}
+          >
+            <span className="sr-only">Use setting</span>
+            <span
+              aria-hidden="true"
+              className={classNames(
+                isDynamic ? 'translate-x-5' : 'translate-x-0',
+                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-gray-200 shadow ring-0 transition duration-200 ease-in-out'
+              )}
+            />
+          </Switch>
+          <span className="ml-2 text-sm font-medium text-gray-900">Dynamic - <span className="font-normal"> enable destination editing</span></span>
+        </div>
+
         <p className="text-md font-semibold pt-5">Shape, Form & Color</p>
 
         <p className="mt-2">Dots</p>
@@ -375,7 +403,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
         </div>
       </div>
 
-      <div className="flex items-center mt-6 md:mt-0">
+      <div className="flex mt-6 md:mt-0">
         <div className="flex justify-center items-center flex-col w-[460px] h-[460px] pt-6 pb-6 bg-pink-100 rounded-3xl md:rounded-full">
           <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
           {/* <img width="1000" height="1000" src={svgUrl} /> */}

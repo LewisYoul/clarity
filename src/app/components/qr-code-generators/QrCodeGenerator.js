@@ -30,6 +30,7 @@ export default function QrCodeGenerator() {
 
     formData.append('link', opts.data)
     formData.append('type', opts.selectedType)
+    formData.append('isDynamic', opts.isDynamic)
     formData.append('svg', svgBlob)
     formData.append('png', pngBlob)
 
@@ -83,22 +84,17 @@ export default function QrCodeGenerator() {
     }
   }
 
+  const actionElement = <button
+    onClick={saveQrCode}
+    type="button"
+    className="mt-6 inline-flex items-center gap-x-1.5 rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
+  >
+    Create QR Code
+  </button>
+
   return(
     <Card>
-      <QrCodeForm onChange={(qrCode) => {
-        console.log('qrCode', qrCode)
-        setQrCode(qrCode)
-      }} />
-
-      <div className="flex justify-center w-full mt-6 mb-4">
-        <button
-          onClick={saveQrCode}
-          type="button"
-          className="mr-1 inline-flex items-center gap-x-1.5 rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
-        >
-          Save
-        </button>
-      </div>
+      <QrCodeForm onChange={setQrCode} actionElement={actionElement}/>
     </Card>
   )
 }
