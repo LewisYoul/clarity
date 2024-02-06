@@ -16,60 +16,60 @@ const dotTypes = [
   {
     name: 'Original',
     value: 'square',
-    icon: GlobeAltIcon
+    icon: '/dots/Square.svg'
   },
   {
     name: 'Rounded',
     value: 'rounded',
-    icon: GlobeAltIcon
+    icon: '/dots/Rounded.svg'
   },
-  {
-    name: 'Smooth',
-    value: 'extra-rounded',
-    icon: GlobeAltIcon
-  },
-  {
-    name: 'Classy',
-    value: 'classy',
-    icon: GlobeAltIcon
-  },
+  // {
+  //   name: 'Smooth',
+  //   value: 'extra-rounded',
+  //   icon: '/dots/Rounded.svg'
+  // },
+  // {
+  //   name: 'Classy',
+  //   value: 'classy',
+  //   icon: '/dots/Smooth.svg'
+  // },
   {
     name: 'Diamond',
     value: 'diamond',
-    icon: GlobeAltIcon
+    icon: '/dots/Diamond.svg'
   },
   {
     name: 'Square',
     value: 'small-square',
-    icon: GlobeAltIcon
+    icon: '/dots/SmallSquare.svg'
   },
-  {
-    name: 'Calligraphy',
-    value: 'classy-rounded',
-    icon: GlobeAltIcon
-  }
+  // {
+  //   name: 'Calligraphy',
+  //   value: 'classy-rounded',
+  //   icon: '/dots/Smooth.svg'
+  // }
 ]
 
 const eyeTypes = [
   {
     name: 'Square',
     value: 'square',
-    icon: ChatBubbleLeftIcon
+    icon: "/outerEyes/Square.png"
   },
   {
     name: 'Circle',
     value: 'dot',
-    icon: ChatBubbleLeftIcon
+    icon: "/outerEyes/Circle.png"
   },
   {
     name: 'Rounded',
     value: 'extra-rounded',
-    icon: ChatBubbleLeftIcon
+    icon: "/outerEyes/Rounded.png"
   },
   {
     name: 'Outpoint',
     value: 'outpoint',
-    icon: ChatBubbleLeftIcon
+    icon: "/outerEyes/Outpoint.png"
   }
 ]
 
@@ -77,23 +77,23 @@ const innerEyeTypes = [
   {
     name: 'Square',
     value: 'square',
-    icon: EnvelopeIcon
+    icon: "/innerEyes/Square.svg"
   },
   {
     name: 'Dot',
     value: 'dot',
-    icon: EnvelopeIcon
-  },
-  {
-    name: 'Outpoint',
-    value: 'outpoint',
-    icon: EnvelopeIcon
+    icon: "/innerEyes/Circle.svg"
   },
   {
     name: 'Inpoint',
     value: 'inpoint',
-    icon: EnvelopeIcon
-  }
+    icon: "/innerEyes/Inpoint.svg"
+  },
+  {
+    name: 'Outpoint',
+    value: 'outpoint',
+    icon: "/innerEyes/Outpoint.svg"
+  },
 ]
 
 export default function QrCodeForm({ onChange, actionElement }) {
