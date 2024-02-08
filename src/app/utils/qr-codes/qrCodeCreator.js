@@ -1,6 +1,5 @@
 import s3 from "../s3";
 import prisma from "../prisma";
-import crypto from "crypto";
 
 class Result {
   constructor(success, message) {
@@ -18,13 +17,7 @@ const qrCodeCreator = async (user, team, formData) => {
     const svg = formData.get('svg');
     const svgText = await svg.text();
 
-    console.log('ISDYNAMIC', formData.get('isDynamic') === 'true')
-
-    let dynamicLinkUid = null;
-
-    if (formData.get('isDynamic') === 'true') {
-      dynamicLinkUid = crypto.randomBytes(32).toString('hex');
-    }
+    console.log('DYNAMICUID', formData.get('dynamicLinkUid'))
   
     const qrCode = await prisma.QRCode.create({
       data: {
@@ -32,7 +25,7 @@ const qrCodeCreator = async (user, team, formData) => {
         createdById: user.id,
         link: formData.get('link'),
         type: formData.get('type'),
-        dynamicLinkUid
+        dynamicLinkUid: formData.get('dynamicLinkUid')
       }
     })
 

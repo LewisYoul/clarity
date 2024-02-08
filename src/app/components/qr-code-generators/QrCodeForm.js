@@ -4,7 +4,6 @@ import QRCodeStyling from "palqr-code";
 import { useEffect, useRef, useState } from "react";
 import FileInput from "../form/FileInput";
 import ColorInput from "../form/ColorInput";
-import Collapse from "../Collapse";
 import Radio from "../form/Radio";
 import MailToInput from "../form/MailToInput";
 import WiFiInput from "../form/WiFiInput";
@@ -12,6 +11,7 @@ import PhoneNumberInput from "../form/PhoneNumberInput"
 import { GlobeAltIcon, DocumentTextIcon, ChatBubbleLeftIcon, EnvelopeIcon, DocumentIcon, WifiIcon, PhoneIcon, CreditCardIcon  } from '@heroicons/react/24/outline'
 import SmsInput from "../form/SmsInput";
 import { Switch } from '@headlessui/react'
+import crypto from 'crypto'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -111,6 +111,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
   const [innerEyeColor, setInnerEyeColor] = useState("#000000")
   const [outerEyeColor, setOuterEyeColor] = useState("#000000")
   const [isDynamic, setIsDynamic] = useState(false)
+  const [dynamicLinkUid, setDynamicLinkUid] = useState(null)
   const [link, setLink] = useState('https://example.com')
   const [mailTo, setMailTo] = useState({
     uri: 'mailto:?cc=&bcc=&subject=&body=',
@@ -190,7 +191,15 @@ export default function QrCodeForm({ onChange, actionElement }) {
   }, [qrCode, qrCodeOptions, onChange])
 
   useEffect(() => {
-    const dataForType = () => {
+    if (isDynamic) {
+      setDynamicLinkUid(crypto.randomBytes(20).toString('hex'));
+    } else {
+      setDynamicLinkUid(null);
+    }
+  }, [isDynamic])
+
+  useEffect(() => {
+    const destinationForType = () => {
       switch (selectedType) {
         case 'email':
           return mailTo.uri
@@ -203,6 +212,19 @@ export default function QrCodeForm({ onChange, actionElement }) {
         default:
           return link
       }
+    }
+
+    const data = () => {
+      if (dynamicLinkUid) {
+        switch (process.env.NODE_ENV) {
+          case 'development':
+            return `https://c667-2a00-23c8-778b-3d01-1517-7915-8184-6dc5.ngrok-free.app/scan/${dynamicLinkUid}`
+          case 'production':
+            return `https://palqr.com/scan/${dynamicLinkUid}`
+        }
+      }
+
+      return destinationForType()
     } 
 
     const generateQrCode = () => {
@@ -210,7 +232,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
         type: 'svg',
         width: 1000,
         height: 1000,
-        data: dataForType(),
+        data: data(),
         margin: 10,
         image: logoPath,
         backgroundOptions: {
@@ -238,14 +260,15 @@ export default function QrCodeForm({ onChange, actionElement }) {
         call: call,
         sms: sms,
         selectedType,
-        isDynamic
+        dynamicLinkUid,
+        scanDestination: destinationForType()
       }
 
       setQrCodeOptions(opts)
     }
 
     generateQrCode()
-  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call, sms, isDynamic])
+  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call, sms, dynamicLinkUid])
 
   const changeQrCodeType = (e) => {
     console.log(e.currentTarget.value)
@@ -264,6 +287,16 @@ export default function QrCodeForm({ onChange, actionElement }) {
     }
 
     return styles
+  }
+
+  const formatAndSetLink = (e) => {
+    let linkToFormat = e.target.value
+
+    if (!linkToFormat.startsWith('http://') && !linkToFormat.startsWith('https://')) {
+      linkToFormat = `http://${linkToFormat}`
+    }
+
+    setLink(linkToFormat)
   }
 
   return(
@@ -288,7 +321,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
                 Destination
               </label>
               <input
-                onChange={(e) => setLink(e.target.value)}
+                onChange={formatAndSetLink}
                 type="text"
                 name="link"
                 id="link"

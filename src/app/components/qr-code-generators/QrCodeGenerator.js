@@ -4,6 +4,7 @@ import Card from "../Card";
 import { useState } from "react";
 import { showToast } from "../../utils/toastUtils";
 import QrCodeForm from "./QrCodeForm";
+import crypto from 'crypto'
 
 export default function QrCodeGenerator() {  
   const [qrCode, setQrCode] = useState()
@@ -28,14 +29,13 @@ export default function QrCodeGenerator() {
     const opts = qrCode._options
     console.log('opts', opts)
 
-    formData.append('link', opts.data)
+    formData.append('dynamicLinkUid', opts.dynamicLinkUid)
+    formData.append('link', opts.scanDestination)
     formData.append('type', opts.selectedType)
-    formData.append('isDynamic', opts.isDynamic)
     formData.append('svg', svgBlob)
     formData.append('png', pngBlob)
 
     if (opts.selectedType === 'email') {
-      console.log('here', opts.mailTo.values)
       formData.append('mailTo[to]', opts.mailTo.values.to)
       formData.append('mailTo[cc]', opts.mailTo.values.cc)
       formData.append('mailTo[bcc]', opts.mailTo.values.bcc)
