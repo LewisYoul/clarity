@@ -192,7 +192,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
 
   useEffect(() => {
     if (isDynamic) {
-      setDynamicLinkUid(crypto.randomBytes(14).toString('hex'));
+      setDynamicLinkUid(crypto.randomBytes(8).toString('hex'));
     } else {
       setDynamicLinkUid(null);
     }
