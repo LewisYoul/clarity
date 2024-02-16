@@ -58,6 +58,7 @@ model QRCode {
   call Call?
   sms Sms?
   dynamicLinkUid String? @unique
+  scans Scan[]
 }
 
 model File {
@@ -115,4 +116,12 @@ model Sms {
   qrCodeId Int @unique
   qrCode QRCode @relation(fields: [qrCodeId], references: [id])
   smsNumber String
+}
+
+model Scan {
+  id      Int      @id @default(autoincrement())
+  qrCodeId Int
+  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 }

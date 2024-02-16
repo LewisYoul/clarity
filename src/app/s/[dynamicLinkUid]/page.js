@@ -11,6 +11,16 @@ export default async function Scan({ params }) {
     }
   })
 
+  await prisma.Scan.create({
+    data: {
+      qrCode: {
+        connect: {
+          id: qrCode.id
+        }
+      }
+    }
+  })
+
   console.log(qrCode)
 
   if (!dynamicLinkUid) {

@@ -108,7 +108,7 @@ const QrCode = (props) => {
         )}
       </div>
       <span className="absolute -top-2 -left-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-        {typeForDisplay()} <span className="ml-1">{qr.dynamicLinkUid ? 'dynamic' : 'static'}</span>
+        {typeForDisplay()}
       </span>
       <div className="flex justify-center">
         <div className="mt-4">
@@ -121,7 +121,10 @@ const QrCode = (props) => {
         </div>
       </div>
       <div>
-        <div className="my-3 flex justify-center">
+        <div class="mt-3 flex justify-center">
+          <span className="text-xs ml-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{qr.dynamicLinkUid ? `${qr.scans.length} ${qr.scans.length === 1 ? 'scan' : 'scans'}` : 'static'}</span>
+        </div>
+        <div className="mt-2 mb-3 flex justify-center">
           <p className="max-w-full text-xs text-gray-400">Updated {new Date(qr.createdAt).toLocaleString('en-US', { year:"numeric", month:"short", day:"numeric", hour: '2-digit', minute:'2-digit', hour12: false })}</p>
         </div>
       </div>
