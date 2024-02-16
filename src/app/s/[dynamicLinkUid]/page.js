@@ -18,6 +18,4 @@ export default async function Scan({ params }) {
   } else {
     return redirect(qrCode.link)
   }
-  // const router = useRouter()
-  // return <p>Scan: {router.query.dynamicLinkUid}</p>
 }

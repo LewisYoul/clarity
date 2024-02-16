@@ -10,7 +10,7 @@ export default function WiFiInput({ onChange }) {
 
   useEffect(() => {
     const constructWifiString = () => {
-      let wifiString = `WIFI:T:${encryptionType};S:${ssid};`
+      let wifiString = `wifi:T:${encryptionType};S:${ssid};`
 
       if (encryptionType === 'nopass') {
         return `${wifiString};`

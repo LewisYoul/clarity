@@ -5,7 +5,7 @@ export default function SmsInput({ onChange }) {
   const [smsNumber, setSmsNumber] = useState('')
 
   useEffect(() => {
-    const uri = `tel:${smsNumber}`
+    const uri = `sms:${smsNumber}`
 
     const values = {
       smsNumber
