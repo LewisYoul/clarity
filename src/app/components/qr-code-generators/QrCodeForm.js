@@ -220,7 +220,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
           case 'development':
             return `https://610f-2a00-23c8-778b-3d01-d84f-3797-44ac-6f4f.ngrok-free.app/s/${dynamicLinkUid}`
           case 'production':
-            return `https://palqr.com/s/${dynamicLinkUid}`
+            return `palqr.com/s/${dynamicLinkUid}`
         }
       }
 
