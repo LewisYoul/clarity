@@ -57,7 +57,7 @@ model QRCode {
   wifi WiFi?
   call Call?
   sms Sms?
-  dynamicLinkUid String?
+  dynamicLinkUid String? @unique
 }
 
 model File {
