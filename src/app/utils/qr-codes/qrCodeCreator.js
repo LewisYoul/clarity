@@ -18,82 +18,56 @@ const qrCodeCreator = async (user, team, formData) => {
     const svgText = await svg.text();
 
     console.log('DYNAMICUID', formData.get('dynamicLinkUid'))
+
+    let data = {}
+
+    if (formData.get('type') === 'link') {
+      data = {
+        url: formData.get('link')
+      }
+    }
+
+    if (formData.get('type') === 'email') {
+      data = {
+        to: formData.get('mailTo[to]'),
+        cc: formData.get('mailTo[cc]'),
+        bcc: formData.get('mailTo[bcc]'),
+        subject: formData.get('mailTo[subject]'),
+        body: formData.get('mailTo[body]'),
+      }
+    }
+
+    if (formData.get('type') === 'wifi') {
+      data = {
+        encryptionType: formData.get('wifi[encryptionType]'),
+        ssid: formData.get('wifi[ssid]'),
+        password: formData.get('wifi[password]'),
+      }
+    }
+
+    if (formData.get('type') === 'call') {
+      data = {
+        phoneNumber: formData.get('call[phoneNumber]'),
+      }
+    }
+
+    if (formData.get('type') === 'sms') {
+      data = {
+        smsNumber: formData.get('sms[smsNumber]'),
+      }
+    }
   
+    console.log('DATA', data)
     const qrCode = await prisma.QRCode.create({
       data: {
         teamId: team.id,
         createdById: user.id,
         link: formData.get('link'),
         type: formData.get('type'),
-        dynamicLinkUid: formData.get('dynamicLinkUid')
+        dynamicLinkUid: formData.get('dynamicLinkUid') === 'null' || formData.get('dynamicLinkUid') === null ? null : formData.get('dynamicLinkUid'),
+        data,
       }
     })
-
-    let mailTo = null;
-
-    if (formData.get('type') === 'email') {
-      mailTo = await prisma.MailTo.create({
-        data: {
-          to: formData.get('mailTo[to]'),
-          cc: formData.get('mailTo[cc]'),
-          bcc: formData.get('mailTo[bcc]'),
-          subject: formData.get('mailTo[subject]'),
-          body: formData.get('mailTo[body]'),
-          qrCode: {
-            connect: {
-              id: qrCode.id,
-            }
-          }
-        }
-      })
-    }
-
-    let wifi = null;
-
-    if (formData.get('type') === 'wifi') {
-      wifi = await prisma.WiFi.create({
-        data: {
-          encryptionType: formData.get('wifi[encryptionType]'),
-          ssid: formData.get('wifi[ssid]'),
-          password: formData.get('wifi[password]'),
-          qrCode: {
-            connect: {
-              id: qrCode.id,
-            }
-          }
-        }
-      })
-    }
-    
-    let call = null;
-    
-    if (formData.get('type') === 'call') {
-      call = await prisma.Call.create({
-        data: {
-          phoneNumber: formData.get('call[phoneNumber]'),
-          qrCode: {
-            connect: {
-              id: qrCode.id,
-            }
-          }
-        }
-      })
-    }
-
-    let sms = null;
-    
-    if (formData.get('type') === 'sms') {
-      sms = await prisma.Sms.create({
-        data: {
-          smsNumber: formData.get('sms[smsNumber]'),
-          qrCode: {
-            connect: {
-              id: qrCode.id,
-            }
-          }
-        }
-      })
-    }
   
     const createdPng = await prisma.File.create({
       data: {
@@ -122,18 +96,11 @@ const qrCodeCreator = async (user, team, formData) => {
     } catch (error) {
       console.error('Error sending svg or png or aws', error);
   
-      await prisma.File.delete({ where: { id: createdPng.id } })
-      await prisma.File.delete({ where: { id: createdSvg.id } })
-      await prisma.QRCode.delete({ where: { id: qrCode.id } })
-      if (mailTo) {
-        await prisma.MailTo.delete({ where: { id: mailTo.id } })
-      }
-      if (wifi) {
-        await prisma.WiFi.delete({ where: { id: wifi.id } })
-      }
-      if (call) {
-        await prisma.Call.delete({ where: { id: call.id } })
-      }
+      await prisma.$transaction([
+        prisma.File.delete({ where: { id: createdPng.id } }),
+        prisma.File.delete({ where: { id: createdSvg.id } }),
+        prisma.QRCode.delete({ where: { id: qrCode.id } }),
+      ])
   
       return new Result(false, 'There was a problem creating your QR code. If this problem continues please contact us.')
     }

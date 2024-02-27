@@ -31,26 +31,6 @@ export async function DELETE(req) {
           fileableType: 'QRCode'
         }
       }),
-      prisma.MailTo.deleteMany({
-        where: {
-          qrCodeId: qrCodeId
-        }
-      }),
-      prisma.WiFi.deleteMany({
-        where: {
-          qrCodeId: qrCodeId
-        }
-      }),
-      prisma.Call.deleteMany({
-        where: {
-          qrCodeId: qrCodeId
-        }
-      }),
-      prisma.Sms.deleteMany({
-        where: {
-          qrCodeId: qrCodeId
-        }
-      }),
       prisma.Scan.deleteMany({
         where: {
           qrCodeId: qrCodeId
@@ -97,10 +77,6 @@ export async function GET(req) {
       updatedAt: params.get('sortBy') === 'newestToOldest' ? 'desc' : 'asc'
     },
     include: {
-      mailTo: true,
-      wifi: true,
-      call: true,
-      sms: true,
       scans: true
     }
   })

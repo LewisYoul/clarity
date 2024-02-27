@@ -53,12 +53,9 @@ model QRCode {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   type QRCodeType @default(link)
-  mailTo MailTo?
-  wifi WiFi?
-  call Call?
-  sms Sms?
   dynamicLinkUid String? @unique
   scans Scan[]
+  data Json?
 }
 
 model File {
@@ -76,46 +73,6 @@ enum QRCodeType {
   wifi
   call
   sms
-}
-
-model MailTo {
-  id      Int      @id @default(autoincrement())
-  qrCodeId Int @unique
-  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
-  to String
-  cc String?
-  bcc String?
-  subject String
-  body String
-}
-
-enum WiFiEncryptionType {
-  WEP
-  WPA
-  nopass
-}
-
-model WiFi {
-  id      Int      @id @default(autoincrement())
-  qrCodeId Int @unique
-  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
-  encryptionType WiFiEncryptionType
-  ssid String
-  password String?
-}
-
-model Call {
-  id      Int      @id @default(autoincrement())
-  qrCodeId Int @unique
-  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
-  phoneNumber String
-}
-
-model Sms {
-  id      Int      @id @default(autoincrement())
-  qrCodeId Int @unique
-  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
-  smsNumber String
 }
 
 model Scan {

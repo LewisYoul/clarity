@@ -14,23 +14,23 @@ const QrCode = (props) => {
 
   const qrCodeTitle = () => {
     if (qr.type === 'link') {
-      return qr.link
+      return qr.data.url
     }
 
     if (qr.type === 'email') {
-      return qr.mailTo.to
+      return qr.data.to
     }
 
     if (qr.type === 'wifi') {
-      return qr.wifi.ssid
+      return qr.data.ssid
     }
 
     if (qr.type === 'call') {
-      return qr.call.phoneNumber
+      return qr.data.phoneNumber
     }
 
     if (qr.type === 'sms') {
-      return qr.sms.smsNumber
+      return qr.data.smsNumber
     }
   }
 
