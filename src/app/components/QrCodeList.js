@@ -11,7 +11,7 @@ export default function QrCodeList() {
   const [searchTerm, setSearchTerm] = useState(null);
   const [sortBy, setSortBy] = useState('newestToOldest');
   
-  const fetchQrCodes = async () => {
+  const fetchQrCodes = useCallback(async () => {
     const url = searchTerm ? `/api/qrCodes?sortBy=${sortBy}&searchTerm=${searchTerm}` : `/api/qrCodes?sortBy=${sortBy}`
 
     try {
@@ -27,19 +27,15 @@ export default function QrCodeList() {
 
       showToast('There was a problem loading your QR codes. If the problem persists please contact us.')
     }
-  }
-
-  useEffect(() => {
-    fetchQrCodes()
-  }, [])
-
-  useEffect(() => {
-    fetchQrCodes()
   }, [searchTerm, sortBy])
 
   useEffect(() => {
+    fetchQrCodes()
+  }, [fetchQrCodes])
+
+  useEffect(() => {
     document.addEventListener('triggerQrCodeFetch', () => { fetchQrCodes() })
-  }, [])
+  }, [fetchQrCodes])
 
   const handleSearchChange = debounce(async (e) => {
     let searchTerm = e.target.value.toLowerCase()
