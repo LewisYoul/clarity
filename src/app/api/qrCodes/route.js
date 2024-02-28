@@ -24,19 +24,30 @@ export async function DELETE(req) {
 
     if (!qrCode) { throw new Error('QR code not found.') }
 
+    const deletedAt = new Date()
+
     await prisma.$transaction([
-      prisma.File.deleteMany({
+      prisma.file.updateMany({
+        data: {
+          deletedAt
+        },
         where: {
           fileableId: qrCodeId,
           fileableType: 'QRCode'
-        }
+        },
       }),
-      prisma.Scan.deleteMany({
+      prisma.scan.updateMany({
+        data: {
+          deletedAt
+        },
         where: {
           qrCodeId: qrCodeId
-        }
+        },
       }),
-      prisma.QRCode.delete({ where: { id: qrCodeId } })
+      prisma.qRCode.update({
+        data: { deletedAt },
+        where: { id: qrCodeId }
+      })
     ])
 
     return Response.json({ message: 'QR code deleted.' })
@@ -70,6 +81,7 @@ export async function GET(req) {
 
   let qrs = await prisma.QRCode.findMany({
     where: {
+      deletedAt: null,
       teamId: currentTeam.id,
       ...filterAndSortQuery
     },

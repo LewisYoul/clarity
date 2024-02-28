@@ -56,6 +56,7 @@ model QRCode {
   dynamicLinkUid String? @unique
   scans Scan[]
   data Json?
+  deletedAt DateTime?
 }
 
 model File {
@@ -64,6 +65,7 @@ model File {
   fileType String
   fileableId Int
   fileableType String
+  deletedAt DateTime?
 }
 
 enum QRCodeType {
@@ -81,4 +83,5 @@ model Scan {
   qrCode QRCode @relation(fields: [qrCodeId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
+  deletedAt DateTime?
 }
