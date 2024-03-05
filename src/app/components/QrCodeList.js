@@ -47,6 +47,12 @@ export default function QrCodeList() {
     setSearchTerm(searchTerm)
   }, 300)
 
+  const openQrModal = () => {
+    const event = new CustomEvent('openQrModal', { detail: {} })
+
+    document.dispatchEvent(event)
+  }
+
   const handleSortChange = async (e) => {
     console.log(e.target.value)
 
@@ -62,11 +68,21 @@ export default function QrCodeList() {
       <div className="mb-6 flex justify-between h-full border rounded-md border border-1 bg-slate-50 border-slate-200 p-4 mx-4 lg:mx-0">
         <input placeholder="Search QR codes" onChange={handleSearchChange} className="block w-full lg:w-60 rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6" type="text"></input>
         
-        <div className="items-center text-sm hidden md:flex">
-          <select className="bg-slate-50" defaultValue="newestToOldest" onChange={handleSortChange}>
-            <option value="newestToOldest">Newest</option>
-            <option value="oldestToNewest">Oldest</option>
-          </select>
+        <div className="flex">
+          <div className="mr-4 items-center text-sm hidden md:flex">
+            <select className="bg-slate-50" defaultValue="newestToOldest" onChange={handleSortChange}>
+              <option value="newestToOldest">Newest</option>
+              <option value="oldestToNewest">Oldest</option>
+            </select>
+          </div>
+
+          <button
+            onClick={openQrModal}
+            type="button"
+            className="inline-flex rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
+          >
+            <PlusIcon className="h-5 w-5"/> <span className="hidden lg:block">QR Code</span>
+          </button>
         </div>
       </div>
       {

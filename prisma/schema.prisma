@@ -57,6 +57,7 @@ model QRCode {
   scans Scan[]
   data Json?
   deletedAt DateTime?
+  credit Credit?
 }
 
 model File {
@@ -84,4 +85,14 @@ model Scan {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?
+}
+
+
+model Credit {
+  id      Int      @id @default(autoincrement())
+  teamId Int
+  qrCodeId Int? @unique
+  qrCode QRCode? @relation(fields: [qrCodeId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 }

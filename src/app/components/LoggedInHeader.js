@@ -4,11 +4,11 @@ import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react
 import Link from 'next/link'
 import { useState } from 'react'
 
-export default function LoggedInHeader() {
+export default function LoggedInHeader({ creditsCount }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const openQrModal = () => {
-    const event = new CustomEvent('openQrModal', { detail: {} })
+  const openCreditsModal = () => {
+    const event = new CustomEvent('openCreditsModal', { detail: {} })
 
     document.dispatchEvent(event)
   }
@@ -39,13 +39,9 @@ export default function LoggedInHeader() {
           </a>
         </div>
         <div className="flex flex-1 justify-end items-center">
-          <button
-            onClick={openQrModal}
-            type="button"
-            className="mr-4 inline-flex rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
-          >
-            <PlusIcon className="h-5 w-5"/> <span className="hidden lg:block">QR Code</span>
-          </button>
+          {/* <button onClick={openCreditsModal} className="mr-4 rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            <span className="text-gray-900 text-sm font-semibold">{creditsCount} credits</span>
+          </button> */}
           <button
             onClick={openMenu}
             type="button"

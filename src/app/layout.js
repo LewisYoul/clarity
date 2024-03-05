@@ -6,6 +6,9 @@ import dynamic from 'next/dynamic'
 const Modal = dynamic(() => import('./components/Modal'), {
   ssr: false
 })
+const CreditsModal = dynamic(() => import('./components/CreditsModal'), {
+  ssr: false
+})
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +23,7 @@ export default function RootLayout({ children }) {
       <body className={`h-full ${inter.className}`}>
         <Toast />
         <Modal />
+        <CreditsModal />
         {children}
       </body>
     </html>
