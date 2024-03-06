@@ -39,9 +39,9 @@ export default function LoggedInHeader({ creditsCount }) {
           </a>
         </div>
         <div className="flex flex-1 justify-end items-center">
-          {/* <button onClick={openCreditsModal} className="mr-4 rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          <button onClick={openCreditsModal} className="mr-4 rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
             <span className="text-gray-900 text-sm font-semibold">{creditsCount} credits</span>
-          </button> */}
+          </button>
           <button
             onClick={openMenu}
             type="button"

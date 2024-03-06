@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function Modal() {
   const [showModal, setShowModal] = useState(false);
+  const modalRef = useRef()
 
   const openModal = () => {
-    console.log('cm')
-
     setShowModal(true)
   }
 
   const closeModal = (event) => {
     setShowModal(false)
+  }
+
+  const handleOutsideClick = (event) => {
+    if (modalRef.current.contains(event.target)) { return }
+
+    closeModal()
   }
 
   useEffect(() => {
@@ -29,43 +34,43 @@ export default function Modal() {
   }
 
   return (
-    <div className="fixed h-screen w-full bg-gray-500 bg-opacity-50 z-10 flex justify-center">
-      <div className="absolute top-0 right-0 pt-2 pr-2">
-        <button
-          type="button"
-          className="inline-flex items-center justify-center text-white"
-          onClick={closeModal}
-        >
-          <span className="sr-only">Close modal</span>
-          <XMarkIcon className="h-10 w-10" aria-hidden="true" />
-        </button>
-      </div>
+    <div onClick={handleOutsideClick} className="fixed h-screen w-full bg-gray-500 bg-opacity-50 z-10 flex justify-center">
+      <div ref={modalRef} className="w-[540px] h-screen md:h-[860px] md:mt-12 rounded-md relative bg-white">
+        <div className="absolute top-0 right-0 pt-3 pr-3">
+          <button
+            type="button"
+            className="inline-flex items-center justify-center text-gray-800 hover:text-gray-500"
+            onClick={closeModal}
+          >
+            <span className="sr-only">Close modal</span>
+            <XMarkIcon className="h-8 w-8" aria-hidden="true" />
+          </button>
+        </div>
 
-      <div className="w-[540px] h-screen md:h-[860px] md:mt-12 rounded-md relative bg-white">
         <h1 className="mt-10 text-center text-xl mb-4 font-semibold">Choose your credit pack</h1>
         <h1 className="mt-4 text-gray-600 text-center text-md">All packs are one time purchases. There are no recurring fees.</h1>
         <div className="pb-2 mt-6">
           <div className="border rounded-md hover:border-black hover:cursor-pointer mx-10 px-8 py-4">
-            <h1 className="text-l mb-4">Single</h1>
-            <p className="inline-flex items-center"><span className="font-bold text-3xl">$2</span><span className=" ml-4 text-gray-400">1 QR Code</span></p>
+            <h1 className="text-l mb-4">1 QR Code</h1>
+            <p className="inline-flex items-center"><span className="font-bold text-3xl">$2</span></p>
           </div>
         </div>
         <div className="pb-2 mt-2">
           <div className="border hover:border-black hover:cursor-pointer rounded-md mx-10 px-8 py-4">
-            <h1 className="text-l mb-4">Standard</h1>
-            <p className="inline-flex items-center"><span className="font-bold text-3xl">$5</span><span className=" ml-4 text-gray-400">3 QR Codes</span></p>
+            <h1 className="text-l mb-4">3 QR Codes</h1>
+            <p className="inline-flex items-center"><span className="font-bold text-3xl">$5</span></p>
           </div>
         </div>
         <div className="pb-2 mt-2">
           <div className="border rounded-md hover:border-black hover:cursor-pointer mx-10 px-8 py-4">
-            <h1 className="text-l mb-4">Large</h1>
-            <p className="inline-flex items-center"><span className="font-bold text-3xl">$8</span><span className=" ml-4 text-gray-400">5 QR Codes</span></p>
+            <h1 className="text-l mb-4">5 QR Codes</h1>
+            <p className="inline-flex items-center"><span className="font-bold text-3xl">$8</span></p>
           </div>
         </div>
         <div className="pb-2 mt-2">
           <div className="border rounded-md hover:border-black hover:cursor-pointer mx-10 px-8 py-4">
-            <h1 className="text-l mb-4">Extra Large</h1>
-            <p className="inline-flex items-center"><span className="font-bold text-3xl">$15</span><span className=" ml-4 text-gray-400">10 QR Codes</span></p>
+            <h1 className="text-l mb-4">10 QR Codes</h1>
+            <p className="inline-flex items-center"><span className="font-bold text-3xl">$15</span></p>
           </div>
         </div>
 
