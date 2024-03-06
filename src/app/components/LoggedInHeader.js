@@ -2,10 +2,25 @@
 
 import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 
 export default function LoggedInHeader({ creditsCount }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const menuRef = useRef()
+
+
+  const handleOutsideClick = useCallback((event) => {
+    if (menuRef?.current?.contains(event.target)) { return }
+
+    if (isMenuOpen) { closeMenu() }
+  }, [isMenuOpen])
+
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick)
+    return () => {
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }, [handleOutsideClick])
 
   const openCreditsModal = () => {
     const event = new CustomEvent('openCreditsModal', { detail: {} })
@@ -24,6 +39,8 @@ export default function LoggedInHeader({ creditsCount }) {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
+
+  const menuclass = isMenuOpen ? 'lg:visible' : ''
 
   return (
     <header className="inset-x-0 top-0">
@@ -99,28 +116,26 @@ export default function LoggedInHeader({ creditsCount }) {
             </div>
           )}
 
-          {isMenuOpen && (
-            <div className="invisible lg:visible absolute w-[200px] bg-white top-16 right-0 z-50 rounded-md border">
-              <div className="h-full w-full relative divide-y divide-gray-500/10">
-                <div className="flow-root">
-                  <div>
-                    <Link
-                      href="#"
-                      className="block rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                      Settings
-                    </Link>
-                    <Link
-                      href="/api/auth/signout"
-                      className="block rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                      Sign Out
-                    </Link>
-                  </div>
+          <div ref={menuRef} className={`invisible absolute w-[200px] bg-white top-16 right-0 z-50 rounded-md border ${menuclass}`}>
+            <div className="h-full w-full relative divide-y divide-gray-500/10">
+              <div className="flow-root">
+                <div>
+                  <Link
+                    href="#"
+                    className="block rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Settings
+                  </Link>
+                  <Link
+                    href="/api/auth/signout"
+                    className="block rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Sign Out
+                  </Link>
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </nav>
     </header>
