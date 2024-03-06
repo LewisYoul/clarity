@@ -17,6 +17,7 @@ export default function LoggedInHeader({ creditsCount }) {
 
   useEffect(() => {
     document.addEventListener('click', handleOutsideClick)
+
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }

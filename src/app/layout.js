@@ -18,6 +18,12 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  // const onBodyClick = (event) => {
+  //   const bodyClickEvent = new CustomEvent('documentBodyClicked', { detail: { target: event.target } })
+
+  //   document.dispatchEvent(bodyClickEvent)
+  // }
+
   return (
     <html className="h-full bg-white" lang="en">
       <body className={`h-full ${inter.className}`}>

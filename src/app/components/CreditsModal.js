@@ -2,6 +2,30 @@
 
 import { useEffect, useState, useRef } from "react";
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import CreditPack from "./CreditPack";
+
+const packs = [
+  {
+    type: 'single',
+    numberOfQrCodes: 1,
+    price: 2
+  },
+  {
+    type: 'basic',
+    numberOfQrCodes: 3,
+    price: 5
+  },
+  {
+    type: 'medium',
+    numberOfQrCodes: 5,
+    price: 8
+  },
+  {
+    type: 'large',
+    numberOfQrCodes: 10,
+    price: 15
+  },
+]
 
 export default function Modal() {
   const [showModal, setShowModal] = useState(false);
@@ -48,31 +72,12 @@ export default function Modal() {
         </div>
 
         <h1 className="mt-10 text-center text-xl mb-4 font-semibold">Choose your credit pack</h1>
-        <h1 className="mt-4 text-gray-600 text-center text-md">All packs are one time purchases. There are no recurring fees.</h1>
-        <div className="pb-2 mt-6">
-          <div className="border rounded-md hover:border-black hover:cursor-pointer mx-10 px-8 py-4">
-            <h1 className="text-l mb-4">1 QR Code</h1>
-            <p className="inline-flex items-center"><span className="font-bold text-3xl">$2</span></p>
-          </div>
-        </div>
-        <div className="pb-2 mt-2">
-          <div className="border hover:border-black hover:cursor-pointer rounded-md mx-10 px-8 py-4">
-            <h1 className="text-l mb-4">3 QR Codes</h1>
-            <p className="inline-flex items-center"><span className="font-bold text-3xl">$5</span></p>
-          </div>
-        </div>
-        <div className="pb-2 mt-2">
-          <div className="border rounded-md hover:border-black hover:cursor-pointer mx-10 px-8 py-4">
-            <h1 className="text-l mb-4">5 QR Codes</h1>
-            <p className="inline-flex items-center"><span className="font-bold text-3xl">$8</span></p>
-          </div>
-        </div>
-        <div className="pb-2 mt-2">
-          <div className="border rounded-md hover:border-black hover:cursor-pointer mx-10 px-8 py-4">
-            <h1 className="text-l mb-4">10 QR Codes</h1>
-            <p className="inline-flex items-center"><span className="font-bold text-3xl">$15</span></p>
-          </div>
-        </div>
+        <h1 className="mt-4 mb-6 text-gray-600 text-center text-md">All packs are one time purchases. There are no recurring fees.</h1>
+        {
+          packs.map((pack) => {
+            return <CreditPack key={`pack-${pack.type}`} packType={pack.type} numberOfQrCodes={pack.numberOfQrCodes} price={pack.price} />
+          })
+        }
 
         <div className="mx-10 py-4 text-md">
           <h1 className="font-bold mb-2">How credits work</h1>
