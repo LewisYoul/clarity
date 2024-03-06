@@ -1,6 +1,7 @@
 "use client";
 
-import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { signOut } from "next-auth/react"
+import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIcon, Cog8ToothIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback } from 'react'
 
@@ -123,16 +124,16 @@ export default function LoggedInHeader({ creditsCount }) {
                 <div>
                   <Link
                     href="#"
-                    className="block rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                    className="inline-flex items-center w-full rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Settings
+                    <Cog8ToothIcon className="w-4 h-4 mr-1" /> Settings
                   </Link>
-                  <Link
-                    href="/api/auth/signout"
-                    className="block rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                  <button
+                    onClick={() => { signOut({ callbackUrl: '/' }) }}
+                    className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Sign Out
-                  </Link>
+                    <ArrowLeftOnRectangleIcon className="w-4 h-4 mr-1" />Sign Out
+                  </button>
                 </div>
               </div>
             </div>
