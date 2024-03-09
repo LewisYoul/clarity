@@ -59,7 +59,7 @@ export default function Modal() {
 
   return (
     <div onClick={handleOutsideClick} className="fixed h-screen w-full bg-gray-500 bg-opacity-50 z-10 flex justify-center">
-      <div ref={modalRef} className="w-[540px] h-screen md:h-[860px] md:mt-12 rounded-md relative bg-white">
+      <div ref={modalRef} className="w-[540px] h-screen md:h-[860px] md:mt-12 pb-12 rounded-md relative bg-white overflow-scroll">
         <div className="absolute top-0 right-0 pt-3 pr-3">
           <button
             type="button"
