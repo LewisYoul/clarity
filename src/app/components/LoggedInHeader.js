@@ -5,7 +5,8 @@ import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIco
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback } from 'react'
 
-export default function LoggedInHeader({ creditsCount }) {
+export default function LoggedInHeader(props) {
+  const [creditsCount, setCreditsCount] = useState(props.creditsCount)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef()
 
@@ -23,6 +24,18 @@ export default function LoggedInHeader({ creditsCount }) {
       document.removeEventListener('click', handleOutsideClick)
     }
   }, [handleOutsideClick])
+
+  useEffect(() => {
+    const updateDisplayedCreditsCount = (event) => {
+      setCreditsCount(event.detail.creditsCount)
+    }
+
+    document.addEventListener('updateDisplayedCredits', updateDisplayedCreditsCount)
+
+    return () => {
+      document.removeEventListener('updateDisplayedCredits', updateDisplayedCreditsCount)
+    }
+  }, [])
 
   const openCreditsModal = () => {
     const event = new CustomEvent('openCreditsModal', { detail: {} })

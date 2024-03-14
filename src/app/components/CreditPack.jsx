@@ -1,13 +1,15 @@
 "use client";
 
+import { showToast } from "../utils/toastUtils";
+
 export default function CreditPack({ packType, numberOfQrCodes, price}) {
-  // const beginPuchaseFlow = async () => {
-  //   console.log('PACKTYPE', packType)
-  //   // const res = await fetch('/api/credits', {
-  //   //   method: 'POST',
-  //   //   body: formData,
-  //   // })
-  // }
+  const closeCreditsModal = (creditsCount) => {
+    const closeCreditsModalEvent = new CustomEvent('closeCreditsModal', { detail: {} })
+    const updateDisplayedCreditsCountEvent = new CustomEvent('updateDisplayedCredits', { detail: { creditsCount } })
+
+    document.dispatchEvent(updateDisplayedCreditsCountEvent)
+    document.dispatchEvent(closeCreditsModalEvent)
+  }
 
   const buyCredits = async () => {
     try {
@@ -16,16 +18,16 @@ export default function CreditPack({ packType, numberOfQrCodes, price}) {
         body: JSON.stringify({ packType }),
       })
 
-      if (!res.ok) throw new Error('There was a problem deleting your QR code. If this problem continues please contact us.')
+      if (!res.ok) throw new Error('There was a problem purchasing your credits. If this problem continues please contact us.')
 
       const data = await res.json();
 
-      // triggerQrCodeFetch()
-      // showToast(data.message)
+      showToast(data.message)
+      closeCreditsModal(data.creditsCount)
     } catch (error) {
       console.error(error)
 
-      // showToast(error.message)
+      showToast(error.message)
     }
   }
 
