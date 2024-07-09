@@ -9,8 +9,6 @@ const CreditsProvider = ({children})=>{
   }, [])
 
   const refreshCreditsCount = async () => {
-    console.log('refreshing credits count')
-    
     try {
         const response = await fetch('/api/credits')
         const data = await response.json()

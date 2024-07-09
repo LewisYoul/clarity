@@ -2,29 +2,11 @@ import { ChatBubbleLeftIcon, ArrowDownTrayIcon, EllipsisVerticalIcon, EnvelopeIc
 import Link from 'next/link';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { showToast } from '@/app/utils/toastUtils';
+import Popover from './Popover';
 
 const QrCode = (props) => {
   const { qr } = props;
   const popoverRef = useRef()
-  const [isOptionsPopoverOpen, setIsOptionsPopoverOpen] = useState(false)
-
-  const handleOutsideClick = useCallback((event) => {
-    if (popoverRef?.current?.contains(event.target)) { return }
-
-    if (isOptionsPopoverOpen) { setIsOptionsPopoverOpen(false) }
-  }, [isOptionsPopoverOpen])
-
-  useEffect(() => {
-    document.addEventListener('click', handleOutsideClick)
-
-    return () => {
-      document.removeEventListener('click', handleOutsideClick)
-    }
-  }, [handleOutsideClick])
-
-  const toggleOptionsPopover = () => {
-    setIsOptionsPopoverOpen(!isOptionsPopoverOpen)
-  }
 
   const qrCodeTitle = () => {
     if (qr.type === 'link') {
@@ -98,11 +80,25 @@ const QrCode = (props) => {
   }
 
   const title = qrCodeTitle()
-  const visibilityClass = isOptionsPopoverOpen ? 'visible' : 'invisible'
+
+  const popoverItems = [
+    {
+      label: 'Edit',
+      onClick: () => {
+        console.log('Edit')
+      }
+    },
+    {
+      label: 'Delete',
+      onClick: deleteQrCode,
+      color: 'red'
+    },
+  ]
 
   return (
     <div className="border rounded-md bg-slate-50 relative shadow-md">
-      <div onClick={toggleOptionsPopover} className="absolute top-2 right-2 cursor-pointer">
+      <Popover items={popoverItems}/>
+      {/* <div onClick={toggleOptionsPopover} className="absolute top-2 right-2 cursor-pointer">
         <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
 
         <div ref={popoverRef} className={`${visibilityClass} absolute top-6 right-0 bg-white z-50 rounded-md border`}>
@@ -119,7 +115,7 @@ const QrCode = (props) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <span className="absolute -top-2 -left-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
         {typeForDisplay()}
       </span>
