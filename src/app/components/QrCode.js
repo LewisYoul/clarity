@@ -81,7 +81,7 @@ const QrCode = (props) => {
 
   const title = qrCodeTitle()
 
-  const popoverItems = [
+  let popoverItems = [
     {
       label: 'Edit',
       onClick: () => {
@@ -94,6 +94,17 @@ const QrCode = (props) => {
       color: 'red'
     },
   ]
+
+  if (qr.dynamicLinkUid) {
+    popoverItems.push({
+      label: 'Link',
+      onClick: () => {
+        navigator.clipboard.writeText(qr.dynamicLinkUid)
+          .then(() => showToast('Short link copied to clipboard!'))
+          .catch(err => showToast('Failed to copy short link: ' + err.message));
+      }
+    })
+  }
 
   return (
     <div className="border rounded-md bg-slate-50 relative shadow-md">
