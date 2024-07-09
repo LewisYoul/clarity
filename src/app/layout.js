@@ -10,6 +10,10 @@ const CreditsModal = dynamic(() => import('./components/CreditsModal'), {
   ssr: false
 })
 
+const PageWrapper = dynamic(() => import('./components/PageWrapper'), {
+  ssr: false
+})
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -21,10 +25,12 @@ export default function RootLayout({ children }) {
   return (
     <html className="h-full bg-white" lang="en">
       <body className={`h-full ${inter.className}`}>
-        <Toast />
-        <Modal />
-        <CreditsModal />
-        {children}
+        <PageWrapper>
+          <Toast />
+          <Modal />
+          <CreditsModal />
+          {children}
+        </PageWrapper>
       </body>
     </html>
   )

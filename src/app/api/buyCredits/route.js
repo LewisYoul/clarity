@@ -25,7 +25,7 @@ export async function POST(req) {
     })
 
     const creditsCount = await prisma.credit.count({
-      where: { teamId: currentTeam.id }
+      where: { teamId: currentTeam.id, qrCodeId: null }
     })
 
     const responseJson = {

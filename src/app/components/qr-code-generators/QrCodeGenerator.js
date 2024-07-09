@@ -1,14 +1,16 @@
 "use client";
 
 import Card from "../Card";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { showToast } from "../../utils/toastUtils";
 import QrCodeForm from "./QrCodeForm";
 import crypto from 'crypto'
+import { CreditsContext } from "../../contexts/creditsContext";
 
 export default function QrCodeGenerator() {  
   const [qrCode, setQrCode] = useState()
   const [options, setOptions] = useState()
+  const { refreshCreditsCount } = useContext(CreditsContext)
 
   const closeQrModal = () => {
     const event = new CustomEvent('closeQrModal', { detail: {} })
@@ -75,6 +77,8 @@ export default function QrCodeGenerator() {
       })
 
       const data = await res.json();
+
+      await refreshCreditsCount()
 
       showToast(data.message)
       triggerQrCodeFetch()

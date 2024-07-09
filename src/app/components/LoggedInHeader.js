@@ -3,13 +3,13 @@
 import { signOut } from "next-auth/react"
 import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIcon, Cog8ToothIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useContext } from 'react'
+import { CreditsContext } from "../contexts/creditsContext";
 
 export default function LoggedInHeader(props) {
-  const [creditsCount, setCreditsCount] = useState(props.creditsCount)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef()
-
+  const { creditsCount } = useContext(CreditsContext)
 
   const handleOutsideClick = useCallback((event) => {
     if (menuRef?.current?.contains(event.target)) { return }
@@ -24,18 +24,6 @@ export default function LoggedInHeader(props) {
       document.removeEventListener('click', handleOutsideClick)
     }
   }, [handleOutsideClick])
-
-  useEffect(() => {
-    const updateDisplayedCreditsCount = (event) => {
-      setCreditsCount(event.detail.creditsCount)
-    }
-
-    document.addEventListener('updateDisplayedCredits', updateDisplayedCreditsCount)
-
-    return () => {
-      document.removeEventListener('updateDisplayedCredits', updateDisplayedCreditsCount)
-    }
-  }, [])
 
   const openCreditsModal = () => {
     const event = new CustomEvent('openCreditsModal', { detail: {} })
@@ -72,7 +60,7 @@ export default function LoggedInHeader(props) {
         </div>
         <div className="flex flex-1 justify-end items-center">
           <button onClick={openCreditsModal} className="mr-4 rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            <span className="text-gray-900 text-sm font-semibold">{creditsCount} credits</span>
+            <span className="text-gray-900 text-sm font-semibold">{creditsCount ? `${creditsCount} credits` : '-'}</span>
           </button>
           <button
             onClick={openMenu}

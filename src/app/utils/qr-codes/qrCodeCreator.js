@@ -58,16 +58,35 @@ const qrCodeCreator = async (user, team, formData) => {
     }
   
     console.log('DATA', data)
+    const isDynamic = formData.get('dynamicLinkUid') !== 'null' && formData.get('dynamicLinkUid') !== null
+
+    console.log('isdynamic', isDynamic)
     const qrCode = await prisma.QRCode.create({
       data: {
         teamId: team.id,
         createdById: user.id,
         link: formData.get('link'),
         type: formData.get('type'),
-        dynamicLinkUid: formData.get('dynamicLinkUid') === 'null' || formData.get('dynamicLinkUid') === null ? null : formData.get('dynamicLinkUid'),
+        dynamicLinkUid: isDynamic ? formData.get('dynamicLinkUid') : null,
         data,
       }
     })
+
+
+    if (isDynamic) {
+      const credit = await prisma.credit.findFirst({
+        where: { teamId: team.id, qrCodeId: null }
+      })
+
+      if (!credit) { return new Result(false, "You don't have enough credits") }
+  
+      console.log("QR CODE ID", qrCode.id)
+      await prisma.credit.update({
+        where: { id: credit.id },
+        data: { qrCodeId: qrCode.id }
+      })
+    }
+
   
     const createdPng = await prisma.File.create({
       data: {

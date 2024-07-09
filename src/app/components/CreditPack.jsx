@@ -1,8 +1,11 @@
 "use client";
 
+import { useContext } from "react";
 import { showToast } from "../utils/toastUtils";
+import { CreditsContext } from "../contexts/creditsContext";
 
 export default function CreditPack({ packType, numberOfQrCodes, price}) {
+  const { refreshCreditsCount } = useContext(CreditsContext)
   const closeCreditsModal = (creditsCount) => {
     const closeCreditsModalEvent = new CustomEvent('closeCreditsModal', { detail: {} })
     const updateDisplayedCreditsCountEvent = new CustomEvent('updateDisplayedCredits', { detail: { creditsCount } })
@@ -21,6 +24,8 @@ export default function CreditPack({ packType, numberOfQrCodes, price}) {
       if (!res.ok) throw new Error('There was a problem purchasing your credits. If this problem continues please contact us.')
 
       const data = await res.json();
+
+      await refreshCreditsCount()
 
       showToast(data.message)
       closeCreditsModal(data.creditsCount)
