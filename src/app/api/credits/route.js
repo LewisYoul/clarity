@@ -10,7 +10,7 @@ export async function GET(req) {
 
   try {
     const creditsCount = await prisma.credit.count({
-      where: { teamId: currentTeam.id }
+      where: { teamId: currentTeam.id, qrCodeId: null }
     });
 
     return Response.json({ creditsCount });
