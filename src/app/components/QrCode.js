@@ -99,7 +99,13 @@ const QrCode = (props) => {
     popoverItems.push({
       label: 'Link',
       onClick: () => {
-        navigator.clipboard.writeText(qr.dynamicLinkUid)
+        let link = `palqr.com/s/${qr.dynamicLinkUid}`
+
+        if (process.env.NODE_ENV === 'development') {
+            link = `https://610f-2a00-23c8-778b-3d01-d84f-3797-44ac-6f4f.ngrok-free.app/s/${qr.dynamicLinkUid}`
+        }
+
+        navigator.clipboard.writeText(link)
           .then(() => showToast('Short link copied to clipboard!'))
           .catch(err => showToast('Failed to copy short link: ' + err.message));
       }
