@@ -13,11 +13,22 @@ export async function POST(req) {
   const body = await req.json()
   const packType = body.packType
 
-  const prices = {
-    single: 'price_1PbFrXFv8VES5JMTH0r2TCob',
-    basic: 'price_1Pd45CFv8VES5JMT6MAKbV6U',
-    medium: 'price_1Pd45cFv8VES5JMTB6AygXxH',
-    large: 'price_1Pd461Fv8VES5JMThmxgw1S4'
+  // production
+  let prices = {
+    single: 'price_1Pd4NzFv8VES5JMThczfgdtk',
+    basic: 'price_1Pd4O6Fv8VES5JMTKFnKc6iG',
+    medium: 'price_1Pd4O9Fv8VES5JMTE4Ij8PD9',
+    large: 'price_1Pd4OBFv8VES5JMTz9RldZPa'
+  }
+  
+  if (process.env.NODE_ENV === 'development') {
+    // development
+    prices = {
+      single: 'price_1PbFrXFv8VES5JMTH0r2TCob',
+      basic: 'price_1Pd45CFv8VES5JMT6MAKbV6U',
+      medium: 'price_1Pd45cFv8VES5JMTB6AygXxH',
+      large: 'price_1Pd461Fv8VES5JMThmxgw1S4'
+    }
   }
 
   const params = {
