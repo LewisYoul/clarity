@@ -8,22 +8,26 @@ const packs = [
   {
     type: 'single',
     numberOfQrCodes: 1,
-    price: 2
+    price: 2,
+    priceId: 'price_1PbFrXFv8VES5JMTH0r2TCob'
   },
   {
     type: 'basic',
     numberOfQrCodes: 3,
-    price: 5
+    price: 5,
+    priceId: 'price_1PbFrXFv8VES5JMTH0r2TCob'
   },
   {
     type: 'medium',
     numberOfQrCodes: 5,
-    price: 8
+    price: 8,
+    priceId: 'price_1PbFrXFv8VES5JMTH0r2TCob'
   },
   {
     type: 'large',
     numberOfQrCodes: 10,
-    price: 15
+    price: 15,
+    priceId: 'price_1PbFrXFv8VES5JMTH0r2TCob'
   },
 ]
 

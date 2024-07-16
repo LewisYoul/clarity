@@ -24,13 +24,8 @@ export async function POST(req) {
       data: creditsToCreate
     })
 
-    const creditsCount = await prisma.credit.count({
-      where: { teamId: currentTeam.id, qrCodeId: null }
-    })
-
     const responseJson = {
       message: `Purchase complete! ${creditsToCreate.length} credit${creditsToCreate.length > 1 ? 's' : ''} ${creditsToCreate.length > 1 ? 'have' : 'has'} been added to your account.`,
-      creditsCount
     }
     return Response.json(responseJson)
   } catch {

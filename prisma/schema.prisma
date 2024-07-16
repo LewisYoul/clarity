@@ -17,6 +17,7 @@ model User {
   teamUsers TeamUser[]
   passwordResetRequests PasswordResetRequest[]
   qrCodes QRCode[]
+  stripeCheckoutSessions StripeCheckoutSession[]
 }
 
 model Team {
@@ -25,6 +26,7 @@ model Team {
   teamUsers TeamUser[]
   isPersonal Boolean @default(true)
   qrCodes QRCode[]
+  stripeCheckoutSessions StripeCheckoutSession[]
 }
 
 model TeamUser {
@@ -96,3 +98,15 @@ model Credit {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 }
+
+model StripeCheckoutSession {
+  id      Int      @id @default(autoincrement())
+  sessionId String
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  teamId Int
+  team Team @relation(fields: [teamId], references: [id])
+  packType String 
+  isUsed Boolean @default(false)
+}
+
