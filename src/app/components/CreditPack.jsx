@@ -27,8 +27,9 @@ export default function CreditPack({ packType, numberOfQrCodes, price}) {
       const data = await res.json();
 
       console.log('CHECKOUT SESSION', data)
+      console.log('STRIPE_PUBLISHABLE_KEY', process.env.STRIPE_PUBLISHABLE_KEY)
     
-      const stripe = await loadStripe('pk_test_51LEEh0Fv8VES5JMTY6MIl7Dkdu84WMPX310kZFGVic4sL4A149QO5uUPVjXCSvyr0Nm3CXkJlkRArduQwZuibzDk00DS0yojeL');
+      const stripe = await loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
 
       await stripe.redirectToCheckout({ sessionId: data.id })
 
