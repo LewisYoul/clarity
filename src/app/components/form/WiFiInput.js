@@ -3,10 +3,10 @@ import debounce from 'debounce'
 
 const DEFAULT_ENCRYPTION_TYPE = 'WPA'
 
-export default function WiFiInput({ onChange }) {
-  const [encryptionType, setEncryptionType] = useState(DEFAULT_ENCRYPTION_TYPE)
-  const [ssid, setSsid] = useState('')
-  const [password, setPassword] = useState('')
+export default function WiFiInput({ onChange, data }) {
+  const [encryptionType, setEncryptionType] = useState(data?.encryptionType || DEFAULT_ENCRYPTION_TYPE)
+  const [ssid, setSsid] = useState(data?.ssid || '')
+  const [password, setPassword] = useState(data?.password || '')
 
   useEffect(() => {
     const constructWifiString = () => {
@@ -19,13 +19,13 @@ export default function WiFiInput({ onChange }) {
       }
     }
 
-    const values = {
+    const data = {
       encryptionType,
       ssid,
       password
     }
-    console.log('v', values)
-    onChange({ values, data: constructWifiString() })
+
+    onChange(data,constructWifiString())
   }, [encryptionType, ssid, password, onChange])
 
   const handleEncrytionTypeChange = (e) => {
@@ -43,7 +43,7 @@ export default function WiFiInput({ onChange }) {
       <label className="block text-sm font-medium text-gray-900 mt-3">
         Encryption
       </label>
-      <select defaultValue={DEFAULT_ENCRYPTION_TYPE} onChange={handleEncrytionTypeChange} className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+      <select defaultValue={encryptionType} onChange={handleEncrytionTypeChange} className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
         <option value="WEP">WEP</option>
         <option value="WPA">WPA/WPA2</option>
         <option value="nopass">No encryption</option>
@@ -58,6 +58,7 @@ export default function WiFiInput({ onChange }) {
         name="wifi-name"
         id="wifi-name"
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        defaultValue={ssid}
       />
 
       {
@@ -72,6 +73,7 @@ export default function WiFiInput({ onChange }) {
               name="password"
               id="password"
               className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+              defaultValue={password}
             />
           </div>
         )

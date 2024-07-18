@@ -5,7 +5,7 @@ import { showToast } from '@/app/utils/toastUtils';
 import Popover from './Popover';
 import { ModalContext } from "../contexts/modalContext"
 import EditQrCode from './EditQrCode';
-import QrCodeDecorator from '../decorators/qrCodeDecorator';
+import QrCodeDecorator from '../decorators/QrCodeDecorator';
 
 const QrCode = (props) => {
   const { setModalContent } = useContext(ModalContext)
@@ -134,7 +134,7 @@ const QrCode = (props) => {
           <span className="text-xs ml-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{qr.dynamicLinkUid ? `${qr.scans.length} ${qr.scans.length === 1 ? 'scan' : 'scans'}` : 'static'}</span>
         </div>
         <div className="mt-2 mb-3 flex justify-center">
-          <p className="max-w-full text-xs text-gray-400">Updated {new Date(qr.createdAt).toLocaleString('en-US', { year:"numeric", month:"short", day:"numeric", hour: '2-digit', minute:'2-digit', hour12: false })}</p>
+          <p className="max-w-full text-xs text-gray-400">Updated {new Date(qr.updatedAt).toLocaleString('en-US', { year:"numeric", month:"short", day:"numeric", hour: '2-digit', minute:'2-digit', hour12: false })}</p>
         </div>
       </div>
       <div className="mt-5 flex text-sm border-t">

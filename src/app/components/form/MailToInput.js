@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import debounce from 'debounce'
 
-export default function MailToInput({ onChange }) {
-  const [to, setTo] = useState('')
-  const [cc, setCc] = useState('')
-  const [bcc, setBcc] = useState('')
-  const [subject, setSubject] = useState('')
-  const [body, setBody] = useState('')
+export default function MailToInput({ onChange, data }) {
+  const [to, setTo] = useState(data.to || '')
+  const [cc, setCc] = useState(data.cc || '')
+  const [bcc, setBcc] = useState(data.bcc || '')
+  const [subject, setSubject] = useState(data.subject || '')
+  const [body, setBody] = useState(data.body || '')
 
   useEffect(() => {
     if (!to.includes('@')) { return }
@@ -25,7 +25,7 @@ export default function MailToInput({ onChange }) {
       return encodeURI(uri)
     }
 
-    const values = {
+    const newData = {
       to,
       cc,
       bcc,
@@ -33,7 +33,7 @@ export default function MailToInput({ onChange }) {
       body
     }
 
-    onChange({ values, uri: constructMailToUri() })
+    onChange(newData, constructMailToUri())
   }, [to, cc, bcc, subject, body, onChange])
 
   return (
@@ -48,6 +48,7 @@ export default function MailToInput({ onChange }) {
         id="to"
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         placeholder="email@example.com"
+        defaultValue={data.to}
       />
 
       <label className="block text-sm font-medium text-gray-900 mt-3">
@@ -56,9 +57,10 @@ export default function MailToInput({ onChange }) {
       <input
         onChange={debounce((e) => setCc(e.target.value), 300)}
         type="text"
-        name="to"
-        id="to"
+        name="cc"
+        id="cc"
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        defaultValue={data.cc}
       />
 
       <label className="block text-sm font-medium text-gray-900 mt-3">
@@ -67,9 +69,10 @@ export default function MailToInput({ onChange }) {
       <input
         onChange={debounce((e) => setBcc(e.target.value), 300)}
         type="text"
-        name="to"
-        id="to"
-        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        name="bcc"
+        id="bcc"
+        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-9000 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        defaultValue={data.bcc}
       />
 
       <label className="block text-sm font-medium text-gray-900 mt-3">
@@ -78,9 +81,10 @@ export default function MailToInput({ onChange }) {
       <input
         onChange={debounce((e) => setSubject(e.target.value), 300)}
         type="text"
-        name="to"
-        id="to"
+        name="subject"
+        id="subject"
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        defaultValue={data.subject}
       />
 
       <label className="block text-sm font-medium text-gray-900 mt-3">
@@ -88,9 +92,10 @@ export default function MailToInput({ onChange }) {
       </label>
       <textarea
         onChange={debounce((e) => setBody(e.target.value), 300)}
-        name="bodu"
-        id="bodu"
+        name="body"
+        id="body"
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        defaultValue={data.body}
       />
     </div>
   )

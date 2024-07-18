@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react'
 import debounce from 'debounce'
 
-export default function PhoneNumberInput({ onChange }) {
-  const [phoneNumber, setPhoneNumber] = useState('')
+export default function PhoneNumberInput({ onChange, data }) {
+  const [phoneNumber, setPhoneNumber] = useState(data?.phoneNumber || '')
 
   useEffect(() => {
     const uri = `tel:${phoneNumber}`
 
-    const values = {
+    const data = {
       phoneNumber
     }
 
-    onChange({ values, uri })
+    onChange(data, uri)
   }, [phoneNumber, onChange])
 
   return (
@@ -25,6 +25,7 @@ export default function PhoneNumberInput({ onChange }) {
         name="phone-number"
         id="phone-number"
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        defaultValue={phoneNumber}
       />
     </div>
   )

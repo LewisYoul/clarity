@@ -2,6 +2,42 @@ import { authorizeRequest } from '@/app/utils/sessionUtils';
 import prisma from '../../utils/prisma';
 import qrCodeCreator from "../../utils/qr-codes/qrCodeCreator";
 
+export async function PUT(req) {
+  const { currentUser, currentTeam } = await authorizeRequest();
+
+  if (!currentUser || !currentTeam) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  const params = req.nextUrl.searchParams;
+  const qrCodeId = Number(params.get('id'));
+  const { type, data, link } = await req.json();
+
+  try {
+    const qrCode = await prisma.QRCode.findUnique({
+      where: {
+        id: qrCodeId,
+        teamId: currentTeam.id
+      }
+    });
+
+    if (!qrCode) {
+      throw new Error('QR code not found.');
+    }
+
+    const updatedQrCode = await prisma.QRCode.update({
+      where: { id: qrCodeId },
+      data: { type, data, link, updatedAt: new Date() }
+    });
+
+    return Response.json({ message: 'QR code updated.', qrCode: updatedQrCode });
+  } catch (error) {
+    console.error('Error updating QR code:', error);
+    return Response.json({ message: 'Error updating QR code.' }, { status: 500 });
+  }
+}
+
+
 export async function DELETE(req) {
   const { currentUser, currentTeam } = await authorizeRequest();
   
