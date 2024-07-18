@@ -1,34 +1,17 @@
 import { ChatBubbleLeftIcon, ArrowDownTrayIcon, EllipsisVerticalIcon, EnvelopeIcon, LinkIcon, WifiIcon, PhoneIcon  } from '@heroicons/react/24/outline'
 import Link from 'next/link';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRef, useContext } from 'react';
 import { showToast } from '@/app/utils/toastUtils';
 import Popover from './Popover';
+import { ModalContext } from "../contexts/modalContext"
+import EditQrCode from './EditQrCode';
+import QrCodeDecorator from '../decorators/qrCodeDecorator';
 
 const QrCode = (props) => {
+  const { setModalContent } = useContext(ModalContext)
+
   const { qr } = props;
-  const popoverRef = useRef()
-
-  const qrCodeTitle = () => {
-    if (qr.type === 'link') {
-      return qr.data.url
-    }
-
-    if (qr.type === 'email') {
-      return qr.data.to
-    }
-
-    if (qr.type === 'wifi') {
-      return qr.data.ssid
-    }
-
-    if (qr.type === 'call') {
-      return qr.data.phoneNumber
-    }
-
-    if (qr.type === 'sms') {
-      return qr.data.smsNumber
-    }
-  }
+  const qrCodeDecorator = new QrCodeDecorator(qr)
 
   const typeForDisplay = () => {
     if (qr.type === 'link') {
@@ -79,15 +62,7 @@ const QrCode = (props) => {
     }
   }
 
-  const title = qrCodeTitle()
-
   let popoverItems = [
-    {
-      label: 'Edit',
-      onClick: () => {
-        console.log('Edit')
-      }
-    },
     {
       label: 'Delete',
       onClick: deleteQrCode,
@@ -96,6 +71,14 @@ const QrCode = (props) => {
   ]
 
   if (qr.dynamicLinkUid) {
+    popoverItems.unshift({
+      label: 'Edit',
+      onClick: () => {
+        console.log('Edit')
+        setModalContent(<EditQrCode qrCode={qr} />)
+      }
+    })
+
     popoverItems.push({
       label: 'Link',
       onClick: () => {
@@ -139,7 +122,7 @@ const QrCode = (props) => {
       <div className="flex justify-center">
         <div className="mt-4">
           <div className="mb-3 flex justify-center w-40">
-            <p className="max-w-full text-sm truncate">{title}</p>
+            <p className="max-w-full text-sm truncate">{qrCodeDecorator.title()}</p>
           </div>
           <div className="bg-white h-40 w-40">
             <img src={qr.svgFile.url}></img>
