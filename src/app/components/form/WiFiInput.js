@@ -1,12 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import debounce from 'debounce'
 
 const DEFAULT_ENCRYPTION_TYPE = 'WPA'
 
-export default function WiFiInput({ onChange, data }) {
+export default function WiFiInput({ onChange, data, showValidationErrors }) {
   const [encryptionType, setEncryptionType] = useState(data?.encryptionType || DEFAULT_ENCRYPTION_TYPE)
   const [ssid, setSsid] = useState(data?.ssid || '')
   const [password, setPassword] = useState(data?.password || '')
+  const [displayValidationErrors, setDisplayValidationErrors] = useState(showValidationErrors)
+
+  const isSsidValid = useCallback(() => {
+    return ssid !== ''
+  }, [ssid])
 
   useEffect(() => {
     const constructWifiString = () => {
@@ -25,8 +30,14 @@ export default function WiFiInput({ onChange, data }) {
       password
     }
 
-    onChange(data,constructWifiString())
-  }, [encryptionType, ssid, password, onChange])
+    const isValid = isSsidValid()
+
+    onChange(isValid, data, constructWifiString())
+  }, [encryptionType, ssid, password, onChange, isSsidValid])
+
+  useEffect(() => {
+    setDisplayValidationErrors(showValidationErrors)
+  }, [showValidationErrors])
 
   const handleEncrytionTypeChange = (e) => {
     const value = e.target.value
@@ -37,6 +48,9 @@ export default function WiFiInput({ onChange, data }) {
 
     setEncryptionType(value)
   }
+
+  const inputStyles = displayValidationErrors && !isSsidValid() ? 'ring-red-300' : 'ring-gray-300'
+  const validationText = displayValidationErrors && !isSsidValid() ? 'SSID is required' : ''
 
   return (
     <div className="mt-2">
@@ -57,9 +71,10 @@ export default function WiFiInput({ onChange, data }) {
         type="text"
         name="wifi-name"
         id="wifi-name"
-        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+        className={`block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${inputStyles} placeholder:text-gray-400 sm:text-sm sm:leading-6`}
         defaultValue={ssid}
       />
+      <p className="text-red-500 text-xs mt-1">{validationText}</p>
 
       {
         encryptionType !== 'nopass' && (

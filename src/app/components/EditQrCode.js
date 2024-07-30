@@ -6,10 +6,12 @@ import { CheckCircleIcon } from "@heroicons/react/24/solid";
 
 const EditQrCode = ({ qrCode }) => {
   const [qrCodeDecorator, setQrCodeDecorator] = useState(new QrCodeDecorator(qrCode))
+  const [isValid, setIsValid] = useState(false)
   const [uri, setUri] = useState(qrCode.link)
   const [type, setType] = useState(qrCode.type)
   const [data, setData] = useState(qrCode.data)
   const [showSavedChangesMessage, setShowSavedChangesMessage] = useState(false)
+  const [showValidationErrors, setShowValidationErrors] = useState(false)
 
   useEffect(() => {
     setQrCodeDecorator(new QrCodeDecorator(qrCode))
@@ -19,6 +21,17 @@ const EditQrCode = ({ qrCode }) => {
     const event = new CustomEvent('triggerQrCodeFetch', { detail: {} })
 
     document.dispatchEvent(event)
+  }
+
+  const validateQrCode = () => {
+    console.log('isValid', isValid)
+
+    if (!isValid) {
+      setShowValidationErrors(true)
+    } else {
+      setShowValidationErrors(false)
+      saveQrCode()
+    }
   }
 
   const saveQrCode = async () => {
@@ -45,7 +58,8 @@ const EditQrCode = ({ qrCode }) => {
     }
   }
 
-  const storeQrCodeChanges = (type, data, uri) => {
+  const storeQrCodeChanges = (isValid, type, data, uri) => {
+    setIsValid(isValid)
     setType(type)
     setData(data)
     setUri(uri)
@@ -65,12 +79,17 @@ const EditQrCode = ({ qrCode }) => {
       </div>
 
       <div className="flex justify-center mt-4">
-        <QrCodeTypeFormGroup onChange={storeQrCodeChanges} qrCode={qrCode} />
+        <QrCodeTypeFormGroup
+          onChange={storeQrCodeChanges}
+          qrCode={qrCode}
+          showValidationErrors={showValidationErrors}
+          setShowValidationErrors={setShowValidationErrors}
+        />
       </div>
 
       <div className="flex justify-center">
         <button
-            onClick={saveQrCode}
+          onClick={validateQrCode}
           type="button"
           className="mt-6 inline-flex items-center gap-x-1.5 rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
         >

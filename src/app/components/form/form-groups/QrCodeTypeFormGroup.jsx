@@ -6,7 +6,7 @@ import PhoneNumberInput from '../PhoneNumberInput'
 import SmsInput from '../SmsInput'
 import { useState, useEffect } from 'react'
 
-export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
+export default function QrCodeTypeFormGroup({ onChange, qrCode, showValidationErrors, setShowValidationErrors }) {
   const [selectedType, setSelectedType] = useState(qrCode.type)
   const [link, setLink] = useState({
     uri: qrCode.type === 'link' ? qrCode.data.uri : null
@@ -34,21 +34,21 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
   const [mailToLink, setMailToLink] = useState()
   const [wifiLink, setWifiLink] = useState()
   const [callLink, setCallLink] = useState()
+  const [isValid, setIsValid] = useState(false)
 
   useEffect(() => {
     if (selectedType === 'link') {
-      console.log('linklink', linkLink)
-      onChange(selectedType, link, linkLink)
+      onChange(isValid, selectedType, link, linkLink)
     } else if (selectedType === 'email') {
-      onChange(selectedType, mailTo, mailToLink)
+      onChange(isValid, selectedType, mailTo, mailToLink)
     } else if (selectedType === 'wifi') {
-      onChange(selectedType, wifi, wifiLink)
+      onChange(isValid, selectedType, wifi, wifiLink)
     } else if (selectedType === 'call') {
-      onChange(selectedType, call, callLink)
+      onChange(isValid, selectedType, call, callLink)
     } else if (selectedType === 'sms') {
-      onChange(selectedType, sms, smsLink)
+      onChange(isValid, selectedType, sms, smsLink)
     }
-  }, [onChange, selectedType, mailTo, mailToLink, link, linkLink, wifi, call, sms, smsLink, wifiLink, callLink])
+  }, [onChange, isValid, selectedType, mailTo, mailToLink, link, linkLink, wifi, call, sms, smsLink, wifiLink, callLink])
 
   const typeButtonStyles = (type) => {
     let styles = "flex items-center"
@@ -75,6 +75,7 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
   const changeQrCodeType = (e) => {
     const type = e.currentTarget.value
 
+    setShowValidationErrors(false)
     setSelectedType(type)
   }
 
@@ -89,40 +90,48 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
     }
   }
 
-  const updateMailTo = (data, uri) => {
+  const updateMailTo = (valid, data, uri) => {
     if (JSON.stringify(data) !== JSON.stringify(mailTo)) {
       setMailTo(data)
     }
     if (uri !== mailToLink) {
       setMailToLink(uri)
     }
+
+    setIsValid(valid)
   }
 
-  const updateWifi = (data, uri) => {
+  const updateWifi = (valid, data, uri) => {
     if (JSON.stringify(data) !== JSON.stringify(wifi)) {
       setWifi(data)
     }
     if (uri !== wifiLink) {
       setWifiLink(uri)
     }
+
+    setIsValid(valid)
   }
 
-  const updateCall = (data, uri) => {
+  const updateCall = (valid, data, uri) => {
     if (JSON.stringify(data) !== JSON.stringify(call)) {
       setCall(data)
     }
     if (uri !== callLink) {
       setCallLink(uri)
     }
+
+    setIsValid(valid)
   }
 
-  const updateSms = (data, uri) => {
+  const updateSms = (valid, data, uri) => {
     if (JSON.stringify(data) !== JSON.stringify(sms)) {
       setSms(data)
     }
     if (uri !== smsLink) {
       setSmsLink(uri)
     }
+
+    setIsValid(valid)
   }
 
   return (
@@ -163,6 +172,7 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
             <MailToInput
               onChange={updateMailTo}
               data={mailTo}
+              showValidationErrors={showValidationErrors}
             />
           )
         }
@@ -172,6 +182,7 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
             <WiFiInput
               onChange={updateWifi}
               data={wifi}
+              showValidationErrors={showValidationErrors}
             />
           )
         }
@@ -181,6 +192,7 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
             <PhoneNumberInput
               onChange={updateCall}
               data={call}
+              showValidationErrors={showValidationErrors}
             />
           )
         }
@@ -190,6 +202,7 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
             <SmsInput
               onChange={updateSms}
               data={sms}
+              showValidationErrors={showValidationErrors}
             />
           )
         }

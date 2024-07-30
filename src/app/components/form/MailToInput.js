@@ -1,16 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import debounce from 'debounce'
 
-export default function MailToInput({ onChange, data }) {
+export default function MailToInput({ onChange, data, showValidationErrors }) {
   const [to, setTo] = useState(data.to || '')
   const [cc, setCc] = useState(data.cc || '')
   const [bcc, setBcc] = useState(data.bcc || '')
   const [subject, setSubject] = useState(data.subject || '')
   const [body, setBody] = useState(data.body || '')
+  const [displayValidationErrors, setDisplayValidationErrors] = useState(showValidationErrors)
+
+  const isToValid = useCallback(() => {
+    return to.includes('@')
+  }, [to])
+
+  const isCcValid = useCallback(() => {
+    return cc === '' || cc.includes('@')
+  }, [cc])
+
+  const isBccValid = useCallback(() => {
+    return bcc === '' || bcc.includes('@')
+  }, [bcc])
+
+  const isSubjectValid = useCallback(() => {
+    return subject.length > 0
+  }, [subject])
 
   useEffect(() => {
-    if (!to.includes('@')) { return }
-
     const constructMailToUri = () => {
       let uri = `mailto:${to}`
   
@@ -33,8 +48,14 @@ export default function MailToInput({ onChange, data }) {
       body
     }
 
-    onChange(newData, constructMailToUri())
-  }, [to, cc, bcc, subject, body, onChange])
+    const isValid = isToValid() && isCcValid() && isBccValid() && isSubjectValid()
+
+    onChange(isValid, newData, constructMailToUri())
+  }, [to, cc, bcc, subject, body, onChange, isToValid, isCcValid, isBccValid, isSubjectValid])
+
+  useEffect(() => {
+    setDisplayValidationErrors(showValidationErrors)
+  }, [showValidationErrors])
 
   return (
     <div className="mt-2">
@@ -50,6 +71,7 @@ export default function MailToInput({ onChange, data }) {
         placeholder="email@example.com"
         defaultValue={data.to}
       />
+      {displayValidationErrors && !isToValid() && <p className="mt-2 text-sm text-red-600">Invalid email address</p>}
 
       <label className="block text-sm font-medium text-gray-900 mt-3">
         cc
@@ -62,6 +84,7 @@ export default function MailToInput({ onChange, data }) {
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         defaultValue={data.cc}
       />
+      {displayValidationErrors && !isCcValid() && <p className="mt-2 text-sm text-red-600">Invalid email address</p>}
 
       <label className="block text-sm font-medium text-gray-900 mt-3">
         Bcc
@@ -74,6 +97,7 @@ export default function MailToInput({ onChange, data }) {
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-9000 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         defaultValue={data.bcc}
       />
+      {displayValidationErrors && !isBccValid() && <p className="mt-2 text-sm text-red-600">Invalid email address</p>}
 
       <label className="block text-sm font-medium text-gray-900 mt-3">
         Subject
@@ -86,6 +110,7 @@ export default function MailToInput({ onChange, data }) {
         className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         defaultValue={data.subject}
       />
+      {displayValidationErrors && !isSubjectValid() && <p className="mt-2 text-sm text-red-600">Enter a subject</p>}
 
       <label className="block text-sm font-medium text-gray-900 mt-3">
         Body
