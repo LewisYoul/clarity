@@ -1,13 +1,19 @@
 import QrCodeDecorator from "../decorators/QrCodeDecorator";
 import QrCodeTypeFormGroup from "./form/form-groups/QrCodeTypeFormGroup";
 import { useState, useEffect } from "react";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 
 
 const EditQrCode = ({ qrCode }) => {
-  const qrCodeDecorator = new QrCodeDecorator(qrCode)
+  const [qrCodeDecorator, setQrCodeDecorator] = useState(new QrCodeDecorator(qrCode))
   const [uri, setUri] = useState(qrCode.link)
   const [type, setType] = useState(qrCode.type)
   const [data, setData] = useState(qrCode.data)
+  const [showSavedChangesMessage, setShowSavedChangesMessage] = useState(false)
+
+  useEffect(() => {
+    setQrCodeDecorator(new QrCodeDecorator(qrCode))
+  }, [qrCode])
 
   const triggerQrCodeFetch = () => {
     const event = new CustomEvent('triggerQrCodeFetch', { detail: {} })
@@ -25,7 +31,15 @@ const EditQrCode = ({ qrCode }) => {
         }
       })
 
+      const json = await res.json()
+
+      setQrCodeDecorator(new QrCodeDecorator(json.qrCode))
+
       triggerQrCodeFetch()
+      setShowSavedChangesMessage(true)
+      setTimeout(() => {
+        setShowSavedChangesMessage(false)
+      }, 2000)
     } catch (error) {
       console.error('Error updating QR code:', error)
     }
@@ -63,6 +77,13 @@ const EditQrCode = ({ qrCode }) => {
           Save QR Code
         </button>
       </div>
+
+      {showSavedChangesMessage && (
+        <div className="flex justify-center items-center mt-4">
+          <CheckCircleIcon className="h-5 w-5 text-green-500 mr-1" />
+          <span className="text-sm text-green-500">Changes saved</span>
+        </div>
+      )}
     </div>
   );
 };

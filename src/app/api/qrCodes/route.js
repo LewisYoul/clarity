@@ -30,6 +30,27 @@ export async function PUT(req) {
       data: { type, data, link, updatedAt: new Date() }
     });
 
+    const svgFile = await prisma.File.findFirst({
+      where: {
+        fileableId: qrCodeId,
+        fileableType: 'QRCode',
+        fileType: 'image/svg+xml'
+      }
+    })
+  
+    const pngFile = await prisma.File.findFirst({
+      where: {
+        fileableId: qrCodeId,
+        fileableType: 'QRCode',
+        fileType: 'image/png'
+      }
+    })
+
+    updatedQrCode.svgFile = svgFile
+    updatedQrCode.svgFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${updatedQrCode.svgFile.id}/qr.svg`
+    updatedQrCode.pngFile = pngFile
+    updatedQrCode.pngFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${updatedQrCode.pngFile.id}/qr.png`
+
     return Response.json({ message: 'QR code updated.', qrCode: updatedQrCode });
   } catch (error) {
     console.error('Error updating QR code:', error);
@@ -152,13 +173,13 @@ export async function GET(req) {
     }
   })
   qrs.map((qr) => {
-      qr.svgFile = svgFiles.find(file => file.fileableId === qr.id)
-      qr.svgFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.svgFile.id}/qr.svg`
-      qr.pngFile = pngFiles.find(file => file.fileableId === qr.id)
-      qr.pngFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.pngFile.id}/qr.png`
+    qr.svgFile = svgFiles.find(file => file.fileableId === qr.id)
+    qr.svgFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.svgFile.id}/qr.svg`
+    qr.pngFile = pngFiles.find(file => file.fileableId === qr.id)
+    qr.pngFile.url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/File/${qr.pngFile.id}/qr.png`
 
-      return qr
-    })
+    return qr
+  })
 
   return Response.json({ data: qrs })
 }

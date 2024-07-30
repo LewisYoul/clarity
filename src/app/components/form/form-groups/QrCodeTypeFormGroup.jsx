@@ -26,7 +26,7 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode }) {
     phoneNumber: qrCode.type === 'call' ? qrCode.data.phoneNumber : ''
   })
   const [sms, setSms] = useState({
-    phoneNumber: qrCode.type === 'sms' ? qrCode.data.phoneNumber : '',
+    smsNumber: qrCode.type === 'sms' ? qrCode.data.smsNumber : '',
     message: qrCode.type === 'sms' ? qrCode.data.message : ''
   })
   const [linkLink, setLinkLink] = useState()

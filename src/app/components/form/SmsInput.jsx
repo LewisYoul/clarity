@@ -3,7 +3,6 @@ import debounce from 'debounce'
 
 export default function SmsInput({ onChange, data }) {
   const [smsNumber, setSmsNumber] = useState(data?.smsNumber || '')
-
   useEffect(() => {
     const uri = `sms:${smsNumber}`
 
