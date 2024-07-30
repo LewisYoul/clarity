@@ -9,15 +9,23 @@ const EditQrCode = ({ qrCode }) => {
   const [type, setType] = useState(qrCode.type)
   const [data, setData] = useState(qrCode.data)
 
+  const triggerQrCodeFetch = () => {
+    const event = new CustomEvent('triggerQrCodeFetch', { detail: {} })
+
+    document.dispatchEvent(event)
+  }
+
   const saveQrCode = async () => {
     try {
-      res = await fetch(`/api/qrCodes?id=${qrCode.id}`, {
+      const res = await fetch(`/api/qrCodes?id=${qrCode.id}`, {
         method: 'PUT',
         body: JSON.stringify({ type, data, link: uri }),
         headers: {
           'Content-Type': 'application/json'
         }
       })
+
+      triggerQrCodeFetch()
     } catch (error) {
       console.error('Error updating QR code:', error)
     }
