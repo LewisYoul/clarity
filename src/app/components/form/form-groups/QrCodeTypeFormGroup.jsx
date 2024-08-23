@@ -1,33 +1,34 @@
 import { GlobeAltIcon, DocumentTextIcon, ChatBubbleLeftIcon, EnvelopeIcon, DocumentIcon, WifiIcon, PhoneIcon, CreditCardIcon  } from '@heroicons/react/24/outline'
-// import FileInput from '../FileInput'
+import LinkInput from '../LinkInput'
 import MailToInput from '../MailToInput'
 import WiFiInput from '../WiFiInput'
 import PhoneNumberInput from '../PhoneNumberInput'
 import SmsInput from '../SmsInput'
 import { useState, useEffect } from 'react'
 
-export default function QrCodeTypeFormGroup({ onChange, qrCode, showValidationErrors, setShowValidationErrors }) {
-  const [selectedType, setSelectedType] = useState(qrCode.type)
+export default function QrCodeTypeFormGroup({ onChange, qrCode = { type: 'link', data: { uri: undefined }}, showValidationErrors, setShowValidationErrors }) {
+  console.log('qrCode', qrCode)
+  const [selectedType, setSelectedType] = useState(qrCode?.type || 'link')
   const [link, setLink] = useState({
-    uri: qrCode.type === 'link' ? qrCode.data.uri : null
+    uri: qrCode?.type === 'link' ? qrCode.data.uri : ''
   })
   const [mailTo, setMailTo] = useState({
-    to: qrCode.type === 'email' ? qrCode.data.to : '',
-    cc: qrCode.type === 'email' ? qrCode.data.cc : '',
-    bcc: qrCode.type === 'email' ? qrCode.data.bcc : '',
-    subject: qrCode.type === 'email' ? qrCode.data.subject : '',
-    body: qrCode.type === 'email' ? qrCode.data.body : ''
+    to: qrCode?.type === 'email' ? qrCode.data.to : '',
+    cc: qrCode?.type === 'email' ? qrCode.data.cc : '',
+    bcc: qrCode?.type === 'email' ? qrCode.data.bcc : '',
+    subject: qrCode?.type === 'email' ? qrCode.data.subject : '',
+    body: qrCode?.type === 'email' ? qrCode.data.body : ''
   })
   const [wifi, setWifi] = useState({
-    ssid: qrCode.type === 'wifi' ? qrCode.data.ssid : '',
-    password: qrCode.type === 'wifi' ? qrCode.data.password : '',
+    ssid: qrCode?.type === 'wifi' ? qrCode.data.ssid : '',
+    password: qrCode?.type === 'wifi' ? qrCode.data.password : '',
   })
   const [call, setCall] = useState({
-    phoneNumber: qrCode.type === 'call' ? qrCode.data.phoneNumber : ''
+    phoneNumber: qrCode?.type === 'call' ? qrCode.data.phoneNumber : ''
   })
   const [sms, setSms] = useState({
-    smsNumber: qrCode.type === 'sms' ? qrCode.data.smsNumber : '',
-    message: qrCode.type === 'sms' ? qrCode.data.message : ''
+    smsNumber: qrCode?.type === 'sms' ? qrCode.data.smsNumber : '',
+    message: qrCode?.type === 'sms' ? qrCode.data.message : ''
   })
   const [linkLink, setLinkLink] = useState()
   const [smsLink, setSmsLink] = useState()
@@ -62,16 +63,6 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode, showValidationEr
     return styles
   }
 
-  const formatAndSetLink = (e) => {
-    let linkToFormat = e.target.value
-
-    if (!linkToFormat.startsWith('http://') && !linkToFormat.startsWith('https://')) {
-      linkToFormat = `http://${linkToFormat}`
-    }
-
-    updateLink(linkToFormat)
-  }
-
   const changeQrCodeType = (e) => {
     const type = e.currentTarget.value
 
@@ -79,15 +70,15 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode, showValidationEr
     setSelectedType(type)
   }
 
-  const updateLink = (newLink) => {
-    const newData = { url: newLink }
+  const updateLink = (valid, data, uri) => {
+    if (JSON.stringify(data) !== JSON.stringify(link)) {
+      setLink(data)
+    }
+    if (uri !== linkLink) {
+      setLinkLink(uri)
+    }
 
-    if (JSON.stringify(newData) !== JSON.stringify(mailTo)) {
-      setLink(newData)
-    }
-    if (newLink !== linkLink) {
-      setLinkLink(newLink)
-    }
+    setIsValid(valid)
   }
 
   const updateMailTo = (valid, data, uri) => {
@@ -150,20 +141,11 @@ export default function QrCodeTypeFormGroup({ onChange, qrCode, showValidationEr
 
       {
           selectedType === 'link' && (
-            <div className="mt-2">
-              <label className="block text-sm font-medium text-gray-900 mt-3">
-                Destination
-              </label>
-              <input
-                onChange={formatAndSetLink}
-                type="text"
-                name="link"
-                id="link"
-                className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                placeholder="https://example.com"
-                defaultValue={linkLink}
-              />
-            </div>
+            <LinkInput
+              onChange={updateLink}
+              data={link}
+              showValidationErrors={showValidationErrors}
+            />
           )
         }
 

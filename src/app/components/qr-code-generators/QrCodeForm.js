@@ -1,7 +1,8 @@
 "use client";
 
 import QRCodeStyling from "palqr-code";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
+import { CreditsContext } from "../../contexts/creditsContext";
 import FileInput from "../form/FileInput";
 import ColorInput from "../form/ColorInput";
 import Radio from "../form/Radio";
@@ -9,9 +10,10 @@ import MailToInput from "../form/MailToInput";
 import WiFiInput from "../form/WiFiInput";
 import PhoneNumberInput from "../form/PhoneNumberInput"
 import { GlobeAltIcon, DocumentTextIcon, ChatBubbleLeftIcon, EnvelopeIcon, DocumentIcon, WifiIcon, PhoneIcon, CreditCardIcon  } from '@heroicons/react/24/outline'
-import SmsInput from "../form/SmsInput";
 import { Switch } from '@headlessui/react'
 import crypto from 'crypto'
+import QrCodeTypeFormGroup from "../form/form-groups/QrCodeTypeFormGroup";
+import { showToast } from "../../utils/toastUtils";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -101,8 +103,8 @@ const innerEyeTypes = [
   },
 ]
 
-export default function QrCodeForm({ onChange, actionElement }) {
-  const [selectedType, setSelectedType] = useState('link')
+export default function QrCodeForm() {
+  const [showValidationErrors, setShowValidationErrors] = useState(false)
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[0])
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
   const [selectedInnerEyeType, setSelectedInnerEyeType] = useState(innerEyeTypes[0])
@@ -112,45 +114,111 @@ export default function QrCodeForm({ onChange, actionElement }) {
   const [outerEyeColor, setOuterEyeColor] = useState("#000000")
   const [isDynamic, setIsDynamic] = useState(false)
   const [dynamicLinkUid, setDynamicLinkUid] = useState(null)
-  const [link, setLink] = useState('https://example.com')
-  const [mailTo, setMailTo] = useState({
-    uri: 'mailto:?cc=&bcc=&subject=&body=',
-    values: {
-      to: '',
-      cc: '',
-      bcc: '',
-      subject: '',
-      body: ''
+  const [isValid, setIsValid] = useState(false)
+  const ref = useRef(null);
+
+  const { refreshCreditsCount } = useContext(CreditsContext)
+
+  const closeQrModal = () => {
+    const event = new CustomEvent('closeQrModal', { detail: {} })
+
+    document.dispatchEvent(event)
+  }
+
+  const triggerQrCodeFetch = () => {
+    const event = new CustomEvent('triggerQrCodeFetch', { detail: {} })
+
+    document.dispatchEvent(event)
+  }
+
+  const createQrCodeForm = async () => {
+    const svgBlob = await qrCode.getRawData('svg')
+    const pngBlob = await qrCode.getRawData('png')
+    const formData = new FormData()
+    const opts = qrCode._options
+    console.log('opts', opts)
+
+    formData.append('dynamicLinkUid', opts.dynamicLinkUid)
+    formData.append('link', opts.scanDestination)
+    formData.append('type', opts.selectedType)
+    formData.append('svg', svgBlob)
+    formData.append('png', pngBlob)
+
+    if (opts.selectedType === 'link') {
+      formData.append('link[uri]', opts.qrData.uri)
     }
-  })
-  const [wifi, setWifi] = useState({
-    data: '',
-    values: {
-      encryptionType: 'wpa',
-      ssid: '',
-      password: ''
+
+    if (opts.selectedType === 'email') {
+      formData.append('mailTo[to]', opts.qrData.to)
+      formData.append('mailTo[cc]', opts.qrData.cc)
+      formData.append('mailTo[bcc]', opts.qrData.bcc)
+      formData.append('mailTo[subject]', opts.qrData.subject)
+      formData.append('mailTo[body]', opts.qrData.body)
     }
-  })
-  const [call, setCall] = useState({
-    uri: 'tel:',
-    values: {
-      phoneNumber: ''
+
+    if (opts.selectedType === 'wifi') {
+      formData.append('wifi[encryptionType]', opts.qrData.encryptionType)
+      formData.append('wifi[ssid]', opts.qrData.ssid)
+      formData.append('wifi[password]', opts.qrData.password)
     }
-  })
-  const [sms, setSms] = useState({
-    uri: 'sms:',
-    values: {
-      smsNumber: ''
+
+    if (opts.selectedType === 'call') {
+      formData.append('call[phoneNumber]', opts.qrData.phoneNumber)
     }
+
+    if (opts.selectedType === 'sms') {
+      formData.append('sms[smsNumber]', opts.qrData.smsNumber)
+    }
+
+    for (let val of formData.entries()) {
+      console.log(val[0]+ ', ' + val[1]); 
+    }
+
+    return formData;
+  }
+
+
+  const saveQrCode = async () => {
+    if (!isValid) {
+      setShowValidationErrors(true)
+
+      return
+    }
+
+    setShowValidationErrors(false)
+
+    const formData = await createQrCodeForm()
+
+    try {
+      const res = await fetch('/api/qrCodes', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await res.json();
+
+      await refreshCreditsCount()
+
+      showToast(data.message)
+      triggerQrCodeFetch()
+      closeQrModal()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const [uri, setUri] = useState('https://palqr.com')
+  const [type, setType] = useState('link')
+  const [data, setData] = useState({
+    uri: 'https://palqr.com'
   })
 
-  const ref = useRef(null);
   const defaultOptions = {
     type: 'svg',
     width: 1000,
     height: 1000,
     margin: 10,
-    data: link,
+    data: 'gfdsa',
     backgroundOptions: {
       color: 'white',
     },
@@ -186,9 +254,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
       qrCode._svg._element.setAttribute('height', '200')
       qrCode._svg._element.setAttribute('viewBox', '0 0 1000 1000')
     }
-
-    onChange(qrCode)
-  }, [qrCode, qrCodeOptions, onChange])
+  }, [qrCode, qrCodeOptions])
 
   useEffect(() => {
     if (isDynamic) {
@@ -199,22 +265,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
   }, [isDynamic])
 
   useEffect(() => {
-    const destinationForType = () => {
-      switch (selectedType) {
-        case 'email':
-          return mailTo.uri
-        case 'wifi':
-          return wifi.data
-        case 'call':
-          return call.uri
-        case 'sms':
-          return sms.uri
-        default:
-          return link
-      }
-    }
-
-    const data = () => {
+    const qrData = () => {
       if (dynamicLinkUid) {
         switch (process.env.NODE_ENV) {
           case 'development':
@@ -224,7 +275,9 @@ export default function QrCodeForm({ onChange, actionElement }) {
         }
       }
 
-      return destinationForType()
+      // For qrs with a type of "link" we don't build a uri so if it is empty
+      // we need to return something here so that a qr code is rendered to the screen
+      return uri || 'https://palqr.com'
     } 
 
     const generateQrCode = () => {
@@ -232,7 +285,7 @@ export default function QrCodeForm({ onChange, actionElement }) {
         type: 'svg',
         width: 1000,
         height: 1000,
-        data: data(),
+        data: qrData(),
         margin: 10,
         image: logoPath,
         backgroundOptions: {
@@ -255,118 +308,33 @@ export default function QrCodeForm({ onChange, actionElement }) {
           margin: 5,
           imageSize: 0.5,
         },
-        mailTo: mailTo,
-        wifi: wifi,
-        call: call,
-        sms: sms,
-        selectedType,
         dynamicLinkUid,
-        scanDestination: destinationForType()
+        selectedType: type,
+        qrData: data,
+        scanDestination: uri
       }
 
       setQrCodeOptions(opts)
     }
 
     generateQrCode()
-  }, [selectedType, selectedDotType, selectedEyeType, logoPath, link, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, mailTo, wifi, call, sms, dynamicLinkUid])
-
-  const changeQrCodeType = (e) => {
-    console.log(e.currentTarget.value)
-    const type = e.currentTarget.value
-
-    setSelectedType(type)
-  }
-
-  const typeButtonStyles = (type) => {
-    let styles = "flex items-center"
-
-    if (selectedType === type) {
-      styles += " font-semibold text-gray-900"
-    } else {
-      styles += " text-gray-500"
-    }
-
-    return styles
-  }
-
-  const formatAndSetLink = (e) => {
-    let linkToFormat = e.target.value
-
-    if (!linkToFormat.startsWith('http://') && !linkToFormat.startsWith('https://')) {
-      linkToFormat = `http://${linkToFormat}`
-    }
-
-    setLink(linkToFormat)
-  }
+  }, [selectedDotType, selectedEyeType, logoPath, selectedInnerEyeType, dotsColor, innerEyeColor, outerEyeColor, dynamicLinkUid, uri, type, data])
 
   return(
     <div className="flex flex-col justify-between md:flex-row">
       <div className="md:mr-6">
-      <div className="grid grid-cols-4 gap-4">
-        <button onClick={changeQrCodeType} className={typeButtonStyles('link')} value="link"><GlobeAltIcon className="w-4 h-4 mr-2" /> URL</button>
-        <button onClick={changeQrCodeType} className={typeButtonStyles('email')} value="email"><EnvelopeIcon className="w-4 h-4 mr-2" /> Email</button>
-        <button onClick={changeQrCodeType} className={typeButtonStyles('wifi')} value="wifi"><WifiIcon className="w-4 h-4 mr-2" /> WiFi</button>
-        <button onClick={changeQrCodeType} className={typeButtonStyles('call')} value="call"><PhoneIcon className="w-4 h-4 mr-2" /> Phone</button>
-        <button onClick={changeQrCodeType} className={typeButtonStyles('sms')} value="sms"><ChatBubbleLeftIcon className="w-4 h-4 mr-2" /> SMS</button>
-        {/* Not available yet */}
-        <button className={typeButtonStyles('text')}><DocumentTextIcon className="w-4 h-4 mr-2" /> Text</button>
-        <button className={typeButtonStyles('pdf')}><DocumentIcon className="w-4 h-4 mr-2" /> PDF</button>
-        <button className={typeButtonStyles('vcard')}><CreditCardIcon className="w-4 h-4 mr-2" /> vCard</button>
-      </div>
-        
-        {
-          selectedType === 'link' && (
-            <div className="mt-2">
-              <label className="block text-sm font-medium text-gray-900 mt-3">
-                Destination
-              </label>
-              <input
-                onChange={formatAndSetLink}
-                type="text"
-                name="link"
-                id="link"
-                className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                placeholder="https://example.com"
-              />
-            </div>
-          )
-        }
+        <QrCodeTypeFormGroup
+          onChange={(isValid, type, data, link) => {
+            console.log(isValid, type, data, link)
 
-        {
-          selectedType === 'email' && (
-            <MailToInput onChange={setMailTo} />
-          )
-        }
-
-        {
-          selectedType === 'wifi' && (
-            <WiFiInput onChange={setWifi} />
-          )
-        }
-
-        {
-          selectedType === 'call' && (
-            <PhoneNumberInput onChange={setCall} />
-          )
-        }
-
-        {
-          selectedType === 'sms' && (
-            <SmsInput onChange={setSms} />
-          )
-        }
-
-        {
-          selectedType === 'pdf' && (
-            <div className="mt-2">
-              <FileInput
-                accept={['application/pdf']}
-                buttonText="Upload a PDF"
-                onChange={() => {}}
-              />
-            </div>
-          )
-        }
+            setIsValid(isValid)
+            setUri(link)
+            setType(type)
+            setData(data)
+          }}
+          showValidationErrors={showValidationErrors}
+          setShowValidationErrors={setShowValidationErrors}
+        />
 
         <div className="mt-5 flex items-center">
           <Switch
@@ -439,8 +407,13 @@ export default function QrCodeForm({ onChange, actionElement }) {
       <div className="flex mt-6 md:mt-0">
         <div className="flex justify-center items-center flex-col w-[460px] h-[460px] pt-6 pb-6 bg-pink-100 rounded-3xl md:rounded-full">
           <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
-          {/* <img width="1000" height="1000" src={svgUrl} /> */}
-          {actionElement ? actionElement : null}
+          <button
+            onClick={saveQrCode}
+            type="button"
+            className="mt-6 inline-flex items-center gap-x-1.5 rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
+          >
+            Create QR Code
+          </button>
         </div>
       </div>
 

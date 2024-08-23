@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import debounce from 'debounce'
 
-export default function MailToInput({ onChange, data, showValidationErrors }) {
-  const [to, setTo] = useState(data.to || '')
-  const [cc, setCc] = useState(data.cc || '')
-  const [bcc, setBcc] = useState(data.bcc || '')
-  const [subject, setSubject] = useState(data.subject || '')
-  const [body, setBody] = useState(data.body || '')
+export default function MailToInput({ onChange, data = {}, showValidationErrors }) {
+  const [to, setTo] = useState(data?.to || '')
+  const [cc, setCc] = useState(data?.cc || '')
+  const [bcc, setBcc] = useState(data?.bcc || '')
+  const [subject, setSubject] = useState(data?.subject || '')
+  const [body, setBody] = useState(data?.body || '')
   const [displayValidationErrors, setDisplayValidationErrors] = useState(showValidationErrors)
 
   const isToValid = useCallback(() => {

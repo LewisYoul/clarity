@@ -5,7 +5,7 @@ export default class QrCodeDecorator {
   
   title = () => {
     if (this.qrCode.type === 'link') {
-      return this.qrCode.data.url
+      return this.qrCode.data.uri
     }
 
     if (this.qrCode.type === 'email') {

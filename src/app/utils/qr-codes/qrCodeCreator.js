@@ -23,7 +23,7 @@ const qrCodeCreator = async (user, team, formData) => {
 
     if (formData.get('type') === 'link') {
       data = {
-        url: formData.get('link')
+        uri: formData.get('link[uri]')
       }
     }
 
