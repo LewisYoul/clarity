@@ -14,6 +14,7 @@ import { Switch } from '@headlessui/react'
 import crypto from 'crypto'
 import QrCodeTypeFormGroup from "../form/form-groups/QrCodeTypeFormGroup";
 import { showToast } from "../../utils/toastUtils";
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -103,7 +104,7 @@ const innerEyeTypes = [
   },
 ]
 
-export default function QrCodeForm() {
+export default function QrCodeForm({ permitDynamic }) {
   const [showValidationErrors, setShowValidationErrors] = useState(false)
   const [selectedDotType, setSelectedDotType] = useState(dotTypes[0])
   const [selectedEyeType, setSelectedEyeType] = useState(eyeTypes[0])
@@ -116,6 +117,13 @@ export default function QrCodeForm() {
   const [dynamicLinkUid, setDynamicLinkUid] = useState(null)
   const [isValid, setIsValid] = useState(false)
   const ref = useRef(null);
+
+  // Used on loggd out screen
+  const downloadQrCode = (extension) => {
+    qrCode.download({
+      extension: extension
+    })
+  }
 
   const { refreshCreditsCount } = useContext(CreditsContext)
 
@@ -336,7 +344,7 @@ export default function QrCodeForm() {
           setShowValidationErrors={setShowValidationErrors}
         />
 
-        <div className="mt-5 flex items-center">
+        {permitDynamic && <div className="mt-5 flex items-center">
           <Switch
             checked={isDynamic}
             onChange={setIsDynamic}
@@ -355,7 +363,7 @@ export default function QrCodeForm() {
             />
           </Switch>
           <span className="ml-2 text-sm font-medium text-gray-900">Dynamic - <span className="font-normal"> enable destination editing</span></span>
-        </div>
+        </div>}
 
         <p className="text-md font-semibold pt-5">Shape, Form & Color</p>
 
@@ -407,13 +415,32 @@ export default function QrCodeForm() {
       <div className="flex mt-6 md:mt-0">
         <div className="flex justify-center items-center flex-col w-[460px] h-[460px] pt-6 pb-6 bg-pink-100 rounded-3xl md:rounded-full">
           <div className="p-1 rounded-md bg-white border border-2" ref={ref}></div>
-          <button
-            onClick={saveQrCode}
-            type="button"
-            className="mt-6 inline-flex items-center gap-x-1.5 rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
-          >
-            Create QR Code
-          </button>
+          {permitDynamic ? (
+            <button
+              onClick={saveQrCode}
+              type="button"
+              className="mt-6 inline-flex items-center gap-x-1.5 rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
+            >
+              Create QR Code
+            </button>
+          ) : (
+            <div className="flex justify-center w-full mt-6 mb-4">
+              <button
+                onClick={() => { downloadQrCode('png') }}
+                type="button"
+                className="mr-1 inline-flex items-center gap-x-1.5 rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" /> PNG
+              </button>
+              <button
+                onClick={() => { downloadQrCode('svg') }}
+                type="button"
+                className="ml-1 inline-flex items-center gap-x-1.5 rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" /> SVG
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
