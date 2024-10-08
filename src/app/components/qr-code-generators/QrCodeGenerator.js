@@ -6,7 +6,7 @@ import QrCodeForm from "./QrCodeForm";
 export default function QrCodeGenerator() {  
   return(
     <Card>
-      <QrCodeForm />
+      <QrCodeForm permitDynamic />
     </Card>
   )
 }
