@@ -94,7 +94,7 @@ export default async function Home() {
                       Change the destination of your QR code without needing to reprint it
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-gray-600">
-                    After integrating your QR code into your designs, you may need to modify its scan destination. With static QR codes that means reprinting but PalQR's dynamic QR codes allow you to do this easily.
+                    After integrating your QR code into your designs, you may need to modify its scan destination. With static QR codes that means reprinting but PalQR&apos;s dynamic QR codes allow you to do this easily.
                     </p>
                   </div>
                 </div>
