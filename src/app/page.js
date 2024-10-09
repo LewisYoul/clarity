@@ -56,6 +56,7 @@ export default async function Home() {
                 }}
               />
             </div>
+
             <div className="mt-20 px-8">
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="flex-1 flex items-center">
@@ -74,6 +75,28 @@ export default async function Home() {
                     src="/logo_qr.png"
                     alt=""
                   />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-20 px-8">
+              <div className="flex flex-col md:flex-row justify-between">
+                <div className="flex-1 flex mt-8 md:mt-0 justify-center items-center">
+                  <img
+                    className="h-60 w-60"
+                    src="/logo_qr.png"
+                    alt=""
+                  />
+                </div>
+                <div className="flex-1 flex items-center">
+                  <div>
+                    <h1 className="text-3xl font-bold text-gray-900">
+                      Change the destination of your QR code without needing to reprint it
+                    </h1>
+                    <p className="mt-6 text-lg leading-8 text-gray-600">
+                    After integrating your QR code into your designs, you may need to modify its scan destination. With static QR codes that means reprinting but PalQR's dynamic QR codes allow you to do this easily.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
