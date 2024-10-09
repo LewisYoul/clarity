@@ -29,7 +29,7 @@ export default function Modal() {
 
   return (
     <div className="fixed h-screen w-full bg-white z-10 flex justify-center">
-      <div className="absolute top-0 right-0 pt-2 pr-2">
+      <div className="absolute top-0 right-0 pt-2 pr-2 z-20">
         <button
           type="button"
           className="inline-flex items-center justify-center text-gray-700"
