@@ -100,6 +100,28 @@ export default async function Home() {
                 </div>
               </div>
             </div>
+
+            <div className="mt-20 px-8">
+              <div className="flex flex-col md:flex-row justify-between">
+                <div className="flex-1 flex items-center">
+                  <div>
+                    <h1 className="text-3xl font-bold text-gray-900">
+                      Easily organise your QR codes
+                    </h1>
+                    <p className="mt-6 text-lg leading-8 text-gray-600">
+                      Group your QR codes into different categories using our intuitive tagging system, making keeping track of your QR codes a breeze.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex-1 flex mt-8 md:mt-0 justify-center items-center">
+                  <img
+                    className="h-60 w-60"
+                    src="/logo_qr.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
