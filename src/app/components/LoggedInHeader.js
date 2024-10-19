@@ -4,12 +4,10 @@ import { signOut } from "next-auth/react"
 import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIcon, Cog8ToothIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback, useContext } from 'react'
-import { CreditsContext } from "../contexts/creditsContext";
 
 export default function LoggedInHeader(props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef()
-  const { creditsCount } = useContext(CreditsContext)
 
   const handleOutsideClick = useCallback((event) => {
     if (menuRef?.current?.contains(event.target)) { return }
@@ -24,12 +22,6 @@ export default function LoggedInHeader(props) {
       document.removeEventListener('click', handleOutsideClick)
     }
   }, [handleOutsideClick])
-
-  const openCreditsModal = () => {
-    const event = new CustomEvent('openCreditsModal', { detail: {} })
-
-    document.dispatchEvent(event)
-  }
 
   const openMenu = () => {
     setIsMenuOpen(true)
@@ -59,9 +51,6 @@ export default function LoggedInHeader(props) {
           </a>
         </div>
         <div className="flex flex-1 justify-end items-center">
-          <button onClick={openCreditsModal} className="mr-4 rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            <span className="text-gray-900 text-sm font-semibold">{creditsCount ? `${creditsCount} credits` : '-'}</span>
-          </button>
           <button
             onClick={openMenu}
             type="button"

@@ -1,7 +1,7 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline"
 import { useRef, useState, useEffect, useCallback } from "react"
 
-export default function Popover({ items }) {
+export default function Popover({ items, classes }) {
   const popoverRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -26,7 +26,7 @@ export default function Popover({ items }) {
   const visibilityClass = isOpen ? 'visible' : 'invisible'
 
   return(
-    <div onClick={toggleOptionsPopover} className="absolute top-2 right-2 cursor-pointer">
+    <div onClick={toggleOptionsPopover} className={`${classes} cursor-pointer`}>
       <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
 
       <div ref={popoverRef} className={`${visibilityClass} absolute top-6 right-0 bg-white z-50 rounded-md border`}>

@@ -1,5 +1,6 @@
 import { useState, createContext, useRef } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline'
+
 export const ModalContext = createContext();
 
 const ModalProvider = ({children})=>{
@@ -15,7 +16,7 @@ const ModalProvider = ({children})=>{
   return (
       <ModalContext.Provider value={{ setModalContent }}>
         {modalContent && <div onClick={handleOutsideClick} className="fixed h-screen w-full bg-gray-500 bg-opacity-50 z-10 flex justify-center">
-          <div ref={modalRef}>
+          <div ref={modalRef} className="h-[0px]">
             <div className="absolute top-0 right-0 pt-3 pr-3 z-20">
               <button
                 type="button"

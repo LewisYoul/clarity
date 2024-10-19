@@ -1,16 +1,18 @@
 'use client'
 
-import CreditsProvider from "../contexts/creditsContext";
 import ModalProvider from "../contexts/modalContext";
-
+import NotificationProvider from "../contexts/notificationContext";
+import AlertProvider from "../contexts/alertContext";
 const PageWrapper = ({ children }) => {
 
   return (
-    <ModalProvider>
-      <CreditsProvider>
-        {children}
-      </CreditsProvider>
-    </ModalProvider>
+    <AlertProvider>
+      <NotificationProvider>
+        <ModalProvider>
+          {children}
+        </ModalProvider>
+      </NotificationProvider>
+    </AlertProvider>
   );
 };
 

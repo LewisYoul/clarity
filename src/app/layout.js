@@ -3,13 +3,6 @@ import './globals.css'
 import Toast from './components/Toast'
 import dynamic from 'next/dynamic'
 
-const Modal = dynamic(() => import('./components/Modal'), {
-  ssr: false
-})
-const CreditsModal = dynamic(() => import('./components/CreditsModal'), {
-  ssr: false
-})
-
 const PageWrapper = dynamic(() => import('./components/PageWrapper'), {
   ssr: false
 })
@@ -22,13 +15,11 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  console.log('IS IT ME YOURE LOOKING FOR')
   return (
     <html className="h-full bg-white" lang="en">
       <body className={`h-full ${inter.className}`}>
         <PageWrapper>
-          <Toast />
-          <Modal />
-          <CreditsModal />
           {children}
         </PageWrapper>
       </body>

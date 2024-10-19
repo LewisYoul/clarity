@@ -16,8 +16,7 @@ model User {
   passwordDigest String
   teamUsers TeamUser[]
   passwordResetRequests PasswordResetRequest[]
-  qrCodes QRCode[]
-  stripeCheckoutSessions StripeCheckoutSession[]
+  tasks Task[]
 }
 
 model Team {
@@ -25,8 +24,7 @@ model Team {
   name  String
   teamUsers TeamUser[]
   isPersonal Boolean @default(true)
-  qrCodes QRCode[]
-  stripeCheckoutSessions StripeCheckoutSession[]
+  tasks Task[]
 }
 
 model TeamUser {
@@ -45,68 +43,12 @@ model PasswordResetRequest {
   expiresAt DateTime
 }
 
-model QRCode {
+model Task {
   id      Int      @id @default(autoincrement())
-  teamId Int
-  team Team @relation(fields: [teamId], references: [id])
-  createdById Int
-  createdBy User @relation(fields: [createdById], references: [id])
-  link String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  type QRCodeType @default(link)
-  dynamicLinkUid String? @unique
-  scans Scan[]
-  data Json?
-  deletedAt DateTime?
-  credit Credit?
-}
-
-model File {
-  id      Int      @id @default(autoincrement())
-  fileName String
-  fileType String
-  fileableId Int
-  fileableType String
-  deletedAt DateTime?
-}
-
-enum QRCodeType {
-  link
-  pdf
-  email
-  wifi
-  call
-  sms
-}
-
-model Scan {
-  id      Int      @id @default(autoincrement())
-  qrCodeId Int
-  qrCode QRCode @relation(fields: [qrCodeId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  deletedAt DateTime?
-}
-
-
-model Credit {
-  id      Int      @id @default(autoincrement())
-  teamId Int
-  qrCodeId Int? @unique
-  qrCode QRCode? @relation(fields: [qrCodeId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-}
-
-model StripeCheckoutSession {
-  id      Int      @id @default(autoincrement())
-  sessionId String
   userId Int
   user User @relation(fields: [userId], references: [id])
   teamId Int
   team Team @relation(fields: [teamId], references: [id])
-  packType String 
-  isUsed Boolean @default(false)
+  title String
+  completedAt DateTime?
 }
-
