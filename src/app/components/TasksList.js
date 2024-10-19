@@ -51,7 +51,7 @@ export default function Tasks() {
   )
 
   return(
-    <div className="pb-4 mt-14">
+    <div className="pb-4 mt-4 md:mt-14">
       {
         tasks.length === 0 ? (
           <div className="w-full px-8 pt-10">
