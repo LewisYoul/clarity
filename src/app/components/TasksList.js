@@ -61,6 +61,7 @@ export default function Tasks() {
 
             <div className="flex justify-center mt-4">
               <button
+                onClick={openNewTaskModal}
                 type="button"
                 className="mr-4 inline-flex rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
