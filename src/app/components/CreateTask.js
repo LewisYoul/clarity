@@ -37,7 +37,7 @@ export default function CreateTask({ onCreate }) {
   }
 
   return (
-    <div className="bg-white mt-8 w-[860px] rounded-md py-4 px-4">
+    <div className="bg-white mt-0 md:mt-8 w-screen md:w-[860px] rounded-md py-4 px-4">
       <div className="max-w-6xl m-auto">
         <h1 className="text-center text-2xl">New Task</h1>
 
