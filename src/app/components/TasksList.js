@@ -70,14 +70,8 @@ export default function Tasks() {
             </div>
           </div>
         ) : (
-          // <div className="">
-          //   {tasks.map((task) => (
-          //     <div key={task.id}>{task.title}</div>
-          //     // <QrCode qr={qr} key={`qr-${qr.id}`} />
-          //   ))}
-          // </div>
           <div className="flex justify-center">
-            <div className="w-1/2">
+            <div className="w-full px-6 md:px-0 md:w-1/2">
               <div className="flex justify-between items-center">
                 <legend className="text-base font-semibold leading-6 text-gray-900">Tasks</legend>
                 <button
