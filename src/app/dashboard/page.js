@@ -1,8 +1,6 @@
 import LoggedInHeader from "../components/LoggedInHeader"
-import { options } from "../api/auth/[...nextauth]/options"
 import { authorizeRequest } from "../utils/sessionUtils"
 import dynamic from 'next/dynamic'
-import prisma from "../utils/prisma"
 
 
 const TasksList = dynamic(() => import('../components/TasksList'), {

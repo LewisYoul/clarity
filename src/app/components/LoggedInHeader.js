@@ -4,12 +4,15 @@ import { signOut } from "next-auth/react"
 import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIcon, Cog8ToothIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback, useContext } from 'react'
+import CreateList from './CreateList'
+import { ModalContext } from '../contexts/modalContext'
+
 
 export default function LoggedInHeader({ initialTeam }) {
+  const { setModalContent } = useContext(ModalContext)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef()
   const [teamsData, setTeamsData] = useState(null);
-  const [currentTeam, setCurrentTeam] = useState(initialTeam);
 
 
   const handleOutsideClick = useCallback((event) => {
@@ -56,6 +59,14 @@ export default function LoggedInHeader({ initialTeam }) {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
+  }
+
+  const openNewWorkspaceModal = () => {
+    closeMenu()
+    setModalContent(<CreateList onCreate={() => {
+      setModalContent(null)
+      window.location.href = '/dashboard';
+    }}/>)
   }
 
   const menuclass = isMenuOpen ? 'lg:visible' : ''
@@ -158,6 +169,12 @@ export default function LoggedInHeader({ initialTeam }) {
                     className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     <ArrowLeftOnRectangleIcon className="w-4 h-4 mr-1" />Sign Out
+                  </button>
+                  <button
+                    onClick={openNewWorkspaceModal}
+                    className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    <PlusIcon className="w-4 h-4 mr-1" />New List
                   </button>
                 </div>
               </div>
