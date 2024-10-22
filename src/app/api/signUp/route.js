@@ -22,23 +22,21 @@ export async function POST(req) {
   const hashedPassword = await bcrypt.hash(password, saltRounds)
   
   try {
-    await prisma.user.create({
-      data: {
-        email: email,
-        passwordDigest: hashedPassword,
-        teamUsers: {
-          create: [
-            { 
-              team: {
-                create: {
-                  name: 'My Team',
-                  isPersonal: true,
-                }
-              }
-            }
-          ]
+    await prisma.$transaction(async (tx) => {
+      const team = await tx.team.create({
+        data: {
+          name: 'Personal',
+          isPersonal: true
         }
-      }
+      })
+
+      await tx.user.create({
+        data: {
+          email: email,
+          passwordDigest: hashedPassword,
+          currentTeamId: team.id
+        }
+      })
     })
   } catch (error) {
     console.error(error)

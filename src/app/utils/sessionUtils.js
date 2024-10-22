@@ -6,7 +6,7 @@ export async function authorizeRequest() {
   const session = await getServerSession(options)
   const unauthorizedObject = { currentUser: null, currentTeam: null };
 
-  if (!session || !session.user || !session.team) {
+  if (!session || !session.user) {
     return unauthorizedObject;
   }
 
@@ -22,7 +22,7 @@ export async function authorizeRequest() {
 
   const currentTeam = await prisma.team.findUnique({
     where: {
-      id: session.team.id
+      id: currentUser.currentTeamId
     }
   })
 

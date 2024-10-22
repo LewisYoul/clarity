@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -17,6 +18,8 @@ model User {
   teamUsers TeamUser[]
   passwordResetRequests PasswordResetRequest[]
   tasks Task[]
+  currentTeamId Int
+  currentTeam Team @relation(fields: [currentTeamId], references: [id])
 }
 
 model Team {
@@ -25,6 +28,7 @@ model Team {
   teamUsers TeamUser[]
   isPersonal Boolean @default(true)
   tasks Task[]
+  users User[]
 }
 
 model TeamUser {

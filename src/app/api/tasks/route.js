@@ -2,7 +2,6 @@ import { authorizeRequest } from '@/app/utils/sessionUtils';
 import prisma from '../../utils/prisma';
 
 export async function GET(req) {
-  console.log('BOOOOOOOOOOOOOO')
   const { currentUser, currentTeam } = await authorizeRequest();
   
   if (!currentUser || !currentTeam) {

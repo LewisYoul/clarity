@@ -5,9 +5,12 @@ import { PlusIcon, Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIco
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback, useContext } from 'react'
 
-export default function LoggedInHeader(props) {
+export default function LoggedInHeader({ initialTeam }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef()
+  const [teamsData, setTeamsData] = useState(null);
+  const [currentTeam, setCurrentTeam] = useState(initialTeam);
+
 
   const handleOutsideClick = useCallback((event) => {
     if (menuRef?.current?.contains(event.target)) { return }
@@ -22,6 +25,26 @@ export default function LoggedInHeader(props) {
       document.removeEventListener('click', handleOutsideClick)
     }
   }, [handleOutsideClick])
+
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const response = await fetch('/api/teams');
+        if (response.ok) {
+          const { data } = await response.json();
+          console.log('data', data)
+          setTeamsData(data);
+        } else {
+          console.error('Failed to fetch teams');
+        }
+      } catch (error) {
+        console.error('Error fetching teams:', error);
+      }
+    };
+
+    fetchTeams();
+  }, []);
 
   const openMenu = () => {
     setIsMenuOpen(true)
@@ -49,6 +72,18 @@ export default function LoggedInHeader(props) {
               alt=""
             />
           </a>
+        {teamsData && teamsData.teams && (
+          <select
+            className="ml-4 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            defaultValue={teamsData.currentTeam.id}
+          >
+            {teamsData.teams.map((team) => (
+              <option key={team.id} value={team.id}>
+                {team.name}
+              </option>
+            ))}
+          </select>
+        )}
         </div>
         <div className="flex flex-1 justify-end items-center">
           <button

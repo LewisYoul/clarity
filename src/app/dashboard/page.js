@@ -10,25 +10,12 @@ const TasksList = dynamic(() => import('../components/TasksList'), {
 })
 
 export default async function Dashboard() {
-  const { currentUser, currentTeam } = await authorizeRequest()
-  const tasks = await prisma.Task.findMany({
-    where: {
-      teamId: currentTeam.id,
-    },
-  })
-
-  const openNewTaskModal = () => {
-    console.log('openNewTaskModal')
-
-
-  }
-
-  console.log('tasks', tasks)
+  const { currentTeam } = await authorizeRequest()
 
   return (
     <div className="bg-white h-full min-h-screen">
       <div className="max-w-6xl m-auto">
-        <LoggedInHeader/>
+        <LoggedInHeader initialTeam={currentTeam} />
 
         <TasksList />
       </div>
