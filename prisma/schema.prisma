@@ -18,8 +18,8 @@ model User {
   teamUsers TeamUser[]
   passwordResetRequests PasswordResetRequest[]
   tasks Task[]
-  currentTeamId Int
-  currentTeam Team @relation(fields: [currentTeamId], references: [id])
+  currentTeamId Int?
+  currentTeam Team? @relation(fields: [currentTeamId], references: [id])
 }
 
 model Team {
