@@ -30,11 +30,18 @@ export async function POST(req) {
         }
       })
 
-      await tx.user.create({
+      const user = await tx.user.create({
         data: {
           email: email,
           passwordDigest: hashedPassword,
           currentTeamId: team.id
+        }
+      })
+
+      await tx.teamUser.create({
+        data: {
+          userId: user.id,
+          teamId: team.id
         }
       })
     })
