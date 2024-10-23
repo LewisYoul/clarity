@@ -85,9 +85,9 @@ export default function ListMenu() {
             >
               <Cog8ToothIcon className="w-4 h-4 mr-1" /> List Settings
             </Link>
-            <hr />
             {teamsData?.teams.length > 1 && (
               <div>
+                <hr />
                 <div className="inline-flex items-center w-full rounded-lg px-3 pt-1.5 text-sm leading-7 text-gray-400">
                   CHANGE LIST
                 </div>
@@ -102,7 +102,7 @@ export default function ListMenu() {
                 ))}
               </div>
             )}
-              <hr />
+            <hr />
               <div>
                 <button
                 onClick={openNewWorkspaceModal}
@@ -138,8 +138,15 @@ export default function ListMenu() {
             </nav>
 
             <div className="flow-root">
+              <Link
+                href="#"
+                className="inline-flex items-center w-full rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+              >
+                <Cog8ToothIcon className="w-4 h-4 mr-1" /> List Settings
+              </Link>
               {teamsData?.teams.length > 1 && (
                 <div>
+                  <hr />
                   <div className="inline-flex items-center w-full rounded-lg px-3 pt-1.5 text-sm leading-7 text-gray-400">
                     CHANGE LIST
                   </div>
