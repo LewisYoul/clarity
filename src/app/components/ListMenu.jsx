@@ -1,4 +1,4 @@
-import { PlusIcon, UserIcon, ChevronDownIcon, ChevronUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, UserIcon, ChevronDownIcon, ChevronUpIcon, XMarkIcon, Cog8ToothIcon } from '@heroicons/react/24/outline'
 import CreateList from './CreateList'
 import { useState, useRef, useCallback, useEffect, useContext } from 'react'
 import Link from 'next/link'
@@ -52,17 +52,59 @@ export default function ListMenu() {
 
   const teamMenuClass = isTeamMenuOpen ? 'lg:visible' : ''
 
+  const changeList = async (teamId) => {
+    try {
+      const response = await fetch(`/api/users`, {
+        method: 'PUT',
+        body: JSON.stringify({ currentTeamId: teamId })
+      })
+
+      if (response.ok) {
+        console.log('List changed successfully')
+        window.location.href = '/dashboard';
+      } else {
+        console.error('Failed to change list')
+      }
+    } catch (error) {
+      console.error('Error changing list:', error)
+    }
+  }
+
 
   return (
     <div className="relative">
       <button onClick={() => setIsTeamMenuOpen(!isTeamMenuOpen)} className=" inline-flex items-center mr-4 border-r border-gray-300 pr-4">
         <UserIcon className="w-4 h-4 mr-1" /> <span>{teamsData?.currentTeam?.name}</span> {isTeamMenuOpen ? <ChevronUpIcon className="w-4 h-4 ml-1" /> : <ChevronDownIcon className="w-4 h-4 ml-1" />}
       </button>
-      <div className={`invisible absolute w-[200px] bg-white top-9 right-8 z-50 rounded-md border ${teamMenuClass}`}>
+      <div ref={teamMenuRef} className={`invisible absolute w-[200px] bg-white top-9 right-8 z-50 rounded-md border ${teamMenuClass}`}>
         <div className="h-full w-full relative divide-y divide-gray-500/10">
           <div className="flow-root">
-            <div>
-              <button
+            <Link
+              href="#"
+              className="inline-flex items-center w-full rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+            >
+              <Cog8ToothIcon className="w-4 h-4 mr-1" /> List Settings
+            </Link>
+            <hr />
+            {teamsData?.teams.length > 1 && (
+              <div>
+                <div className="inline-flex items-center w-full rounded-lg px-3 pt-1.5 text-sm leading-7 text-gray-400">
+                  CHANGE LIST
+                </div>
+                {teamsData.teams.map((team) => (
+                  <button
+                    onClick={() => {changeList(team.id)}}
+                    key={team.id}
+                    className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    <UserIcon className="w-4 h-4 mr-1" />{team.name}
+                  </button>
+                ))}
+              </div>
+            )}
+              <hr />
+              <div>
+                <button
                 onClick={openNewWorkspaceModal}
                 className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
               >
