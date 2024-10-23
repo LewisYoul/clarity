@@ -115,6 +115,7 @@ export default function ListMenu() {
         </div>
       </div>
 
+      {/* TODO: Make it so the mobile menu doesn't close immediately when you click it */}
       {isTeamMenuOpen && (
         <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
           <div className="h-full w-full relative divide-y divide-gray-500/10">
@@ -137,15 +138,30 @@ export default function ListMenu() {
             </nav>
 
             <div className="flow-root">
-              <div className="divide-y divide-gray-500/10">
-                <div className="p-6">
-                  <button
-                    onClick={openNewWorkspaceModal}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    New List
-                  </button>
+              {teamsData?.teams.length > 1 && (
+                <div>
+                  <div className="inline-flex items-center w-full rounded-lg px-3 pt-1.5 text-sm leading-7 text-gray-400">
+                    CHANGE LIST
+                  </div>
+                  {teamsData.teams.map((team) => (
+                    <button
+                      onClick={() => {changeList(team.id)}}
+                      key={team.id}
+                      className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      <UserIcon className="w-4 h-4 mr-1" />{team.name}
+                    </button>
+                  ))}
                 </div>
+              )}
+              <hr />
+              <div>
+                <button
+                  onClick={openNewWorkspaceModal}
+                  className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                >
+                  <PlusIcon className="w-4 h-4 mr-1" />New List
+                </button>
               </div>
             </div>
           </div>
