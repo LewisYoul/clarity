@@ -4,7 +4,7 @@ import { signOut } from "next-auth/react"
 import { Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIcon, Cog8ToothIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback } from 'react'
-import ListMenu from './ListMenu'
+import CreateList from './CreateList'
 
 
 export default function LoggedInHeader({ initialTeam }) {
@@ -20,6 +20,14 @@ export default function LoggedInHeader({ initialTeam }) {
     if (isMenuOpen) { closeMenu() }
     if (isTeamMenuOpen) { closeTeamMenu() }
   }, [isMenuOpen, isTeamMenuOpen])
+
+  const openNewWorkspaceModal = () => {
+    setIsTeamMenuOpen(false)
+    setModalContent(<CreateList onCreate={() => {
+      setModalContent(null)
+      window.location.href = '/dashboard';
+    }}/>)
+  }
 
   useEffect(() => {
     document.addEventListener('click', handleOutsideClick)
@@ -41,6 +49,11 @@ export default function LoggedInHeader({ initialTeam }) {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  const openTeamMenu = () => {
+    console.log('openTeamMenu')
+    setIsTeamMenuOpen(true)
+  }
+
   const closeTeamMenu = () => {
     setIsTeamMenuOpen(false)
   }
@@ -51,19 +64,16 @@ export default function LoggedInHeader({ initialTeam }) {
     <header className="inset-x-0 top-0">
       <nav className="flex items-center justify-between p-6 lg:px-3 relative" aria-label="Global">
         <div className="flex lg:flex-1">
-          <a href="/dashboard" className="-m-1.5 p-1.5 flex items-center gap-2">
+          <div onClick={openTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
             <img
               className="h-9 w-auto"
               src="/logo.svg"
               alt=""
             />
             <span className="text-md">ClarityAI</span>
-          </a>
+          </div>
         </div>
         <div className="flex flex-1 justify-end items-center">
-          <ListMenu />
-
-
           <button
             onClick={openMenu}
             type="button"
@@ -85,7 +95,7 @@ export default function LoggedInHeader({ initialTeam }) {
                   <Link href="/dashboard" className="-m-1.5 p-1.5">
                     <span className="sr-only">Your Company</span>
                     <img
-                      className="h-8 w-auto"
+                      className="h-9 w-auto"
                       src="/logo.svg"
                       alt=""
                     />
@@ -128,7 +138,7 @@ export default function LoggedInHeader({ initialTeam }) {
                   <Link href="/dashboard" className="-m-1.5 p-1.5">
                     <span className="sr-only">Your Company</span>
                     <img
-                      className="h-8 w-auto"
+                      className="h-9 w-auto"
                       src="/logo.svg"
                       alt=""
                     />

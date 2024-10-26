@@ -45,9 +45,9 @@ export default function Tasks() {
   )
 
   return(
-    <div className="pb-4 mt-4 md:mt-14">
+    <div className="pb-4 mt-4">
       <div className="flex justify-center">
-        <div className="w-full px-6 md:px-0 md:w-1/2">
+        <div className="w-full px-6 md:px-0 md:w-3/4">
           <div className="flex justify-between items-center">
             <CreateTask onCreate={onTaskCreated}/>
           </div>
