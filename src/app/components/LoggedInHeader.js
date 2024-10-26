@@ -51,13 +51,13 @@ export default function LoggedInHeader({ initialTeam }) {
     <header className="inset-x-0 top-0">
       <nav className="flex items-center justify-between p-6 lg:px-3 relative" aria-label="Global">
         <div className="flex lg:flex-1">
-          <a href="/dashboard" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
+          <a href="/dashboard" className="-m-1.5 p-1.5 flex items-center gap-2">
             <img
-              className="h-8 w-auto"
+              className="h-9 w-auto"
               src="/logo.svg"
               alt=""
             />
+            <span className="text-md">ClarityAI</span>
           </a>
         </div>
         <div className="flex flex-1 justify-end items-center">
