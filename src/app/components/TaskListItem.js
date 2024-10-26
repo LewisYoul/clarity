@@ -87,7 +87,7 @@ export default function TaskListItem({ task, onChange }) {
   const labelClasses = task.completedAt ? 'line-through text-gray-300' : 'text-gray-900'
 
   return(
-    <div className="relative flex items-start py-4 bg-gray-100 px-4 items-center">
+    <div className="relative flex items-start py-4 border-b border-gray-200 px-4 items-center">
       <div className="flex h-6 items-center">
         <input
           onChange={handleChange}
@@ -100,7 +100,7 @@ export default function TaskListItem({ task, onChange }) {
       </div>
       <div className="min-w-0 flex-1 text-sm leading-6 ml-3">
         <label htmlFor={`task-${task.id}`} className={labelClasses}>
-          {task.title}
+          {task.title.length > 0 ? task.title : <span className="text-gray-400">No Title</span>}
         </label>
       </div>
       <Popover items={popoverItems} classes="relative ml-3" />
