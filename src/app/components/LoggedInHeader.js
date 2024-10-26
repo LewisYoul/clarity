@@ -1,10 +1,12 @@
 "use client";
 
 import { signOut } from "next-auth/react"
-import { Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIcon, Cog8ToothIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon, UserCircleIcon, ArrowLeftOnRectangleIcon, Cog8ToothIcon, PlusIcon, UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useContext } from 'react'
 import CreateList from './CreateList'
+import { ListsContext } from '../contexts/ListsProvider'
+import { ModalContext } from '../contexts/modalContext'
 
 
 export default function LoggedInHeader({ initialTeam }) {
@@ -12,6 +14,8 @@ export default function LoggedInHeader({ initialTeam }) {
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false)
   const menuRef = useRef()
   const teamMenuRef = useRef()
+  const { teamsData, changeList } = useContext(ListsContext)
+  const { setModalContent } = useContext(ModalContext)
 
 
   const handleOutsideClick = useCallback((event) => {
@@ -25,7 +29,7 @@ export default function LoggedInHeader({ initialTeam }) {
     setIsTeamMenuOpen(false)
     setModalContent(<CreateList onCreate={() => {
       setModalContent(null)
-      window.location.href = '/dashboard';
+      // You might want to update the teamsData here if necessary
     }}/>)
   }
 
@@ -131,7 +135,7 @@ export default function LoggedInHeader({ initialTeam }) {
             </div>
           )}
 
-          {isTeamMenuOpen && (
+          {isTeamMenuOpen && teamsData && (
             <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
               <div className="h-full w-full relative divide-y divide-gray-500/10">
                 <nav className="flex items-center justify-between p-6">
@@ -157,10 +161,23 @@ export default function LoggedInHeader({ initialTeam }) {
                     <div className="p-6">
                       <button
                         onClick={openNewWorkspaceModal}
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        className="inline-flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-400 hover:bg-gray-50"
                       >
                         New List
+                        <PlusIcon className="w-4 h-4 ml-2" />
                       </button>
+                      {teamsData.teams.map((team) => (
+                        <button
+                          onClick={() => {
+                            changeList(team.id)
+                            closeTeamMenu()
+                          }}
+                          key={team.id}
+                          className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-50' : ''} inline-flex items-center w-full text-left rounded-lg px-3 py-2.5 text-sm leading-7 text-gray-900 hover:bg-gray-50`}
+                        >
+                          <UserIcon className="w-4 h-4 mr-1" />{team.name}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>

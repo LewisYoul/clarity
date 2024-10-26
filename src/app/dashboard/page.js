@@ -15,6 +15,7 @@ export default async function Dashboard() {
     <div className="bg-white h-full min-h-screen">
       <div className="max-w-6xl m-auto">
         <LoggedInHeader initialTeam={currentTeam} />
+
         <div className="flex w-full">
           <ListList />
 

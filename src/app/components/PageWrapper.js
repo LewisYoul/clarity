@@ -3,16 +3,20 @@
 import ModalProvider from "../contexts/modalContext";
 import NotificationProvider from "../contexts/notificationContext";
 import AlertProvider from "../contexts/alertContext";
+import ListsProvider from "../contexts/ListsProvider";
+
 const PageWrapper = ({ children }) => {
 
   return (
-    <AlertProvider>
-      <NotificationProvider>
-        <ModalProvider>
-          {children}
-        </ModalProvider>
-      </NotificationProvider>
-    </AlertProvider>
+    <ListsProvider>
+      <AlertProvider>
+        <NotificationProvider>
+          <ModalProvider>
+            {children}
+          </ModalProvider>
+        </NotificationProvider>
+      </AlertProvider>
+    </ListsProvider>
   );
 };
 
