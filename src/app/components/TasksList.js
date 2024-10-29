@@ -6,12 +6,14 @@ import { ModalContext } from "../contexts/modalContext"
 import CreateTask from "./CreateTask";
 import TaskListItem from "./TaskListItem";
 import { ListsContext } from "../contexts/ListsProvider";
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 
 export default function Tasks() {
   const { setModalContent } = useContext(ModalContext)
   const { teamsData } = useContext(ListsContext)
   const [openTasks, setOpenTasks] = useState(null);
   const [completedTasks, setCompletedTasks] = useState(null);
+  const [showCompleted, setShowCompleted] = useState(true);
   
   const fetchTasks = useCallback(async () => {
     const url = `/api/tasks`
@@ -61,10 +63,20 @@ export default function Tasks() {
 
           {completedTasks.length > 0 && (
             <div className="mt-2">
-              <h2 className="font-semibold p-4 text-sm">Completed</h2>
-              {completedTasks.map((task, taskIdx) => (
-                <TaskListItem key={`task-${taskIdx}`} task={task} onChange={fetchTasks} />
-              ))}
+              <button 
+                onClick={() => setShowCompleted(!showCompleted)}
+                className="flex items-center font-semibold p-4 text-sm w-full"
+              >
+                <span>{showCompleted ? <ChevronDownIcon className="h-4 w-4" /> : <ChevronRightIcon className="h-4 w-4" />}</span>
+                <span className="ml-2">Completed</span>
+              </button>
+              {showCompleted && (
+                <div>
+                  {completedTasks.map((task, taskIdx) => (
+                    <TaskListItem key={`task-${taskIdx}`} task={task} onChange={fetchTasks} />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
