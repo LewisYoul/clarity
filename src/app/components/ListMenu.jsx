@@ -3,31 +3,14 @@ import CreateList from './CreateList'
 import { useState, useRef, useCallback, useEffect, useContext } from 'react'
 import Link from 'next/link'
 import { ModalContext } from '../contexts/modalContext'
+import { ListsContext } from '../contexts/ListsProvider'
 
 export default function ListMenu() {
   const { setModalContent } = useContext(ModalContext)
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false)
-  const [teamsData, setTeamsData] = useState(null);
   const teamMenuRef = useRef()
+  const { teamsData, setTeamsData, changeList } = useContext(ListsContext)
 
-  useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const response = await fetch('/api/teams');
-        if (response.ok) {
-          const { data } = await response.json();
-          console.log('data', data)
-          setTeamsData(data);
-        } else {
-          console.error('Failed to fetch teams');
-        }
-      } catch (error) {
-        console.error('Error fetching teams:', error);
-      }
-    };
-
-    fetchTeams();
-  }, []);
 
   const handleOutsideClick = useCallback((event) => {
     if (teamMenuRef?.current?.contains(event.target)) { return }
@@ -51,24 +34,6 @@ export default function ListMenu() {
   }, [handleOutsideClick])
 
   const teamMenuClass = isTeamMenuOpen ? 'lg:visible' : ''
-
-  const changeList = async (teamId) => {
-    try {
-      const response = await fetch(`/api/users`, {
-        method: 'PUT',
-        body: JSON.stringify({ currentTeamId: teamId })
-      })
-
-      if (response.ok) {
-        console.log('List changed successfully')
-        window.location.href = '/dashboard';
-      } else {
-        console.error('Failed to change list')
-      }
-    } catch (error) {
-      console.error('Error changing list:', error)
-    }
-  }
 
 
   return (

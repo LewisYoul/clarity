@@ -1,16 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useState, useContext } from "react";
-import QrCode from "./QrCode";
-import { PlusIcon  } from '@heroicons/react/24/outline'
 import { showToast } from "../utils/toastUtils";
-import debounce from 'debounce';
 import { ModalContext } from "../contexts/modalContext"
 import CreateTask from "./CreateTask";
 import TaskListItem from "./TaskListItem";
+import { ListsContext } from "../contexts/ListsProvider";
 
 export default function Tasks() {
   const { setModalContent } = useContext(ModalContext)
+  const { teamsData } = useContext(ListsContext)
   const [tasks, setTasks] = useState(null);
   
   const fetchTasks = useCallback(async () => {
@@ -33,7 +32,8 @@ export default function Tasks() {
 
   useEffect(() => {
     fetchTasks()
-  }, [fetchTasks])
+    // This will get new tasks when the list is changed
+  }, [fetchTasks, teamsData])
 
   const onTaskCreated = () => {
     fetchTasks()

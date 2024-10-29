@@ -74,7 +74,7 @@ export default function LoggedInHeader({ initialTeam }) {
               src="/logo.svg"
               alt=""
             />
-            <span className="text-md">ClarityAI</span>
+            <span className="text-md">{teamsData?.currentTeam?.name}</span>
           </div>
         </div>
         <div className="flex flex-1 justify-end items-center">

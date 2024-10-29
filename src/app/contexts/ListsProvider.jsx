@@ -5,22 +5,22 @@ export const ListsContext = createContext();
 const ListsProvider = ({ children }) => {
   const [teamsData, setTeamsData] = useState(null);
 
-  useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const response = await fetch('/api/teams');
-        if (response.ok) {
-          const { data } = await response.json();
-          console.log('data', data);
-          setTeamsData(data);
-        } else {
-          console.error('Failed to fetch teams');
-        }
-      } catch (error) {
-        console.error('Error fetching teams:', error);
+  const fetchTeams = async () => {
+    try {
+      const response = await fetch('/api/teams');
+      if (response.ok) {
+        const { data } = await response.json();
+        console.log('data', data);
+        setTeamsData(data);
+      } else {
+        console.error('Failed to fetch teams');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching teams:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchTeams();
   }, []);
 
@@ -33,13 +33,8 @@ const ListsProvider = ({ children }) => {
 
       if (response.ok) {
         console.log('List changed successfully');
-        // Update the teamsData state instead of reloading the page
-        setTeamsData(prevData => ({
-          ...prevData,
-          currentTeam: prevData.teams.find(team => team.id === teamId)
-        }));
 
-        window.location.href = '/dashboard';
+        fetchTeams();
       } else {
         console.error('Failed to change list');
       }
