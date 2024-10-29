@@ -13,6 +13,7 @@ export default function LoggedInHeader({ initialTeam }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false)
   const menuRef = useRef()
+  const mobileMenuRef = useRef()
   const teamMenuRef = useRef()
   const mobileTeamMenuRef = useRef()
   const { teamsData, changeList } = useContext(ListsContext)
@@ -22,6 +23,7 @@ export default function LoggedInHeader({ initialTeam }) {
   const handleOutsideClick = useCallback((event) => {
     console.log('handleOutsideClick', event.target)
     if (menuRef?.current?.contains(event.target)) { return }
+    if (mobileMenuRef?.current?.contains(event.target)) { return }
     if (teamMenuRef?.current?.contains(event.target)) { return }
     if (mobileTeamMenuRef?.current?.contains(event.target)) { return }
     if (isMenuOpen) { closeMenu() }
@@ -97,7 +99,7 @@ export default function LoggedInHeader({ initialTeam }) {
           </button>
           {isMenuOpen && (
             <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
-              <div className="h-full w-full relative divide-y divide-gray-500/10">
+              <div ref={menuRef} className="h-full w-full relative divide-y divide-gray-500/10">
                 <nav className="flex items-center justify-between p-6">
                   <Link href="/dashboard" className="-m-1.5 p-1.5">
                     <span className="sr-only">Your Company</span>
@@ -187,7 +189,7 @@ export default function LoggedInHeader({ initialTeam }) {
             </div>
           )}
 
-          <div ref={menuRef} className={`invisible absolute w-[200px] bg-white top-16 right-0 z-50 rounded-md border ${menuclass}`}>
+          <div ref={mobileMenuRef} className={`invisible absolute w-[200px] bg-white top-16 right-0 z-50 rounded-md border ${menuclass}`}>
             <div className="h-full w-full relative divide-y divide-gray-500/10">
               <div className="flow-root">
                 <div>
