@@ -88,7 +88,7 @@ export default function LoggedInHeader({ initialTeam }) {
             type="button"
             className="lg:hidden"
           >
-            <Bars3Icon className="h-7 w-7"/>
+            <UserCircleIcon className="h-7 w-7"/>
           </button>
           <button
             onClick={toggleMenu}
@@ -101,20 +101,20 @@ export default function LoggedInHeader({ initialTeam }) {
             <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
               <div ref={menuRef} className="h-full w-full relative divide-y divide-gray-500/10">
                 <nav className="flex items-center justify-between p-6">
-                  <Link href="/dashboard" className="-m-1.5 p-1.5">
-                    <span className="sr-only">Your Company</span>
+                  <div onClick={closeMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
                     <img
                       className="h-9 w-auto"
                       src="/logo.svg"
                       alt=""
                     />
-                  </Link>
+                    <span className="text-md">{teamsData?.currentTeam?.name}</span>
+                  </div>
                   <button
                     className=""
                     onClick={closeMenu}
                     type="button"
                   >
-                    <XMarkIcon className="h-7 w-7"/>
+                    <UserCircleIcon className="h-7 w-7"/>
                   </button>
                 </nav>
 
@@ -144,20 +144,21 @@ export default function LoggedInHeader({ initialTeam }) {
             <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
               <div ref={mobileTeamMenuRef} className="h-full w-full relative divide-y divide-gray-500/10">
                 <nav className="flex items-center justify-between p-6">
-                  <Link href="/dashboard" className="-m-1.5 p-1.5">
-                    <span className="sr-only">Your Company</span>
+                  <div onClick={closeTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
                     <img
                       className="h-9 w-auto"
                       src="/logo.svg"
                       alt=""
                     />
-                  </Link>
+                    <span className="text-md">{teamsData?.currentTeam?.name}</span>
+                  </div>
+
                   <button
                     className=""
                     onClick={closeTeamMenu}
                     type="button"
                   >
-                    <XMarkIcon className="h-7 w-7"/>
+                    <UserCircleIcon className="h-7 w-7"/>
                   </button>
                 </nav>
 
