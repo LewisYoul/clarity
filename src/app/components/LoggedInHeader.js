@@ -14,13 +14,16 @@ export default function LoggedInHeader({ initialTeam }) {
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false)
   const menuRef = useRef()
   const teamMenuRef = useRef()
+  const mobileTeamMenuRef = useRef()
   const { teamsData, changeList } = useContext(ListsContext)
   const { setModalContent } = useContext(ModalContext)
 
 
   const handleOutsideClick = useCallback((event) => {
+    console.log('handleOutsideClick', event.target)
     if (menuRef?.current?.contains(event.target)) { return }
     if (teamMenuRef?.current?.contains(event.target)) { return }
+    if (mobileTeamMenuRef?.current?.contains(event.target)) { return }
     if (isMenuOpen) { closeMenu() }
     if (isTeamMenuOpen) { closeTeamMenu() }
   }, [isMenuOpen, isTeamMenuOpen])
@@ -137,7 +140,7 @@ export default function LoggedInHeader({ initialTeam }) {
 
           {isTeamMenuOpen && teamsData && (
             <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
-              <div className="h-full w-full relative divide-y divide-gray-500/10">
+              <div ref={mobileTeamMenuRef} className="h-full w-full relative divide-y divide-gray-500/10">
                 <nav className="flex items-center justify-between p-6">
                   <Link href="/dashboard" className="-m-1.5 p-1.5">
                     <span className="sr-only">Your Company</span>
@@ -170,7 +173,6 @@ export default function LoggedInHeader({ initialTeam }) {
                         <button
                           onClick={() => {
                             changeList(team.id)
-                            closeTeamMenu()
                           }}
                           key={team.id}
                           className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-50' : ''} inline-flex items-center w-full text-left rounded-lg px-3 py-2.5 text-sm leading-7 text-gray-900 hover:bg-gray-50`}
