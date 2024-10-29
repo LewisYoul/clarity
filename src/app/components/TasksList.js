@@ -10,7 +10,8 @@ import { ListsContext } from "../contexts/ListsProvider";
 export default function Tasks() {
   const { setModalContent } = useContext(ModalContext)
   const { teamsData } = useContext(ListsContext)
-  const [tasks, setTasks] = useState(null);
+  const [openTasks, setOpenTasks] = useState(null);
+  const [completedTasks, setCompletedTasks] = useState(null);
   
   const fetchTasks = useCallback(async () => {
     const url = `/api/tasks`
@@ -22,7 +23,8 @@ export default function Tasks() {
 
       const json = await res.json()
   
-      setTasks(json.data)
+      setOpenTasks(json.data.openTasks)
+      setCompletedTasks(json.data.completedTasks)
     } catch (error) {
       console.error(error)
 
@@ -40,7 +42,7 @@ export default function Tasks() {
     showToast('Task created')
   }
 
-  if (tasks === null || tasks === undefined) return (
+  if (openTasks === null) return (
     <div>Loading...</div>
   )
 
@@ -52,15 +54,24 @@ export default function Tasks() {
             <CreateTask onCreate={onTaskCreated}/>
           </div>
           <div className="mt-2">
-            {tasks.map((task, taskIdx) => (
+            {openTasks.map((task, taskIdx) => (
               <TaskListItem key={`task-${taskIdx}`} task={task} onChange={fetchTasks} />
             ))}
           </div>
+
+          {completedTasks.length > 0 && (
+            <div className="mt-2">
+              <h2 className="font-semibold p-4 text-sm">Completed</h2>
+              {completedTasks.map((task, taskIdx) => (
+                <TaskListItem key={`task-${taskIdx}`} task={task} onChange={fetchTasks} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       {
-        tasks.length === 0 && (
+        openTasks.length === 0 && completedTasks.length === 0 && (
           <div className="w-full px-8 pt-10">
             <div className="flex justify-center text-center mt-4">
               <p className="block mx-auto text-gray-500">We couldn&apos;t find any Tasks, use the input above to create one!</p>

@@ -8,16 +8,35 @@ export async function GET(req) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 })
   }
 
-  let tasks = await prisma.Task.findMany({
+  let openTasks = await prisma.Task.findMany({
     where: {
       teamId: currentTeam.id,
+      completedAt: null,
     },
     orderBy: {
       id: 'desc',
     },
   })
 
-  return Response.json({ data: tasks })
+  let completedTasks = await prisma.Task.findMany({
+    where: {
+      teamId: currentTeam.id,
+      completedAt: {
+        gte: new Date(new Date().setHours(0, 0, 0, 0)), // Start of current day
+        not: null,
+      },
+    },
+    orderBy: {
+      completedAt: 'desc',
+    },
+  })
+
+  const response = {
+    openTasks,
+    completedTasks,
+  }
+
+  return Response.json({ data: response })
 }
 
 export async function DELETE(req) {
