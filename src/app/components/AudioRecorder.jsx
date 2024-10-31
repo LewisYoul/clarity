@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { MicrophoneIcon } from "@heroicons/react/24/solid";
 
-const AudioRecorder = ({ className }) => {
+const AudioRecorder = ({ className, onCreate }) => {
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
@@ -64,11 +64,33 @@ const AudioRecorder = ({ className }) => {
   const stopRecording = () => {
     setRecordingStatus("inactive");
     mediaRecorder.current.stop();
-    mediaRecorder.current.onstop = () => {
+    mediaRecorder.current.onstop = async () => {
       const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio(audioUrl);
       setAudioChunks([]);
+
+      // Send audio to server
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recording.webm');
+
+      try {
+        const response = await fetch('/api/aiTasks', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to send audio');
+        }
+        
+        const data = await response.json();
+        console.log('Server response:', data);
+
+        onCreate()
+      } catch (error) {
+        console.error('Error sending audio:', error);
+      }
     };
   };
 
@@ -88,9 +110,17 @@ const AudioRecorder = ({ className }) => {
   const colorClasses = recordingStatus === "recording" ? 'bg-green-500' : 'bg-blue-500'
 
   return (
-    <button onClick={handleButtonClick} type="button" className={`${className} ${colorClasses} rounded-full p-1 h-7 w-7`}>
-      <MicrophoneIcon className="h-5 w-5 text-white"/>
-    </button>
+    <>
+      <button onClick={handleButtonClick} type="button" className={`${className} ${colorClasses} rounded-full p-1 h-7 w-7`}>
+        <MicrophoneIcon className="h-5 w-5 text-white"/>
+      </button>
+      {/* {audio && (
+        <audio controls>
+          <source src={audio} type="audio/webm" />
+          Your browser does not support the audio element.
+        </audio>
+      )} */}
+    </>
   );
 };
 export default AudioRecorder;
