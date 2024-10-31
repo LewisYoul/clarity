@@ -62,6 +62,7 @@ export async function POST(request) {
                 The text should be in the format of a short task that can be completed.
                 Do not add a full stop to the end of the text.
                 If the user's input starts with "I had a task" then you should assume that the user means "Add a task".
+                If the user's input isn't an actionable task then you should return "no_task".
               `
             }
           ]
@@ -92,13 +93,45 @@ export async function POST(request) {
         {
           "role": "user",
           "content": [
+            {
+              "type": "text",
+              "text": 'I like big butts and I cannot lie.'
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [{ "type": "text", "text": "no_task" }]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": 'Sometimes I just want to lay down and cry.'
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [{ "type": "text", "text": "no_task" }]
+        },
+        {
+          "role": "user",
+          "content": [
             { "type": "text", "text": transcription.text }
           ]
         }
       ]
     });
 
-    console.log('completion', completion.choices[0].message.content)
+    const task = completion.choices[0].message.content
+
+    console.log('task', task)
+
+    if (task === 'no_task') {
+      return Response.json({ message: "can't convert your message to a task" }, { status: 200 })
+    }
         
     try {
       const task = await prisma.Task.create({
