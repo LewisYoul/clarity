@@ -22,10 +22,10 @@ export default async function Home() {
             <div className="mx-auto max-w-3xl py-16">
               <div className="text-center">
                 <h1 className="text-5xl font-bold tracking-tight text-gray-900">
-                  Keep track of your tasks
+                  Manage Tasks with Your Voice
                 </h1>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                  Obtain clarity by adding the things you need to do
+                  The smart way to organize your life. Just speak your tasks and let BusyFinch handle the rest.
                 </p>
               </div>
             </div>
