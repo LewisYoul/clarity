@@ -71,7 +71,7 @@ export default function LoggedInHeader({ initialTeam }) {
 
   return (
     <header className="inset-x-0 top-0">
-      <nav className="flex items-center justify-between p-6 lg:px-3 relative" aria-label="Global">
+      <nav className="flex items-center justify-between px-4 py-3 lg:px-3 relative" aria-label="Global">
         <div className="flex lg:flex-1">
           <div onClick={openTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
             <img
@@ -100,7 +100,7 @@ export default function LoggedInHeader({ initialTeam }) {
           {isMenuOpen && (
             <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
               <div ref={menuRef} className="h-full w-full relative divide-y divide-gray-500/10">
-                <nav className="flex items-center justify-between p-6">
+                <nav className="flex items-center justify-between px-4 py-3">
                   <div onClick={closeMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
                     <img
                       className="h-9 w-auto"
@@ -143,7 +143,7 @@ export default function LoggedInHeader({ initialTeam }) {
           {isTeamMenuOpen && teamsData && (
             <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
               <div ref={mobileTeamMenuRef} className="h-full w-full relative divide-y divide-gray-500/10">
-                <nav className="flex items-center justify-between p-6">
+                <nav className="flex items-center justify-between px-4 py-3">
                   <div onClick={closeTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
                     <img
                       className="h-9 w-auto"

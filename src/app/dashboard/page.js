@@ -12,16 +12,14 @@ export default async function Dashboard() {
   const { currentTeam } = await authorizeRequest()
 
   return (
-    <div className="bg-white h-full min-h-screen">
-      <div className="max-w-6xl m-auto">
-        <LoggedInHeader initialTeam={currentTeam} />
+    <div className="bg-white h-full min-h-screen flex flex-col">
+      <LoggedInHeader initialTeam={currentTeam} />
 
-        <div className="flex w-full">
-          <ListList />
+      <div className="flex flex-1 w-full border-t border-gray-200">
+        <ListList />
 
-          <div className="w-full">
-            <TasksList />
-          </div>
+        <div className="w-full">
+          <TasksList />
         </div>
       </div>
     </div>
