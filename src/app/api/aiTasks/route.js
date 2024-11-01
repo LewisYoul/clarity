@@ -57,12 +57,11 @@ export async function POST(request) {
             {
               "type": "text",
               "text": `
-                Your task is to convert the user's input (which has been transcribed from an audio file)
-                into a text string.
-                The text should be in the format of a short task that can be completed.
-                Do not add a full stop to the end of the text.
+                Your task is to convert the user's input (which has been transcribed from an audio file) into a text string that is a short task that can be completed.
+                Ideally the user's input will start with "Add a task" but it won't always. Your job is to figure out what the user wants to do.
                 If the user's input starts with "I had a task" then you should assume that the user means "Add a task".
                 If the user's input isn't an actionable task then you should return "no_task".
+                Do not add a full stop to the end of the text.
               `
             }
           ]
@@ -115,6 +114,32 @@ export async function POST(request) {
         {
           "role": "assistant",
           "content": [{ "type": "text", "text": "no_task" }]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Get Alice's phone number from John."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [{ "type": "text", "text": "Get Alice's phone number from John" }]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Buy a loaf of bread from Lidl."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [{ "type": "text", "text": "Buy a loaf of bread from Lidl" }]
         },
         {
           "role": "user",
