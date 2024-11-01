@@ -98,41 +98,35 @@ export default function LoggedInHeader({ initialTeam }) {
             <UserCircleIcon className="h-7 w-7"/>
           </button>
           {isMenuOpen && (
-            <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
-              <div ref={menuRef} className="h-full w-full relative divide-y divide-gray-500/10">
-                <nav className="flex items-center justify-between px-4 py-3">
-                  <div onClick={closeMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
-                    <img
-                      className="h-9 w-auto"
-                      src="/logo.svg"
-                      alt=""
-                    />
-                    <span className="text-md">{teamsData?.currentTeam?.name}</span>
-                  </div>
-                  <button
-                    className=""
-                    onClick={closeMenu}
-                    type="button"
-                  >
-                    <UserCircleIcon className="h-7 w-7"/>
-                  </button>
-                </nav>
+            <div className="lg:hidden fixed h-screen w-screen bg-gray-500/70 inset-x-0 top-0 z-50">
+              <div className="bg-white w-3/4 h-full ml-auto">
+                <div ref={menuRef} className="h-full w-full relative divide-y divide-gray-500/10">
+                  <nav className="flex items-center justify-end px-4 py-3">
+                    <button
+                      className="h-9"
+                      onClick={closeMenu}
+                      type="button"
+                    >
+                      <UserCircleIcon className="h-7 w-7"/>
+                    </button>
+                  </nav>
 
-                <div className="flow-root">
-                  <div className="divide-y divide-gray-500/10">
-                    <div className="p-6">
-                      <Link
-                        href="#"
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                      >
-                        Settings
-                      </Link>
-                      <Link
-                        href="/api/auth/signout"
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                      >
-                        Sign Out
-                      </Link>
+                  <div className="flow-root">
+                    <div className="divide-y divide-gray-500/10">
+                      <div className="p-6">
+                        <Link
+                          href="#"
+                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        >
+                          Settings
+                        </Link>
+                        <Link
+                          href="/api/auth/signout"
+                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        >
+                          Sign Out
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -141,48 +135,42 @@ export default function LoggedInHeader({ initialTeam }) {
           )}
 
           {isTeamMenuOpen && teamsData && (
-            <div className="lg:hidden fixed h-screen w-screen bg-white inset-x-0 top-0 z-50">
-              <div ref={mobileTeamMenuRef} className="h-full w-full relative divide-y divide-gray-500/10">
-                <nav className="flex items-center justify-between px-4 py-3">
-                  <div onClick={closeTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
-                    <img
-                      className="h-9 w-auto"
-                      src="/logo.svg"
-                      alt=""
-                    />
-                    <span className="text-md">{teamsData?.currentTeam?.name}</span>
-                  </div>
+            <div className="lg:hidden fixed h-screen w-screen bg-gray-500/70 inset-x-0 top-0 z-50">
+              <div className="bg-white w-3/4 h-full">
+                <div ref={mobileTeamMenuRef} className="h-full w-full relative divide-y divide-gray-500/10">
+                  <nav className="flex items-center justify-between px-4 py-3">
+                    <div onClick={closeTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
+                      <img
+                        className="h-9 w-auto"
+                        src="/logo.svg"
+                        alt=""
+                      />
+                      <span className="text-md">{teamsData?.currentTeam?.name}</span>
+                    </div>
+                  </nav>
 
-                  <button
-                    className=""
-                    onClick={closeTeamMenu}
-                    type="button"
-                  >
-                    <UserCircleIcon className="h-7 w-7"/>
-                  </button>
-                </nav>
-
-                <div className="flow-root">
-                  <div className="divide-y divide-gray-500/10">
-                    <div className="p-6">
-                      <button
-                        onClick={openNewWorkspaceModal}
-                        className="inline-flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-400 hover:bg-gray-50"
-                      >
-                        New List
-                        <PlusIcon className="w-4 h-4 ml-2" />
-                      </button>
-                      {teamsData.teams.map((team) => (
+                  <div className="flow-root">
+                    <div className="divide-y divide-gray-500/10">
+                      <div className="p-6">
                         <button
-                          onClick={() => {
-                            changeList(team.id)
-                          }}
-                          key={team.id}
-                          className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-50' : ''} inline-flex items-center w-full text-left rounded-lg px-3 py-2.5 text-sm leading-7 text-gray-900 hover:bg-gray-50`}
+                          onClick={openNewWorkspaceModal}
+                          className="inline-flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-400 hover:bg-gray-50"
                         >
-                          <UserIcon className="w-4 h-4 mr-1" />{team.name}
+                          New List
+                          <PlusIcon className="w-4 h-4 ml-2" />
                         </button>
-                      ))}
+                        {teamsData.teams.map((team) => (
+                          <button
+                            onClick={() => {
+                              changeList(team.id)
+                            }}
+                            key={team.id}
+                            className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-50' : ''} inline-flex items-center w-full text-left rounded-lg px-3 py-2.5 text-sm leading-7 text-gray-900 hover:bg-gray-50`}
+                          >
+                            <UserIcon className="w-4 h-4 mr-1" />{team.name}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
