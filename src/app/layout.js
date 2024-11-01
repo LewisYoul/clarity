@@ -9,8 +9,8 @@ const PageWrapper = dynamic(() => import('./components/PageWrapper'), {
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'ClarityAI',
-  description: 'ClarityAI',
+  title: 'BusyFinch',
+  description: 'BusyFinch',
 }
 
 export default function RootLayout({ children }) {
