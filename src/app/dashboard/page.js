@@ -12,7 +12,7 @@ export default async function Dashboard() {
   const { currentTeam } = await authorizeRequest()
 
   return (
-    <div className="bg-gray-900 h-full min-h-screen flex flex-col">
+    <div className="bg-gray-900 min-h-screen flex flex-col">
       <LoggedInHeader initialTeam={currentTeam} />
 
       <div className="flex flex-1 w-full border-t border-gray-700">
