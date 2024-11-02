@@ -75,7 +75,7 @@ export default function LoggedInHeader({ initialTeam }) {
         <div className="flex lg:flex-1">
           <div onClick={openTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
             <img
-              className="h-9 w-auto"
+              className="h-10 w-auto"
               src="/logo.svg"
               alt=""
             />
@@ -141,7 +141,7 @@ export default function LoggedInHeader({ initialTeam }) {
                   <nav className="flex items-center justify-between px-4 py-3">
                     <div onClick={closeTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
                       <img
-                        className="h-9 w-auto"
+                        className="h-10 w-auto"
                         src="/logo.svg"
                         alt=""
                       />
