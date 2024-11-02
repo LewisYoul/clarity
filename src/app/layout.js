@@ -1,4 +1,4 @@
-import { Inter, Gabarito } from 'next/font/google'
+import { Space_Grotesk, Gabarito } from 'next/font/google'
 import './globals.css'
 import dynamic from 'next/dynamic'
 
@@ -6,7 +6,12 @@ const PageWrapper = dynamic(() => import('./components/PageWrapper'), {
   ssr: false
 })
 
-const inter = Inter({ subsets: ['latin'] })
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+})
 const gabarito = Gabarito({ 
   subsets: ['latin'],
   variable: '--font-gabarito'
@@ -21,7 +26,7 @@ export default function RootLayout({ children }) {
   console.log('IS IT ME YOURE LOOKING FOR')
   return (
     <html className="h-full bg-white" lang="en">
-      <body className={`h-full ${inter.className} ${gabarito.variable}`}>
+      <body className={`h-full ${spaceGrotesk.variable} ${gabarito.variable} font-sans`}>
         <PageWrapper>
           {children}
         </PageWrapper>

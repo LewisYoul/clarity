@@ -17,7 +17,9 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       fontFamily: {
-        gabarito: ['var(--font-gabarito)'],
+        sans: ['var(--font-space-grotesk)', 'sans-serif'],
+        gabarito: ['var(--font-gabarito)', 'sans-serif'],
+        spaceGrotesk: ['var(--font-space-grotesk)', 'sans-serif'],
       },
     },
   },

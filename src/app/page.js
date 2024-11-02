@@ -26,7 +26,7 @@ export default async function Home() {
                   <span className="text-gray-300 font-gabarito">Manage Tasks with</span><br />
                   <span className="text-palqrblue font-gabarito flex items-center"> Just Your Voice <img src="/speaker.svg" alt="BusyFinch Logo" className="h-8 w-8 ml-2" /></span>
                 </h1>
-                <p className="mt-5 text-md mb-6 leading-8 text-gray-300">
+                <p className="mt-4 text-md mb-6 leading-8 text-gray-300 font-gabarito">
                   Typing takes ages. Save time by cutting out the middleman and streamline your task management.
                 </p>
               </div>
@@ -37,12 +37,12 @@ export default async function Home() {
                   <span className="text-gray-300 font-gabarito">Manage Tasks with</span>
                   <span className="text-palqrblue font-gabarito items-center"> Just Your Voice <img src="/speaker.svg" alt="BusyFinch Logo" className="h-8 w-8 inline mb-1" /></span>
                 </h1>
-                <p className="mt-5 text-md mb-6 leading-8 text-gray-300">
+                <p className="mt-4 text-md mb-6 leading-8 text-gray-300 font-gabarito">
                   Typing takes ages. Save time by cutting out the middleman and streamline your task management.
                 </p>
               </div>
 
-              <Link href="/sign-up" className="mt-6 bg-palqrblue text-white px-4 py-2 rounded-md">Get Started</Link>
+              <Link href="/sign-up" className="mt-6 bg-palqrblue text-white px-4 py-2 rounded-md font-gabarito">Get Started</Link>
             </div>
             <img src="/voice-hero.svg" alt="BusyFinch Logo" className="flex-1 h-72 w-72 mt-12 lg:mt-0" />
           </div>
