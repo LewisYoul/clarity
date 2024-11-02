@@ -18,8 +18,8 @@ const gabarito = Gabarito({
 })
 
 export const metadata = {
-  title: 'BusyFinch',
-  description: 'Create and manage your tasks and todo lists by using only your voice. No typing, no clicking, just talking.',
+  title: 'BusyFinch | Manage Tasks and To-Do Lists with your Voice',
+  description: 'Typing takes ages. Create and manage your tasks and to-do lists by using your voice. Increase your productivity through speech.',
 }
 
 export default function RootLayout({ children }) {
