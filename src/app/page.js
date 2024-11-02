@@ -10,7 +10,7 @@ export default async function Home() {
 
   if (session === null) {
     return (
-      <div className="bg-gray-900 h-screen">
+      <div className="bg-gray-900">
         <div className="max-w-5xl m-auto">
           <Header />
 

@@ -23,7 +23,6 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
-  console.log('IS IT ME YOURE LOOKING FOR')
   return (
     <html className="h-full bg-white" lang="en">
       <body className={`h-full ${spaceGrotesk.variable} ${gabarito.variable} font-sans`}>
