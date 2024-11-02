@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import Header from "./components/Header"
 import { redirect } from 'next/navigation';
 import dynamic from 'next/dynamic'
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import Link from 'next/link'
 
 const LoggedOutQrCodeGenerator = dynamic(() => import('./components/qr-code-generators/LoggedOutQrCodeGenerator'), {
   ssr: false
@@ -21,14 +21,15 @@ export default async function Home() {
           <div className="w-full py-16 flex items-center justify-between px-6 pt-14 lg:px-8">
             <div className="text-left flex-2">
               <h1 className="text-5xl font-bold text-gray-300">
-                <span className="text-gray-300">Manage Tasks</span>
-                <span className="text-palqrblue"> with Your Voice <img src="/speaker.svg" alt="BusyFinch Logo" className="h-8 w-8 inline-block" /></span>
+                <span className="text-gray-300 font-gabarito">Manage Tasks with</span><br />
+                <span className="text-palqrblue font-gabarito flex items-center"> Just Your Voice <img src="/speaker.svg" alt="BusyFinch Logo" className="h-8 w-8 ml-2" /></span>
               </h1>
-              <p className="mt-6 text-md leading-8 text-gray-400">
+              <p className="mt-5 text-md mb-6 leading-8 text-gray-300">
                 Typing takes ages. Save time by cutting out the middleman and streamline your task management.
               </p>
+              <Link href="/sign-up" className="mt-6 bg-palqrblue text-white px-4 py-2 rounded-md">Get Started</Link>
             </div>
-            <img src="/voice-hero.svg" alt="BusyFinch Logo" className="flex-1h-72 w-72" />
+            <img src="/voice-hero.svg" alt="BusyFinch Logo" className="flex-1 h-72 w-72" />
           </div>
 
 
