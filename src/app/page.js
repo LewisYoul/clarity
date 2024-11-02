@@ -14,22 +14,23 @@ export default async function Home() {
 
   if (session === null) {
     return (
-      <div className="bg-white h-screen">
-        <div className="max-w-6xl m-auto">
+      <div className="bg-gray-900 h-screen">
+        <div className="max-w-5xl m-auto">
           <Header />
 
-          <div className="relative isolate px-6 pt-14 lg:px-8">
-            <div className="mx-auto max-w-3xl py-16">
-              <div className="text-center">
-                <h1 className="text-5xl font-bold tracking-tight text-gray-900">
-                  Manage Tasks with Your Voice
-                </h1>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
-                  The smart way to organize your life. Just speak your tasks and let BusyFinch handle the rest.
-                </p>
-              </div>
+          <div className="w-full py-16 flex items-center justify-between px-6 pt-14 lg:px-8">
+            <div className="text-left flex-2">
+              <h1 className="text-5xl font-bold text-gray-300">
+                <span className="text-gray-300">Manage Tasks</span>
+                <span className="text-palqrblue"> with Your Voice <img src="/speaker.svg" alt="BusyFinch Logo" className="h-8 w-8 inline-block" /></span>
+              </h1>
+              <p className="mt-6 text-md leading-8 text-gray-400">
+                Typing takes ages. Save time by cutting out the middleman and streamline your task management.
+              </p>
             </div>
-            </div>
+            <img src="/voice-hero.svg" alt="BusyFinch Logo" className="flex-1h-72 w-72" />
+          </div>
+
 
         </div>
       </div>
