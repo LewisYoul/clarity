@@ -98,8 +98,8 @@ export default function LoggedInHeader({ initialTeam }) {
             <UserCircleIcon className="h-7 w-7"/>
           </button>
           {isMenuOpen && (
-            <div className="lg:hidden fixed h-screen w-screen bg-gray-500/70 inset-x-0 top-0 z-50">
-              <div className="bg-white w-3/4 h-full ml-auto">
+            <div className="lg:hidden fixed h-screen w-screen bg-gray-500/70 inset-x-0 top-0 z-50 text-gray-300">
+              <div className="bg-gray-900 w-3/4 h-full ml-auto">
                 <div ref={menuRef} className="h-full w-full relative divide-y divide-gray-500/10">
                   <nav className="flex items-center justify-end px-4 py-3">
                     <button
@@ -116,16 +116,16 @@ export default function LoggedInHeader({ initialTeam }) {
                       <div className="p-6">
                         <Link
                           href="#"
-                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
                         >
                           Settings
                         </Link>
-                        <Link
-                          href="/api/auth/signout"
-                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        <button
+                          onClick={() => { signOut({ callbackUrl: '/' }) }}
+                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-300 hover:bg-gray-800"
                         >
                           Sign Out
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>
