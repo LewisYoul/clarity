@@ -42,7 +42,7 @@ export default async function Home() {
                 </p>
               </div>
 
-              <Link href="/sign-up" className="mt-6 bg-palqrblue text-white px-4 py-2 rounded-md font-gabarito">Get Started</Link>
+              <Link href="/sign-up" className="mt-6 bg-palqrblue text-white px-4 py-2 font-gabarito">Get Started</Link>
             </div>
             <img src="/voice-hero.svg" alt="BusyFinch Logo" className="flex-1 h-72 w-72 mt-12 lg:mt-0" />
           </div>

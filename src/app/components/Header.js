@@ -34,12 +34,12 @@ export default function Header() {
         ))}
       </div>
       <div className="lg:flex lg:flex-1 lg:justify-end">
-        <Link href="/sign-in" className="inline-flex mr-2 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+        <Link href="/sign-in" className="inline-flex mr-2 bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
           Log in
         </Link>
         <Link
           href="/sign-up"
-          className="inline-flex rounded-md bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-palqrblue ring-1 ring-inset ring-palqrblue"
+          className="inline-flex bg-palqrblue px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-palqrblue ring-1 ring-inset ring-palqrblue"
         >
           Sign Up  
         </Link>
