@@ -4,6 +4,7 @@ import Header from "./components/Header"
 import { redirect } from 'next/navigation';
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import Faq from './components/Faq'
 
 const LoggedOutQrCodeGenerator = dynamic(() => import('./components/qr-code-generators/LoggedOutQrCodeGenerator'), {
   ssr: false
@@ -47,6 +48,23 @@ export default async function Home() {
             <img src="/voice-hero.svg" alt="BusyFinch Logo" className="flex-1 h-72 w-72 mt-12 lg:mt-0" />
           </div>
 
+          <div className="px-6 py-16 lg:px-8">
+            <h2 className="text-3xl font-bold text-gray-300 font-gabarito mb-8 text-center">Frequently Asked Questions</h2>
+            <div className="mx-auto">
+              <Faq 
+                question="How does voice task management work?"
+                answer="Simply speak your task and our system will automatically convert it into a written task. No typing needed!"
+              />
+              <Faq 
+                question="What platforms are supported?"
+                answer="Our application works on all modern web browsers, both desktop and mobile. We're currently working on mobile apps for Android and iOS."
+              />
+              <Faq 
+                question="Do I need to pay?"
+                answer="BusyFinch is free to use right now but there will be a paid version in the future. Transcribing your voice and creating tasks from it costs money."
+              />
+            </div>
+          </div>
 
         </div>
       </div>
