@@ -20,9 +20,9 @@ export default function ListList() {
   if (!teamsData) return null; // or a loading spinner
 
   return (
-    <div className="w-64 border-r border-gray-700 hidden md:block h-full">
+    <div className="w-64 hidden md:block h-full">
       {teamsData.teams.length > 1 && (
-        <div>
+        <>
           <div
             className="inline-flex items-center justify-between w-full rounded-lg px-4 py-2 text-sm leading-7 text-gray-400">
             LISTS
@@ -42,7 +42,7 @@ export default function ListList() {
               <UserIcon className="w-4 h-4 mr-1" />{team.name}
             </button>
           ))}
-        </div>
+        </>
       )}
     </div>
   )

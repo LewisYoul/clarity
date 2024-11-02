@@ -15,10 +15,10 @@ export default async function Dashboard() {
     <div className="bg-gray-900 min-h-screen flex flex-col">
       <LoggedInHeader initialTeam={currentTeam} />
 
-      <div className="flex flex-1 w-full border-t border-gray-700">
+      <div className="flex flex-1 w-full border-t border-gray-700 h-full">
         <ListList />
 
-        <div className="w-full">
+        <div className="w-full border-l border-gray-700">
           <TasksList />
         </div>
       </div>
