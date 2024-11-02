@@ -20,6 +20,11 @@ const gabarito = Gabarito({
 export const metadata = {
   title: 'BusyFinch | Manage Tasks and To-Do Lists with your Voice',
   description: 'Typing takes ages. Create and manage your tasks and to-do lists by using your voice. Increase your productivity through speech.',
+  openGraph: {
+    title: 'BusyFinch | Manage Tasks and To-Do Lists with your Voice',
+    description: 'Typing takes ages. Create and manage your tasks and to-do lists by using your voice. Increase your productivity through speech.',
+    url: 'https://busyfinch.com',
+  }
 }
 
 export default function RootLayout({ children }) {
