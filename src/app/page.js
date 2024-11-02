@@ -48,12 +48,16 @@ export default async function Home() {
             <img src="/voice-hero.svg" alt="BusyFinch Logo" className="flex-1 h-72 w-72 mt-12 lg:mt-0" />
           </div>
 
-          <div className="px-6 py-16 lg:px-8">
+          <div className="px-6 py-16 lg:px-8" id="faq">
             <h2 className="text-3xl font-bold text-gray-300 font-gabarito mb-8 text-center">Frequently Asked Questions</h2>
             <div className="mx-auto">
               <Faq 
                 question="How does voice task management work?"
                 answer="Simply speak your task and our system will automatically convert it into a written task. No typing needed!"
+              />
+              <Faq 
+                question="Do I have to use my voice?"
+                answer="No, you can use the keyboard and mouse as well."
               />
               <Faq 
                 question="What platforms are supported?"

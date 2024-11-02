@@ -1,13 +1,9 @@
-"use client";
-
-import { useState } from 'react'
 import Link from 'next/link';
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const navigation = [
-    // { name: 'Product', href: '#' },
+    { name: 'FAQs', href: '#faq' },
     // { name: 'Features', href: '#' },
     // { name: 'Marketplace', href: '#' },
     // { name: 'Company', href: '#' },
@@ -28,7 +24,7 @@ export default function Header() {
       </div>
       <div className="hidden lg:flex lg:gap-x-12">
         {navigation.map((item) => (
-          <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
+          <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-400">
             {item.name}
           </a>
         ))}
