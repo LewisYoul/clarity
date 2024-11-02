@@ -41,6 +41,16 @@ export default function RootLayout({ children }) {
             })(window,document,'script','dataLayer','GTM-TJTSX6H8');
           `}
         </Script>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-Q784CT4R7T"></Script>
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Q784CT4R7T');
+          `}
+        </Script>
       </head>
       <body className={`h-full ${spaceGrotesk.variable} ${gabarito.variable} font-sans`}>
         <noscript>
