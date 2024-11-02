@@ -79,10 +79,10 @@ export default function LoggedInHeader({ initialTeam }) {
               src="/logo.svg"
               alt=""
             />
-            <span className="text-md">{teamsData?.currentTeam?.name}</span>
+            <span className="text-md text-gray-300">{teamsData?.currentTeam?.name}</span>
           </div>
         </div>
-        <div className="flex flex-1 justify-end items-center">
+        <div className="flex flex-1 justify-end items-center text-gray-300">
           <button
             onClick={openMenu}
             type="button"
@@ -135,8 +135,8 @@ export default function LoggedInHeader({ initialTeam }) {
           )}
 
           {isTeamMenuOpen && teamsData && (
-            <div className="lg:hidden fixed h-screen w-screen bg-gray-500/70 inset-x-0 top-0 z-50">
-              <div className="bg-white w-3/4 h-full">
+            <div className="lg:hidden fixed h-screen w-screen bg-gray-500/70 inset-x-0 top-0 z-50 text-gray-300">
+              <div className="bg-gray-900 w-3/4 h-full">
                 <div ref={mobileTeamMenuRef} className="h-full w-full relative divide-y divide-gray-500/10">
                   <nav className="flex items-center justify-between px-4 py-3">
                     <div onClick={closeTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
@@ -154,7 +154,7 @@ export default function LoggedInHeader({ initialTeam }) {
                       <div className="p-6">
                         <button
                           onClick={openNewWorkspaceModal}
-                          className="inline-flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-400 hover:bg-gray-50"
+                          className="inline-flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-300 hover:bg-gray-800"
                         >
                           New List
                           <PlusIcon className="w-4 h-4 ml-2" />
@@ -165,7 +165,7 @@ export default function LoggedInHeader({ initialTeam }) {
                               changeList(team.id)
                             }}
                             key={team.id}
-                            className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-50' : ''} inline-flex items-center w-full text-left rounded-lg px-3 py-2.5 text-sm leading-7 text-gray-900 hover:bg-gray-50`}
+                            className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-800' : ''} inline-flex items-center w-full text-left px-3 py-2.5 text-sm leading-7 text-gray-300 hover:bg-gray-800`}
                           >
                             <UserIcon className="w-4 h-4 mr-1" />{team.name}
                           </button>
@@ -178,19 +178,19 @@ export default function LoggedInHeader({ initialTeam }) {
             </div>
           )}
 
-          <div ref={mobileMenuRef} className={`invisible absolute w-[200px] bg-white top-16 right-0 z-50 rounded-md border ${menuclass}`}>
+          <div ref={mobileMenuRef} className={`invisible absolute w-[200px] bg-gray-900 top-16 right-0 z-50 border border-gray-700 ${menuclass}`}>
             <div className="h-full w-full relative divide-y divide-gray-500/10">
               <div className="flow-root">
                 <div>
                   <Link
                     href="#"
-                    className="inline-flex items-center w-full rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                    className="inline-flex items-center w-full rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-300 hover:bg-gray-800"
                   >
                     <Cog8ToothIcon className="w-4 h-4 mr-1" /> Settings
                   </Link>
                   <button
                     onClick={() => { signOut({ callbackUrl: '/' }) }}
-                    className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                    className="inline-flex items-center w-full text-left rounded-lg px-3 py-1.5 text-sm leading-7 text-gray-300 hover:bg-gray-800"
                   >
                     <ArrowLeftOnRectangleIcon className="w-4 h-4 mr-1" />Sign Out
                   </button>

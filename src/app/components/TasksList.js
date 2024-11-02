@@ -65,10 +65,10 @@ export default function Tasks() {
             <div className="mt-2">
               <button 
                 onClick={() => setShowCompleted(!showCompleted)}
-                className="flex items-center font-semibold p-4 text-sm w-full"
+                className="flex items-center font-semibold p-4 text-sm w-full text-gray-300"
               >
                 <span>{showCompleted ? <ChevronDownIcon className="h-4 w-4" /> : <ChevronRightIcon className="h-4 w-4" />}</span>
-                <span className="ml-2">Completed</span>
+                <span className="ml-2 text-gray-300">Completed</span>
               </button>
               {showCompleted && (
                 <div>

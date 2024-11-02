@@ -38,7 +38,7 @@ export default function SignUpForm() {
   return(
     <form onSubmit={handleSubmit} className="space-y-6" action="#" method="POST">
       <div>
-        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-300">
           Email address
         </label>
         <div className="mt-2">
@@ -48,7 +48,7 @@ export default function SignUpForm() {
             type="email"
             autoComplete="email"
             required
-            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full bg-gray-800 border-0 py-1.5 px-2 text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             autoFocus
           />
         </div>
@@ -56,7 +56,7 @@ export default function SignUpForm() {
 
       <div>
         <div className="flex items-center justify-between">
-          <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-300">
             Password
           </label>
         </div>
@@ -66,14 +66,14 @@ export default function SignUpForm() {
             name="password"
             type="password"
             required
-            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full bg-gray-800 border-0 py-1.5 px-2 text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
       </div>
 
       <div>
         <div className="flex items-center justify-between">
-          <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-300">
             Confirm Password
           </label>
         </div>
@@ -83,7 +83,7 @@ export default function SignUpForm() {
             name="passwordConfirmation"
             type="password"
             required
-            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full bg-gray-800 border-0 py-1.5 px-2 text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
       </div>
@@ -91,7 +91,7 @@ export default function SignUpForm() {
       <div>
         <button
           type="submit"
-          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="flex w-full justify-center bg-palqrblue px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Sign up
         </button>

@@ -84,10 +84,10 @@ export default function TaskListItem({ task, onChange }) {
     }
   };
 
-  const labelClasses = task.completedAt ? 'line-through text-gray-300' : 'text-gray-900'
+  const labelClasses = task.completedAt ? 'line-through text-gray-400' : 'text-gray-300'
 
   return(
-    <div className="relative flex items-start py-4 border-b border-gray-200 px-4 items-center">
+    <div className="relative flex items-start py-4 border-b border-gray-700 px-4 items-center">
       <div className="flex h-6 items-center">
         <input
           onChange={handleChange}

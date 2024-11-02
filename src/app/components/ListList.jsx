@@ -20,7 +20,7 @@ export default function ListList() {
   if (!teamsData) return null; // or a loading spinner
 
   return (
-    <div className="w-64 border-r border-gray-200 hidden md:block h-full">
+    <div className="w-64 border-r border-gray-700 hidden md:block h-full">
       {teamsData.teams.length > 1 && (
         <div>
           <div
@@ -28,7 +28,7 @@ export default function ListList() {
             LISTS
             <button
               onClick={openNewWorkspaceModal}
-              className="ml-2 hover:bg-gray-100 rounded-md p-1"
+              className="ml-2 hover:bg-gray-800 rounded-md p-1 text-gray-300"
             >
               <PlusIcon className="w-4 h-4" />
             </button>
@@ -37,7 +37,7 @@ export default function ListList() {
             <button
               onClick={() => changeList(team.id)}
               key={team.id}
-              className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-50' : null} inline-flex items-center w-full text-left rounded-lg px-4 py-1.5 text-sm leading-7 text-gray-900 hover:bg-gray-50`}
+              className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-800' : null} inline-flex items-center w-full text-left px-4 py-1.5 text-sm leading-7 text-gray-300 hover:bg-gray-800`}
             >
               <UserIcon className="w-4 h-4 mr-1" />{team.name}
             </button>

@@ -52,7 +52,7 @@ export default function SignInForm() {
     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form onSubmit={handleSubmit} className="space-y-6" action="#" method="POST">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-300">
             Email address
           </label>
           <div className="mt-2">
@@ -62,7 +62,7 @@ export default function SignInForm() {
               type="email"
               autoComplete="email"
               required
-              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6"
+              className="block w-full bg-gray-800 border-0 py-1.5 px-2 text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6"
               autoFocus
             />
           </div>
@@ -70,7 +70,7 @@ export default function SignInForm() {
 
         <div>
           <div className="flex items-center justify-between">
-            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-300">
               Password
             </label>
             <div className="text-sm">
@@ -86,7 +86,7 @@ export default function SignInForm() {
               type="password"
               autoComplete="current-password"
               required
-              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6"
+              className="block w-full bg-gray-800 border-0 py-1.5 px-2 text-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-palqrblue sm:text-sm sm:leading-6"
             />
           </div>
         </div>
@@ -94,7 +94,7 @@ export default function SignInForm() {
         <div>
           <button
             type="submit"
-            className="flex w-full justify-center rounded-md bg-palqrblue px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
+            className="flex w-full justify-center bg-palqrblue px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-palqrblue"
           >
             Sign in
           </button>

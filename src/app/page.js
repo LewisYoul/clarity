@@ -2,13 +2,8 @@ import { options } from "./api/auth/[...nextauth]/options"
 import { getServerSession } from 'next-auth/next'
 import Header from "./components/Header"
 import { redirect } from 'next/navigation';
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Faq from './components/Faq'
-
-const LoggedOutQrCodeGenerator = dynamic(() => import('./components/qr-code-generators/LoggedOutQrCodeGenerator'), {
-  ssr: false
-})
 
 export default async function Home() {
   const session = await getServerSession(options)
