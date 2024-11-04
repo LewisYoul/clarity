@@ -4,8 +4,9 @@ import { redirect } from 'next/navigation';
 import SignInForm from "../components/SignInForm";
 import Link from "next/link";
 
-export default async function SignUp() {
+export default async function SignUp({ searchParams }) {
   const session = await getServerSession(options)
+  const message = searchParams.message
 
   if (session === null) {
     return (
@@ -19,6 +20,11 @@ export default async function SignUp() {
                 alt="Your Company"
               />
             </Link>
+            {message && (
+              <div className="mt-4 text-center text-sm text-green-500">
+                {message}
+              </div>
+            )}
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-300">
               Sign in to your account
             </h2>
@@ -28,7 +34,7 @@ export default async function SignUp() {
         </div>
       </>
     )
-    } else {
-      redirect("dashboard")
-    }
+  } else {
+    redirect("dashboard")
+  }
 }

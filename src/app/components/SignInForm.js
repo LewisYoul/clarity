@@ -19,12 +19,6 @@ export default function SignInForm() {
 
       return
     }
-
-    const toastMessage = urlParams.get('toastMessage')
-
-    if (!toastMessage) { return }
-
-    showToast(toastMessage)
   }, [])
 
   const handleSubmit = async (e) => {
@@ -34,8 +28,6 @@ export default function SignInForm() {
       email: data.get('email'),
       password: data.get('password'),
     }
-
-    console.log(params);
 
     try {
       signIn('credentials', { ...params, redirect: true, callbackUrl: '/dashboard' })

@@ -18,38 +18,40 @@ export async function POST(req) {
     if (user) {
       
       try {
-        const token = crypto.randomBytes(32).toString('hex');
+        if (process.env.NODE_ENV !== 'development') {
+          const token = crypto.randomBytes(32).toString('hex');
 
-        const res = await prisma.passwordResetRequest.create({
-          data: {
-            userId: user.id,
-            token,
-            expiresAt: new Date(Date.now() + 3600000),
-          }
-        })
+          const res = await prisma.passwordResetRequest.create({
+            data: {
+              userId: user.id,
+              token,
+              expiresAt: new Date(Date.now() + 3600000),
+            }
+          })
 
-        console.log(res)
+          console.log(res)
 
-        const postmarkClient = new postmark.ServerClient(process.env.POSTMARK_SERVER_ID);
+          const postmarkClient = new postmark.ServerClient(process.env.POSTMARK_SERVER_ID);
 
-        const html = `
-          <p>Hello ${user.email},</p>
-          <p>A request has been made to reset your password. Please click the following link to reset your password: https://busyfinch.com/reset-password?token=${token}.</p>
-          <p>If you did not make this request, please ignore this email.</p>
-          <br>
-          <p>Thanks,</p>
-          <p>BusyFinch</p>
-        `
-        const text = `Hello ${user.email}, A request has been made to reset your password. Please click the following link to reset your password: https://busyfinch.com/reset-password?token=${token}. If you did not make this request, please ignore this email. Thanks, BusyFinch`
+          const html = `
+            <p>Hello ${user.email},</p>
+            <p>A request has been made to reset your password. Please click the following link to reset your password: https://busyfinch.com/reset-password?token=${token}.</p>
+            <p>If you did not make this request, please ignore this email.</p>
+            <br>
+            <p>Thanks,</p>
+            <p>BusyFinch</p>
+          `
+          const text = `Hello ${user.email}, A request has been made to reset your password. Please click the following link to reset your password: https://busyfinch.com/reset-password?token=${token}. If you did not make this request, please ignore this email. Thanks, BusyFinch`
 
-        postmarkClient.sendEmail({
-          "From": "hello@busyfinch.com",
-          "To": user.email,
-          "Subject": "BusyFinch Password Reset Request",
-          "HtmlBody": html,
-          "TextBody": text,
-          "MessageStream": "broadcast"
-        });
+          postmarkClient.sendEmail({
+            "From": "hello@busyfinch.com",
+            "To": user.email,
+            "Subject": "BusyFinch Password Reset Request",
+            "HtmlBody": html,
+            "TextBody": text,
+            "MessageStream": "broadcast"
+          });
+        }
 
         return Response.json({ message: 'Please check your email for a link to reset your password.' }, { status: 200 });
       } catch (error) {

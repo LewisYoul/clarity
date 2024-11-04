@@ -21,7 +21,7 @@ export default function ResetPasswordForm({ userId, token }) {
       const res = await axios.post('/api/resetPassword', params)
       const message = res.data.message
 
-      router.push(`/sign-in?toastMessage=${message}`)
+      router.push(`/sign-in?message=${message}`)
     } catch (error) {
       console.error(error)
 
