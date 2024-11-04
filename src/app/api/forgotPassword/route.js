@@ -34,21 +34,21 @@ export async function POST(req) {
 
         const html = `
           <p>Hello ${user.email},</p>
-          <p>A request has been made to reset your password. Please click the following link to reset your password: https://palqr.com/reset-password?token=${token}.</p>
+          <p>A request has been made to reset your password. Please click the following link to reset your password: https://busyfinch.com/reset-password?token=${token}.</p>
           <p>If you did not make this request, please ignore this email.</p>
           <br>
           <p>Thanks,</p>
-          <p>PalQR</p>
+          <p>BusyFinch</p>
         `
-        const text = `Hello ${user.email}, A request has been made to reset your password. Please click the following link to reset your password: https://palqr.com/reset-password?token=${token}. If you did not make this request, please ignore this email. Thanks, PalQR`
+        const text = `Hello ${user.email}, A request has been made to reset your password. Please click the following link to reset your password: https://busyfinch.com/reset-password?token=${token}. If you did not make this request, please ignore this email. Thanks, BusyFinch`
 
         postmarkClient.sendEmail({
-          "From": "hello@palqr.com",
+          "From": "hello@busyfinch.com",
           "To": user.email,
-          "Subject": "PalQR Password Reset Request",
+          "Subject": "BusyFinch Password Reset Request",
           "HtmlBody": html,
           "TextBody": text,
-          "MessageStream": "outbound"
+          "MessageStream": "broadcast"
         });
 
         return Response.json({ message: 'Please check your email for a link to reset your password.' }, { status: 200 });
