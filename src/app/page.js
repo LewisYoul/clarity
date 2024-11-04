@@ -65,6 +65,14 @@ export default async function Home() {
             </div>
           </div>
 
+          <footer className="px-6 py-8 border-t border-gray-800">
+            <div className="text-center text-gray-400 font-gabarito">
+              <a href="mailto:hello@busyfinch.com" className="hover:text-palqrblue transition-colors">
+                Contact us: hello@busyfinch.com
+              </a>
+            </div>
+          </footer>
+
         </div>
       </div>
     )
