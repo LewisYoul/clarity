@@ -1,13 +1,49 @@
+'use client'
+
 import { useState, useRef, useEffect } from "react";
 import { MicrophoneIcon } from "@heroicons/react/24/solid";
+import useLongPress from "../utils/useLongPress";
 
-const AudioRecorder = ({ className, onCreate }) => {
+const AudioRecorder = ({ className }) => {
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
-  const [recordingStatus, setRecordingStatus] = useState("inactive");
+  const [isRecording, setIsRecording] = useState(false);
   const [stream, setStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
+  const [durationSeconds, setDurationSeconds] = useState(0);
+  const intervalIdRef = useRef(null);
+
+  useEffect(() => {
+    console.log('ds', durationSeconds)
+  }, [durationSeconds])
+
+  const onLongPressStart = () => {
+    console.log('long press started')
+
+    const interval = setInterval(() => {
+      setDurationSeconds(prev => prev + 1);
+    }, 1000)
+
+    intervalIdRef.current = interval;
+    setIsRecording(true)
+  }
+
+  const onLongPressEnd = () => {
+    console.log('long press ended')
+    if (intervalIdRef.current) {
+      clearInterval(intervalIdRef.current)
+      intervalIdRef.current = null;
+    }
+    setDurationSeconds(0)
+    setIsRecording(false)
+  }
+
+  const onRecord = useLongPress(onLongPressStart, onLongPressEnd, 10000)
+
+  const onCreate = () => {
+    console.log('created')
+  }
 
   console.log('permission', permission)
 
@@ -107,13 +143,16 @@ const AudioRecorder = ({ className, onCreate }) => {
     }
   }
 
-  const colorClasses = recordingStatus === "recording" ? 'bg-green-500' : 'bg-blue-500'
+  const colorClasses = isRecording ? 'bg-green-500' : 'bg-blue-500'
 
   return (
     <>
-      <button onClick={handleButtonClick} type="button" className={`${className} ${colorClasses} rounded-full p-1 h-7 w-7`}>
-        <MicrophoneIcon className="h-5 w-5 text-white"/>
-      </button>
+      <div className="fixed bottom-10 right-10">
+        <button {...onRecord} type="button" className={`${className} ${colorClasses} rounded-full p-1 h-12 w-12 relative`}>
+          {isRecording && <div className={`w-9 bg-green-500 text-white text-sm absolute top-3.5 right-10 rounded-l-full`}>{durationSeconds}s</div>}
+          <MicrophoneIcon className="h-10 w-10 text-white"/>
+        </button>
+      </div>
       {/* {audio && (
         <audio controls>
           <source src={audio} type="audio/webm" />
