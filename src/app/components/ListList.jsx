@@ -24,6 +24,7 @@ function ListListItem({ list }) {
   if (list.name !== 'Personal') {
     popoverItems.push({
       label: 'Delete',
+      color: 'red',
       onClick: () => {
         setAlertContent({
           title: 'Delete list',
