@@ -2,14 +2,12 @@
 
 import { useCallback, useEffect, useState, useContext } from "react";
 import { showToast } from "../utils/toastUtils";
-import { ModalContext } from "../contexts/modalContext"
 import CreateTask from "./CreateTask";
 import TaskListItem from "./TaskListItem";
 import { ListsContext } from "../contexts/ListsProvider";
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 
 export default function Tasks() {
-  const { setModalContent } = useContext(ModalContext)
   const { teamsData } = useContext(ListsContext)
   const [openTasks, setOpenTasks] = useState(null);
   const [completedTasks, setCompletedTasks] = useState(null);

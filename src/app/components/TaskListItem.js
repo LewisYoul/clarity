@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { NotificationContext } from '../contexts/notificationContext'
 import { AlertContext } from '../contexts/alertContext'
 import Popover from './Popover'
+import { CheckCircleIcon } from '@heroicons/react/24/outline'
 
 export default function TaskListItem({ task, onChange }) {
   const { setNotificationContent } = useContext(NotificationContext)
@@ -89,6 +90,7 @@ export default function TaskListItem({ task, onChange }) {
   return(
     <div className="relative flex items-start py-4 border-b border-gray-700 px-4 items-center">
       <div className="flex h-6 items-center">
+        {/* <CheckCircleIcon className="h-4 w-4 text-green-400" /> */}
         <input
           onChange={handleChange}
           id={`task-${task.id}`}

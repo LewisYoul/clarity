@@ -5,7 +5,7 @@ export const ListsContext = createContext();
 const ListsProvider = ({ children }) => {
   const [teamsData, setTeamsData] = useState(null);
 
-  const fetchTeams = async () => {
+  const fetchLists = async () => {
     try {
       const response = await fetch('/api/teams');
       if (response.ok) {
@@ -21,7 +21,7 @@ const ListsProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchTeams();
+    fetchLists();
   }, []);
 
   const changeList = async (teamId) => {
@@ -34,7 +34,7 @@ const ListsProvider = ({ children }) => {
       if (response.ok) {
         console.log('List changed successfully');
 
-        fetchTeams();
+        fetchLists();
       } else {
         console.error('Failed to change list');
       }
@@ -44,7 +44,7 @@ const ListsProvider = ({ children }) => {
   };
 
   return (
-    <ListsContext.Provider value={{ teamsData, setTeamsData, changeList }}>
+    <ListsContext.Provider value={{ teamsData, setTeamsData, changeList, fetchLists }}>
       {children}
     </ListsContext.Provider>
   );

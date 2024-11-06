@@ -1,6 +1,70 @@
 import { authorizeRequest } from '@/app/utils/sessionUtils';
 import prisma from '../../utils/prisma';
 
+export async function DELETE(req) {
+  const { currentUser, currentTeam } = await authorizeRequest();
+
+  if (!currentUser || !currentTeam) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 })
+  }
+
+  const params = req.nextUrl.searchParams;
+  const listId = Number(params.get('id'));
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.Task.deleteMany({
+        where: {
+          teamId: currentTeam.id,
+        },
+      })
+
+      const personalTeamId = await tx.Team.findFirst({
+        where: {
+          name: "Personal",
+          teamUsers: {
+            some: {
+              userId: currentUser.id
+            }
+          }
+        },
+        select: {
+          id: true
+        }
+      }).then(team => team.id)
+
+      // Update users' currentTeamId who have this team as their current team
+      await tx.User.updateMany({
+        where: {
+          currentTeamId: listId
+        },
+        data: {
+          // Set to their personal team (where name is "Personal" and they are a member)
+          currentTeamId: personalTeamId
+        }
+      });
+
+      await tx.TeamUser.deleteMany({
+        where: {
+          teamId: listId
+        }
+      })
+
+      await tx.Team.delete({
+        where: {
+          id: listId
+        }
+      })
+    })
+
+    return Response.json({ message: 'List deleted successfully' })
+  } catch (error) {
+    console.error(error)
+
+    return Response.json({ message: 'There was a problem deleting this list. If this problem continues please contact us.' }, { status: 500 })
+  }
+}
+
 export async function GET(req) {
   const { currentUser, currentTeam } = await authorizeRequest();
   

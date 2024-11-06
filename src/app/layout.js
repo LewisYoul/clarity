@@ -15,7 +15,10 @@ const spaceGrotesk = Space_Grotesk({
 })
 const gabarito = Gabarito({ 
   subsets: ['latin'],
-  variable: '--font-gabarito'
+  variable: '--font-gabarito',
+  display: 'swap',
+  adjustFontFallback: false,
+  weight: ['400', '500', '600', '700'],
 })
 
 export const metadata = {
