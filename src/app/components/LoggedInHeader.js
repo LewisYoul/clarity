@@ -7,7 +7,7 @@ import { useState, useRef, useEffect, useCallback, useContext } from 'react'
 import CreateList from './CreateList'
 import { ListsContext } from '../contexts/ListsProvider'
 import { ModalContext } from '../contexts/modalContext'
-
+import ListListItem from './ListListItem'
 
 export default function LoggedInHeader({ initialTeam }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -22,6 +22,11 @@ export default function LoggedInHeader({ initialTeam }) {
 
   const handleOutsideClick = useCallback((event) => {
     console.log('handleOutsideClick', event.target)
+
+    const alertRoot = document.getElementById('alert-root')
+
+    // These different menus need extracting to their own contexts
+    if (alertRoot?.contains(event.target)) { return }
     if (menuRef?.current?.contains(event.target)) { return }
     if (mobileMenuRef?.current?.contains(event.target)) { return }
     if (teamMenuRef?.current?.contains(event.target)) { return }
@@ -98,7 +103,7 @@ export default function LoggedInHeader({ initialTeam }) {
             <UserCircleIcon className="h-7 w-7"/>
           </button>
           <div 
-            className={`lg:hidden fixed h-screen w-screen inset-x-0 top-0 z-50 text-gray-300 ${
+            className={`lg:hidden fixed h-screen w-screen inset-x-0 top-0 z-40 text-gray-300 ${
               isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
             }`}
           >
@@ -148,7 +153,7 @@ export default function LoggedInHeader({ initialTeam }) {
           </div>
 
           <div 
-            className={`lg:hidden fixed h-screen w-screen inset-x-0 top-0 z-50 text-gray-300 ${
+            className={`lg:hidden fixed h-screen w-screen inset-x-0 top-0 z-40 text-gray-300 ${
               isTeamMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
             }`}
           >
@@ -178,26 +183,18 @@ export default function LoggedInHeader({ initialTeam }) {
 
                 <div className="flow-root">
                   <div className="divide-y divide-gray-500/10">
-                    <div className="p-6">
+                    <div className="">
                       {teamsData && (
                         <>
                           <button
                             onClick={openNewWorkspaceModal}
-                            className="inline-flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-300 hover:bg-gray-800"
+                            className="inline-flex items-center justify-between w-full rounded-lg px-4 py-2.5 text-sm font-semibold leading-7 text-gray-300 hover:bg-gray-800"
                           >
-                            New List
+                            Lists
                             <PlusIcon className="w-4 h-4 ml-2" />
                           </button>
                           {teamsData.teams.map((team) => (
-                            <button
-                              onClick={() => {
-                                changeList(team.id)
-                              }}
-                              key={team.id}
-                              className={`${teamsData.currentTeam.id === team.id ? 'bg-gray-800' : ''} inline-flex items-center w-full text-left px-3 py-2.5 text-sm leading-7 text-gray-300 hover:bg-gray-800`}
-                            >
-                              <UserIcon className="w-4 h-4 mr-1" />{team.name}
-                            </button>
+                            <ListListItem key={team.id} list={team} />
                           ))}
                         </>
                       )}
@@ -208,7 +205,7 @@ export default function LoggedInHeader({ initialTeam }) {
             </div>
           </div>
 
-          <div ref={mobileMenuRef} className={`invisible absolute w-[200px] bg-gray-900 top-16 right-0 z-50 border border-gray-700 ${menuclass}`}>
+          <div ref={mobileMenuRef} className={`invisible absolute w-[200px] bg-gray-900 top-16 right-0 z-40 border border-gray-700 ${menuclass}`}>
             <div className="h-full w-full relative divide-y divide-gray-500/10">
               <div className="flow-root">
                 <div>

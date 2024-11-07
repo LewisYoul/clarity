@@ -8,15 +8,17 @@ import ListsProvider from "../contexts/ListsProvider";
 const PageWrapper = ({ children }) => {
 
   return (
-    <ListsProvider>
+    <div className="relative isolate">
       <AlertProvider>
         <NotificationProvider>
-          <ModalProvider>
-            {children}
-          </ModalProvider>
+          <ListsProvider>
+            <ModalProvider>
+              {children}
+            </ModalProvider>
+          </ListsProvider>
         </NotificationProvider>
       </AlertProvider>
-    </ListsProvider>
+    </div>
   );
 };
 
