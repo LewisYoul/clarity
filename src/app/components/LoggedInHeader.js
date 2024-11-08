@@ -7,18 +7,19 @@ import { useState, useRef, useEffect, useCallback, useContext } from 'react'
 import CreateList from './CreateList'
 import { ListsContext } from '../contexts/ListsProvider'
 import { ModalContext } from '../contexts/modalContext'
+import { MobileMenuContext } from '../contexts/MobileMenuProvider'
 import ListListItem from './ListListItem'
 
 export default function LoggedInHeader({ initialTeam }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false)
+  // const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false)
   const menuRef = useRef()
   const mobileMenuRef = useRef()
   const teamMenuRef = useRef()
   const mobileTeamMenuRef = useRef()
   const { teamsData, changeList } = useContext(ListsContext)
   const { setModalContent } = useContext(ModalContext)
-
+  const { isTeamMenuOpen, setIsTeamMenuOpen } = useContext(MobileMenuContext)
 
   const handleOutsideClick = useCallback((event) => {
     console.log('handleOutsideClick', event.target)
@@ -32,16 +33,8 @@ export default function LoggedInHeader({ initialTeam }) {
     if (teamMenuRef?.current?.contains(event.target)) { return }
     if (mobileTeamMenuRef?.current?.contains(event.target)) { return }
     if (isMenuOpen) { closeMenu() }
-    if (isTeamMenuOpen) { closeTeamMenu() }
-  }, [isMenuOpen, isTeamMenuOpen])
-
-  const openNewWorkspaceModal = () => {
-    setIsTeamMenuOpen(false)
-    setModalContent(<CreateList onCreate={() => {
-      setModalContent(null)
-      // You might want to update the teamsData here if necessary
-    }}/>)
-  }
+    // if (isTeamMenuOpen) { closeTeamMenu() }
+  }, [isMenuOpen])
 
   useEffect(() => {
     document.addEventListener('click', handleOutsideClick)
@@ -78,7 +71,7 @@ export default function LoggedInHeader({ initialTeam }) {
     <header className="inset-x-0 top-0">
       <nav className="flex items-center justify-between px-4 py-3 lg:px-3 relative" aria-label="Global">
         <div className="flex lg:flex-1">
-          <div onClick={openTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
+          <div onClick={() => { setIsTeamMenuOpen(true) }} className="-m-1.5 p-1.5 flex items-center gap-2">
             <img
               className="h-10 w-auto"
               src="/logo.svg"
@@ -152,58 +145,7 @@ export default function LoggedInHeader({ initialTeam }) {
             </div>
           </div>
 
-          <div 
-            className={`lg:hidden fixed h-screen w-screen inset-x-0 top-0 z-40 text-gray-300 ${
-              isTeamMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
-            }`}
-          >
-            {/* Background overlay with fade transition */}
-            <div 
-              className={`absolute inset-0 bg-gray-500/70 transition-opacity duration-300 ${
-                isTeamMenuOpen ? 'opacity-100' : 'opacity-0'
-              }`}
-            />
-            {/* Menu panel with slide transition */}
-            <div 
-              className={`absolute bg-gray-900 w-3/4 h-full transform transition-transform duration-300 ease-in-out ${
-                isTeamMenuOpen ? 'translate-x-0' : '-translate-x-full'
-              }`}
-            >
-              <div ref={mobileTeamMenuRef} className="h-full w-full relative divide-y divide-gray-500/10">
-                <nav className="flex items-center justify-between px-4 py-3">
-                  <div onClick={closeTeamMenu} className="-m-1.5 p-1.5 flex items-center gap-2">
-                    <img
-                      className="h-10 w-auto"
-                      src="/logo.svg"
-                      alt=""
-                    />
-                    <span className="text-md">{teamsData?.currentTeam?.name}</span>
-                  </div>
-                </nav>
 
-                <div className="flow-root">
-                  <div className="divide-y divide-gray-500/10">
-                    <div className="">
-                      {teamsData && (
-                        <>
-                          <button
-                            onClick={openNewWorkspaceModal}
-                            className="inline-flex items-center justify-between w-full rounded-lg px-4 py-2.5 text-sm font-semibold leading-7 text-gray-300 hover:bg-gray-800"
-                          >
-                            Lists
-                            <PlusIcon className="w-4 h-4 ml-2" />
-                          </button>
-                          {teamsData.teams.map((team) => (
-                            <ListListItem key={team.id} list={team} />
-                          ))}
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <div ref={mobileMenuRef} className={`invisible absolute w-[200px] bg-gray-900 top-16 right-0 z-40 border border-gray-700 ${menuclass}`}>
             <div className="h-full w-full relative divide-y divide-gray-500/10">

@@ -5,6 +5,7 @@ import NotificationProvider from "../contexts/notificationContext";
 import AlertProvider from "../contexts/alertContext";
 import ListsProvider from "../contexts/ListsProvider";
 import TasksProvider from "../contexts/TasksProvider";
+import MobileMenuProvider from "../contexts/MobileMenuProvider";
 
 const PageWrapper = ({ children }) => {
 
@@ -12,13 +13,15 @@ const PageWrapper = ({ children }) => {
     <div className="relative isolate">
       <AlertProvider>
         <NotificationProvider>
-          <ListsProvider>
-            <TasksProvider>
-              <ModalProvider>
+          <ModalProvider>
+            <ListsProvider>
+              <MobileMenuProvider>
+                <TasksProvider>
                   {children}
-              </ModalProvider>
-            </TasksProvider>
-          </ListsProvider>
+                </TasksProvider>
+              </MobileMenuProvider>
+            </ListsProvider>
+          </ModalProvider>
         </NotificationProvider>
       </AlertProvider>
     </div>

@@ -1,9 +1,7 @@
-import { useState, useContext } from 'react';
-import { PlusIcon, XCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
-import { ListsContext } from '../contexts/ListsProvider'
+import { useState } from 'react';
+import { XCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
 
 export default function CreateList({ onCreate }) {
-  const { fetchLists } = useContext(ListsContext)
   const [name, setName] = useState('')
   const [collaborators, setCollaborators] = useState([])
   const [error, setError] = useState(false)
@@ -35,7 +33,6 @@ export default function CreateList({ onCreate }) {
         
         console.log('json', json)
 
-        await fetchLists()
         onCreate()
       } catch (error) {
         console.error('Error updating list:', error)

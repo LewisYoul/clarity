@@ -9,12 +9,12 @@ import ListListItem from './ListListItem'
 
 export default function ListList() {
   const { setModalContent } = useContext(ModalContext)
-  const { teamsData, changeList } = useContext(ListsContext)
+  const { teamsData, fetchLists } = useContext(ListsContext)
 
-  const openNewWorkspaceModal = () => {
-    setModalContent(<CreateList onCreate={() => {
+  const openNewWorkspaceModal = async () => {
+    setModalContent(<CreateList onCreate={async () => {
+      await fetchLists()
       setModalContent(null)
-      // You might want to update the teamsData here if necessary
     }}/>)
   }
 
