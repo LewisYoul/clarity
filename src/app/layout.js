@@ -33,7 +33,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html className="h-full bg-white" lang="en">
+    <html className="h-full bg-gray-900" lang="en">
       <head>
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
