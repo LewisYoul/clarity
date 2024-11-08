@@ -4,11 +4,12 @@ import { NotificationContext } from '../contexts/notificationContext'
 import { ListsContext } from '../contexts/ListsProvider'
 import { UserIcon } from '@heroicons/react/24/outline'
 import { useContext } from 'react'
-
+import { MobileMenuContext } from '../contexts/MobileMenuProvider'
 export default function ListListItem({ list }) {
   const { setAlertContent } = useContext(AlertContext)
   const { setNotificationContent } = useContext(NotificationContext)
   const { teamsData, changeList, fetchLists } = useContext(ListsContext)
+  const { setIsTeamMenuOpen } = useContext(MobileMenuContext)
 
   let popoverItems = [
     {
@@ -64,7 +65,10 @@ export default function ListListItem({ list }) {
   return (
     <div key={list.id} className={`${teamsData.currentTeam.id === list.id ? 'bg-gray-800' : null} flex justify-between items-center hover:bg-gray-800`}>
       <button
-        onClick={() => changeList(list.id)}
+        onClick={() => {
+          changeList(list.id)
+          setIsTeamMenuOpen(false)
+        }}
         className={`inline-flex items-center w-full text-left px-4 py-1.5 text-sm leading-7 text-gray-300`}
       >
         <UserIcon className="w-4 h-4 mr-1" />{list.name}
