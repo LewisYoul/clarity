@@ -19,7 +19,7 @@ export default async function Dashboard() {
         <AudioRecorder />
         <ListList />
 
-        <div className="w-full border-l border-gray-700">
+        <div className="w-full lg:border-l border-gray-700">
           <TasksList />
         </div>
       </div>
