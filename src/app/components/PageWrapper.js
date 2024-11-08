@@ -4,6 +4,7 @@ import ModalProvider from "../contexts/modalContext";
 import NotificationProvider from "../contexts/notificationContext";
 import AlertProvider from "../contexts/alertContext";
 import ListsProvider from "../contexts/ListsProvider";
+import TasksProvider from "../contexts/TasksProvider";
 
 const PageWrapper = ({ children }) => {
 
@@ -12,9 +13,11 @@ const PageWrapper = ({ children }) => {
       <AlertProvider>
         <NotificationProvider>
           <ListsProvider>
-            <ModalProvider>
-              {children}
-            </ModalProvider>
+            <TasksProvider>
+              <ModalProvider>
+                  {children}
+              </ModalProvider>
+            </TasksProvider>
           </ListsProvider>
         </NotificationProvider>
       </AlertProvider>

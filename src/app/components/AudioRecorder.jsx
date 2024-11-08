@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { MicrophoneIcon } from "@heroicons/react/24/solid";
 import useLongPress from "../utils/useLongPress";
+import { TasksContext } from "../contexts/TasksProvider";
 
 const AudioRecorder = ({ className }) => {
+  const { fetchTasks } = useContext(TasksContext)
   const [permission, setPermission] = useState(false);
   const mediaRecorder = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -13,10 +15,12 @@ const AudioRecorder = ({ className }) => {
   const [audio, setAudio] = useState(null);
   const [durationSeconds, setDurationSeconds] = useState(0);
   const intervalIdRef = useRef(null);
+  const [recordingStatus, setRecordingStatus] = useState("inactive");
+
 
   useEffect(() => {
-    console.log('ds', durationSeconds)
-  }, [durationSeconds])
+    getMicrophonePermission()
+  }, [])
 
   const onLongPressStart = () => {
     console.log('long press started')
@@ -27,6 +31,8 @@ const AudioRecorder = ({ className }) => {
 
     intervalIdRef.current = interval;
     setIsRecording(true)
+
+    startRecording()
   }
 
   const onLongPressEnd = () => {
@@ -37,12 +43,15 @@ const AudioRecorder = ({ className }) => {
     }
     setDurationSeconds(0)
     setIsRecording(false)
+
+    stopRecording()
   }
 
   const onRecord = useLongPress(onLongPressStart, onLongPressEnd, 10000)
 
   const onCreate = () => {
     console.log('created')
+    fetchTasks()
   }
 
   console.log('permission', permission)

@@ -1,12 +1,8 @@
 import LoggedInHeader from "../components/LoggedInHeader"
 import { authorizeRequest } from "../utils/sessionUtils"
-import dynamic from 'next/dynamic'
 import ListList from "../components/ListList"
 import AudioRecorder from "../components/AudioRecorder"
-
-const TasksList = dynamic(() => import('../components/TasksList'), {
-  ssr: false
-})
+import TasksList from "../components/TasksList"
 
 export default async function Dashboard() {
   const { currentTeam } = await authorizeRequest()

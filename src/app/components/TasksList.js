@@ -5,37 +5,13 @@ import { showToast } from "../utils/toastUtils";
 import CreateTask from "./CreateTask";
 import TaskListItem from "./TaskListItem";
 import { ListsContext } from "../contexts/ListsProvider";
+import { TasksContext } from "../contexts/TasksProvider";
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 
 export default function Tasks() {
   const { teamsData } = useContext(ListsContext)
-  const [openTasks, setOpenTasks] = useState(null);
-  const [completedTasks, setCompletedTasks] = useState(null);
+  const { fetchTasks, openTasks, completedTasks } = useContext(TasksContext)
   const [showCompleted, setShowCompleted] = useState(true);
-  
-  const fetchTasks = useCallback(async () => {
-    const url = `/api/tasks`
-
-    try {
-      const res = await fetch(url)
-
-      if (!res.ok) throw new Error()
-
-      const json = await res.json()
-  
-      setOpenTasks(json.data.openTasks)
-      setCompletedTasks(json.data.completedTasks)
-    } catch (error) {
-      console.error(error)
-
-      showToast('There was a problem loading your tasks. If the problem persists please contact us.')
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchTasks()
-    // This will get new tasks when the list is changed
-  }, [fetchTasks, teamsData])
 
   const onTaskCreated = () => {
     fetchTasks()
