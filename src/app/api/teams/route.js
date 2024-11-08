@@ -15,7 +15,7 @@ export async function DELETE(req) {
     await prisma.$transaction(async (tx) => {
       await tx.Task.deleteMany({
         where: {
-          teamId: currentTeam.id,
+          teamId: listId,
         },
       })
 
