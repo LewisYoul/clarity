@@ -19,30 +19,42 @@ export async function DELETE(req) {
         },
       })
 
-      const personalTeamId = await tx.Team.findFirst({
+      // Get all users who have this team as their current team
+      const usersToUpdate = await tx.User.findMany({
         where: {
-          name: "Personal",
-          teamUsers: {
-            some: {
-              userId: currentUser.id
-            }
-          }
+          currentTeamId: listId
         },
         select: {
           id: true
         }
-      }).then(team => team.id)
-
-      // Update users' currentTeamId who have this team as their current team
-      await tx.User.updateMany({
-        where: {
-          currentTeamId: listId
-        },
-        data: {
-          // Set to their personal team (where name is "Personal" and they are a member)
-          currentTeamId: personalTeamId
-        }
       });
+
+      // Update each user's currentTeamId to their own personal team
+      for (const user of usersToUpdate) {
+        const personalTeam = await tx.Team.findFirst({
+          where: {
+            name: "Personal",
+            teamUsers: {
+              some: {
+                userId: user.id
+              }
+            }
+          },
+          select: {
+            id: true
+          }
+        });
+
+        // Something has gone wrong if they don't have a personal team
+        await tx.User.update({
+          where: {
+            id: user.id
+          },
+          data: {
+            currentTeamId: personalTeam.id
+          }
+        });
+      }
 
       await tx.TeamUser.deleteMany({
         where: {
