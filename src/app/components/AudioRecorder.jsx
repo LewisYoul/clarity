@@ -147,7 +147,7 @@ const AudioRecorder = ({ className }) => {
 
   return (
     <>
-      <div className="fixed bottom-10 right-10">
+      <div className="fixed bottom-10 right-10 z-40">
         <button {...onRecord} type="button" className={`${className} ${colorClasses} rounded-full p-1 h-12 w-12 relative`}>
           {isRecording && <div className={`w-9 bg-green-500 text-white text-sm absolute top-3.5 right-10 rounded-l-full`}>{durationSeconds}s</div>}
           <MicrophoneIcon className="h-10 w-10 text-white"/>

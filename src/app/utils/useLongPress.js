@@ -1,28 +1,25 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 
 export default function useLongPress(onStart, onEnd, ms = 300) {
-  const [startLongPress, setStartLongPress] = useState(false);
+  const timerIdRef = useRef(null);
 
-  useEffect(() => {
-    let timerId;
-    if (startLongPress) {
-      timerId = setTimeout(onEnd, ms);
-    } else {
-      clearTimeout(timerId);
-    }
-
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [onStart, ms, startLongPress]);
+  const stop = useCallback(() => {
+    onEnd()
+    timerIdRef.current = null
+  }, [onEnd]);
 
   const start = useCallback(() => {
     onStart()
-    setStartLongPress(true);
-  }, []);
-  const stop = useCallback(() => {
-    onEnd()
-    setStartLongPress(false);
+    timerIdRef.current = setTimeout(stop, ms);
+  }, [onStart, ms, stop]);
+
+  useEffect(() => {
+    return () => {
+      if (timerIdRef.current) {
+        clearTimeout(timerIdRef.current);
+        timerIdRef.current = null;
+      }
+    };
   }, []);
 
   return {
