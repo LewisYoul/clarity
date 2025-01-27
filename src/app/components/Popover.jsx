@@ -1,5 +1,6 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline"
 import { useRef, useState, useEffect, useCallback } from "react"
+import useOutsideClick from "../hooks/useOutsideClick"
 
 export default function Popover({ items, classes }) {
   const popoverRef = useRef(null)
@@ -11,13 +12,7 @@ export default function Popover({ items, classes }) {
     if (isOpen) { setIsOpen(false) }
   }, [isOpen])
 
-  useEffect(() => {
-    document.addEventListener('click', handleOutsideClick)
-
-    return () => {
-      document.removeEventListener('click', handleOutsideClick)
-    }
-  }, [handleOutsideClick])
+  useOutsideClick(handleOutsideClick)
 
   const toggleOptionsPopover = () => {
     setIsOpen(!isOpen)

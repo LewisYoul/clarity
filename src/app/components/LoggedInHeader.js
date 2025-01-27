@@ -9,13 +9,13 @@ import { ListsContext } from '../contexts/ListsProvider'
 import { ModalContext } from '../contexts/modalContext'
 import { MobileMenuContext } from '../contexts/MobileMenuProvider'
 import ListListItem from './ListListItem'
+import useOutsideClick from "../hooks/useOutsideClick";
 
 export default function LoggedInHeader({ initialTeam }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   // const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false)
   const menuRef = useRef()
   const mobileMenuRef = useRef()
-  const teamMenuRef = useRef()
   const mobileTeamMenuRef = useRef()
   const { teamsData, changeList } = useContext(ListsContext)
   const { setModalContent } = useContext(ModalContext)
@@ -36,13 +36,7 @@ export default function LoggedInHeader({ initialTeam }) {
     // if (isTeamMenuOpen) { closeTeamMenu() }
   }, [isMenuOpen])
 
-  useEffect(() => {
-    document.addEventListener('click', handleOutsideClick)
-
-    return () => {
-      document.removeEventListener('click', handleOutsideClick)
-    }
-  }, [handleOutsideClick])
+  useOutsideClick(handleOutsideClick)
 
   const openMenu = () => {
     setIsMenuOpen(true)

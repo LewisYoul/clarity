@@ -5,6 +5,7 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import ListListItem from '../components/ListListItem';
 import CreateList from '../components/CreateList';
 import { ModalContext } from './modalContext';
+import useOutsideClick from '../hooks/useOutsideClick';
 
 export const MobileMenuContext = createContext();
 
@@ -21,13 +22,7 @@ const MobileMenuProvider = ({ children }) => {
     if (isTeamMenuOpen) { setIsTeamMenuOpen(false) }
   }, [isTeamMenuOpen])
 
-  useEffect(() => {
-    document.addEventListener('click', handleOutsideClick)
-
-    return () => {
-      document.removeEventListener('click', handleOutsideClick)
-    }
-  }, [handleOutsideClick])
+  useOutsideClick(handleOutsideClick)
 
   const openNewWorkspaceModal = () => {
     setIsTeamMenuOpen(false)

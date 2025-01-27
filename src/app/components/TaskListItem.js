@@ -22,31 +22,31 @@ export default function TaskListItem({ task, onChange }) {
           confirmText: 'Delete',
           cancelText: 'Cancel',
           onConfirm: () => {
-          const deleteTask = async () => {
-            try {
-              const response = await fetch(`/api/tasks?id=${task.id}`, {
-                method: 'DELETE',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              });
+            const deleteTask = async () => {
+              try {
+                const response = await fetch(`/api/tasks?id=${task.id}`, {
+                  method: 'DELETE',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                });
 
-              if (!response.ok) {
-                throw new Error('Failed to delete task');
+                if (!response.ok) {
+                  throw new Error('Failed to delete task');
+                }
+
+                onChange();
+                setAlertContent(null);
+              } catch (error) {
+                console.error('Error deleting task:', error);
+                setNotificationContent({
+                  title: 'Error',
+                  message: 'Failed to delete the task. Please try again.'
+                });
               }
+            };
 
-              onChange();
-              setAlertContent(null);
-            } catch (error) {
-              console.error('Error deleting task:', error);
-              setNotificationContent({
-                title: 'Error',
-                message: 'Failed to delete the task. Please try again.'
-              });
-            }
-          };
-
-          deleteTask();
+            deleteTask();
           }
         })
       },
