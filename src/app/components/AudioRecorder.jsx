@@ -58,24 +58,30 @@ const AudioRecorder = ({ className }) => {
 
   useEffect(() => {
     const checkPermission = async () => {
-      console.log('navigator', navigator)
+      // Check if we're in a browser environment and if mediaDevices API exists
+      if (typeof window === 'undefined' || !navigator?.mediaDevices?.getUserMedia) {
+        // If API is not available yet, retry after a short delay
+        setTimeout(checkPermission, 100);
+        return;
+      }
 
-      if (!navigator) { return }
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: false,
-      })
-      console.log('stream', stream)
-
-      if (stream) {
-        setPermission(true);
-        setStream(stream);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false,
+        });
+        
+        if (stream) {
+          setPermission(true);
+          setStream(stream);
+        }
+      } catch (err) {
+        console.error('Error accessing microphone:', err);
       }
     }
 
-    checkPermission()
-  }, [])
+    checkPermission();
+  }, []);
 
   const getMicrophonePermission = async () => {
       if ("MediaRecorder" in window) {
