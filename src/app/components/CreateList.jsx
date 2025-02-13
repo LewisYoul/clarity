@@ -57,11 +57,11 @@ export default function CreateList({ onCreate }) {
 
   return (
     <div className="pt-4 px-4 w-screen flex justify-center">
-      <div className="bg-white mt-0 md:mt-8 w-full md:w-[860px] rounded-md py-4 px-4">
+      <div className="bg-gray-900 mt-0 md:mt-8 w-full md:w-[860px] rounded-md py-4 px-4">
         <div className="max-w-6xl m-auto">
-          <h1 className="text-center text-2xl">New List</h1>
+          <h1 className="text-center text-2xl text-gray-100">New List</h1>
 
-          <input autoFocus className="mt-4 border w-full rounded-sm px-2 py-1" onChange={(e => setName(e.target.value))} type="text" placeholder="Enter a name for your list" />
+          <input autoFocus className="mt-4 border w-full bg-gray-800 rounded-sm px-2 py-1 w-full bg-gray-800 rounded-md px-4 py-2 border border-gray-700 focus:outline-none focus:border-blue-400 text-gray-300" onChange={(e => setName(e.target.value))} type="text" placeholder="Enter a name for your list" />
           {error && <div className="text-red-500">Please enter a name for your list</div>}
         </div>
         <p className="text-right">Collaborators (Optional)</p>
@@ -71,7 +71,7 @@ export default function CreateList({ onCreate }) {
               value={collaborator}
               onChange={(e) => handleCollaboratorChange(index, e.target.value)}
               placeholder="Enter collaborator's email"
-              className="flex-grow border"
+              className="flex-grow border w-full bg-gray-800 rounded-md px-4 py-2 border border-gray-700 focus:outline-none focus:border-blue-400 text-gray-300"
             />
             {index > 0 && (
               <button
@@ -90,7 +90,7 @@ export default function CreateList({ onCreate }) {
           className="mt-2"
           onClick={handleAddCollaborator}
         >
-          <span className="flex items-center">
+          <span className="flex items-center text-gray-300">
             <PlusCircleIcon className="mr-2 h-4 w-4" />
             Add Collaborator
           </span>
