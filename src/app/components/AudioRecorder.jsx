@@ -58,6 +58,10 @@ const AudioRecorder = ({ className }) => {
 
   useEffect(() => {
     const checkPermission = async () => {
+      console.log('navigator', navigator)
+
+      if (!navigator) { return }
+
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: false,
