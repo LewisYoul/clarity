@@ -63,5 +63,6 @@ export const options = {
 
   pages: {
     signIn: '/sign-in',
-  }
+  },
+  useSecureCookies: false
 }
